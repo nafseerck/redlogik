@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#CE1D1D</color>
+    <color name="white">#FFFFFF</color>
+    <color name="white_trans_57">#57FFFFFF</color>
+    <color name="white_transparent_overlay">#adffffff</color>
+    <color name="black">#000000</color>
+    <color name="black_trans">#5B000000</color>
+
+    <color name="gray_11">#0B0B0B</color>
+    <color name="gray_14">#0E0E0E</color>
+    <color name="gray_20">#141414</color>
+    <color name="gray_26">#1A1A1A</color>
+    <color name="gray_58">#3A3A3A</color>
+    <color name="gray_70_trans">#33464646</color>
+    <color name="gray_72">#484848</color>
+    <color name="gray_90">#5A5A5A</color>
+    <color name="gray_131">#838383</color>
+    <color name="gray_141">#8D8D8D</color>
+    <color name="gray_151">#979797</color>
+    <color name="gray_151_trans">#3B979797</color>
+    <color name="gray_153">#999999</color>
+    <color name="gray_196">#C6C4C4</color>
+    <color name="gray_216">#D8D8D8</color>
+    <color name="gray_219">#DBDBDB</color>
+    <color name="gray_219_trans">#42DBDBDB</color>
+    <color name="gray_220">#DCDCDC</color>
+    <color name="gray_222">#DEDEDE</color>
+    <color name="gray_226">#E2E2E2</color>
+    <color name="gray_232">#E8E8E8</color>
+    <color name="gray_234">#EAEAEA</color>
+    <color name="gray_235">#EBEBEB</color>
+    <color name="gray_244">#F4F4F4</color>
+    <color name="gray_250">#FAFAFA</color>
+    <color name="gray_250_trans">#42FAFAFA</color>
+    <color name="gray_253">#FDFDFD</color>
+    <color name="gray_light_view">#adc4c4c4</color>
+    <color name="black_trans_light">#8c000000</color>
+
+    <color name="gray_trans">#43979797</color>
+
+    <color name="grad_1">#CE1D1D</color>
+    <color name="grad_1_trans">#AECE1D1D</color>
+    <color name="grad_2">#DBDFEA</color>
+    <color name="grad_2_trans">#AEDBDFEA</color>
+    <color name="grad_3">#CC2022</color>
+    <color name="grad_4">#56BA22</color>
+    <color name="grad_5">#434A54</color>
+    <color name="grad_6">#FB653A</color>
+    <color name="grad_6_trans">#AEFB653A</color>
+    <color name="grad_7">#E50000</color>
+    <color name="grad_8">#CC0000</color>
+    <color name="grad_9">#20B819</color>
+    <color name="grad_10">#FF0000</color>
+</resources>

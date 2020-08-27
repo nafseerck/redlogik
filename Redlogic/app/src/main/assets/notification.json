@@ -1,0 +1,21 @@
+{
+  "status": true,
+  "message": "Notification List",
+  "data": [
+    {
+      "id": "1",
+      "notification_title": "notification 1",
+      "timestamp": "1587279575"
+    },
+    {
+      "id": "2",
+      "notification_title": "notification 2",
+      "timestamp": "1587279575"
+    },
+    {
+      "id": "3",
+      "notification_title": "notification 3",
+      "timestamp": "1587279575"
+    }
+  ]
+}

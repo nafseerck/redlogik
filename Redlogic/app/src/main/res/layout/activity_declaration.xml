@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".dashboard.driver.declaration.DeclarationActivity">
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/item_execution_card" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/roboto_bold"
+                android:gravity="center"
+                android:text="@string/add_your_signature"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:id="@+id/liGenerated"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/pdf" />
+
+                <TextView
+                    android:onClick="onDownload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:fontFamily="@font/roboto"
+                    android:text="@string/download_pdf"
+                    android:textColor="@color/grad_7"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:fontFamily="@font/roboto_light"
+                    android:text="24kb"
+                    android:textColor="@color/gray_90"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/liDraw"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="40dp"
+                android:orientation="vertical"
+                tools:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="58dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="21dp"
+                        android:fontFamily="@font/roboto"
+                        android:gravity="center"
+                        android:onClick="onDraw"
+                        android:text="@string/draw"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="21dp"
+                        android:fontFamily="@font/roboto"
+                        android:gravity="center"
+                        android:onClick="onUpload"
+                        android:text="@string/upload"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@color/gray_232" />
+
+                    <View
+                        android:id="@+id/viDraw"
+                        android:layout_width="35dp"
+                        android:layout_height="4dp"
+                        android:layout_marginStart="21dp"
+                        android:background="@color/grad_7" />
+
+                    <View
+                        android:id="@+id/viUpload"
+                        android:layout_width="35dp"
+                        android:layout_height="4dp"
+                        android:layout_marginStart="85dp"
+                        android:background="@color/grad_7"
+                        android:visibility="gone" />
+                </RelativeLayout>
+
+                <com.kyanogen.signatureview.SignatureView xmlns:sign="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/signatureView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="2dp"
+                    sign:backgroundColor="#ffffff"
+                    sign:enableSignature="true"
+                    sign:penColor="#000000"
+                    sign:penSize="5dp" />
+
+                <ImageView
+                    android:id="@+id/imSig"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="2dp"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvGenerate"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@color/gray_216"
+            android:fontFamily="@font/roboto"
+            android:gravity="center"
+            android:onClick="onGenerate"
+            android:textColor="@color/white"
+            tools:text="@string/complete_execution" />
+    </LinearLayout>
+</layout>

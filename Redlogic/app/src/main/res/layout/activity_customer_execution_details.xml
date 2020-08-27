@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".dashboard.customer.execution.CustomerExecutionDetailsActivity">
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/item_customer_execution_card" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="7dp"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:onClick="onDownload"
+            android:id="@+id/liDownload"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="30dp"
+            android:background="@color/grad_3"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_pdf" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:fontFamily="@font/lato_bold"
+                android:text="@string/download_pod"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>

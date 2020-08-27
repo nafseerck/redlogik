@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/toolbar" />
+
+        <RelativeLayout
+            android:id="@+id/relContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/contentFrame"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <include
+                android:id="@+id/include2"
+                layout="@layout/item_menu" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/contentLoading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/r_icon" />
+
+                <com.akexorcist.roundcornerprogressbar.CenteredRoundCornerProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="260dp"
+                    android:layout_height="6dp"
+                    android:layout_marginTop="10dp"
+                    app:rcAnimationEnable="true"
+                    app:rcBackgroundColor="#432929"
+                    app:rcMax="140"
+                    app:rcProgress="0"
+                    app:rcProgressColor="#CE1D1D"
+                    app:rcRadius="4dp" />
+            </LinearLayout>
+            <!--            <com.airbnb.lottie.LottieAnimationView-->
+            <!--                android:id="@+id/animation_view"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_centerInParent="true"-->
+            <!--                app:lottie_autoPlay="true"-->
+            <!--                app:lottie_loop="true"-->
+            <!--                app:lottie_rawRes="@raw/loading" />-->
+        </RelativeLayout>
+
+    </LinearLayout>
+</layout>

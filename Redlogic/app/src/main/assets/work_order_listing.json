@@ -1,0 +1,25 @@
+{
+  "status": true,
+  "message": "Customer work orders",
+  "result": {
+    "work_orders": [
+      {
+        "work_order_id": 1,
+        "rl_no": 2000,
+        "ref_no": "FR4577",
+        "services": [
+          {
+            "service_name": "Inland Trucking"
+          },
+          {
+            "service_name": "Equipment Hire"
+          }
+        ],
+        "jobs": 10,
+        "jobs_inprocess": 5,
+        "executions": 20,
+        "execution_inprocess": 10
+      }
+    ]
+  }
+}

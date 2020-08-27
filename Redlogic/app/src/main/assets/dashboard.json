@@ -1,0 +1,27 @@
+{
+  "status": true,
+  "message": "Customer dashboard",
+  "result": {
+    "customer_details": {
+      "name": "Vinod Narayanan",
+      "designation": "Marketing Manager",
+      "profile_pic": "path/to/image",
+      "workorder_new_count": 6,
+      "workorder_new_inprocess": 6,
+      "workorder_new_approvals": 6,
+      "workorder_new_completed": 6,
+      "ongoing_jobs": [
+        {
+          "job_id": 1,
+          "job_details": "40 ft Trailer\nDoha - Dukan",
+          "scheduled_at": "01 January 2020, 5 PM"
+        },
+        {
+          "job_id": 2,
+          "job_details": "20 Ton forklift\nDoha",
+          "scheduled_at": "01 January 2020, 5 PM"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "status": true,
+  "message": "Live map details",
+  "data": {
+    "start_lat": "-74.044636",
+    "start_long": "+40.689060",
+    "end_lat": "-74.044636",
+    "end_long": "+40.689060",
+    "current_lat": "-74.044636",
+    "current_long": "+40.689060"
+  }
+}

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <LinearLayout
+        android:id="@+id/liItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="31dp">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="11dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="11dp"
+                        android:fontFamily="@font/roboto"
+                        android:text="@string/licensee"
+                        android:textColor="@color/gray_141"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tvLicensee"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="11dp"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/roboto"
+                        android:textColor="@color/grad_5"
+                        android:textSize="16sp"
+                        tools:text="Delta Doha Corporati" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="11dp"
+                        android:layout_marginTop="15dp"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto"
+                            android:text="@string/customer"
+                            android:textColor="@color/gray_141"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="40dp"
+                            android:fontFamily="@font/roboto"
+                            android:text="@string/status"
+                            android:textColor="@color/gray_141"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/tvStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="26dp"
+                            android:layout_marginStart="25dp"
+                            android:fontFamily="@font/roboto"
+                            android:gravity="center"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="20dp"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            tools:text="Pending" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvAddress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="11dp"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/roboto"
+                        android:textColor="@color/grad_5"
+                        android:textSize="16sp"
+                        tools:text="Delta Doha Corporati" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="18dp"
+                        android:background="@color/gray_220" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="11dp"
+                        android:layout_marginTop="8dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/roboto"
+                            android:text="@string/rl_no"
+                            android:textColor="@color/gray_141"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/roboto"
+                            android:text="@string/ref_no"
+                            android:textColor="@color/gray_141"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.5"
+                            android:fontFamily="@font/roboto"
+                            android:text="@string/date"
+                            android:textColor="@color/gray_141"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="11dp"
+                        android:layout_marginBottom="9dp">
+
+                        <TextView
+                            android:id="@+id/tvRelNo"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/roboto"
+                            android:text="@string/rl_no"
+                            android:textColor="@color/grad_5"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/tvRefNo"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/roboto"
+                            android:text="@string/ref_no"
+                            android:textColor="@color/grad_5"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/tvDate"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.5"
+                            android:fontFamily="@font/roboto"
+                            android:text="@string/date"
+                            android:textColor="@color/grad_5"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <ImageView
+                    android:onClick="onCall"
+                    android:id="@+id/imCall"
+                    android:layout_width="49dp"
+                    android:layout_height="42dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_margin="4dp"
+                    android:background="@color/grad_9"
+                    android:scaleType="center"
+                    android:src="@mipmap/phone" />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</layout>

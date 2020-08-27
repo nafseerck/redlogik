@@ -1,0 +1,30 @@
+{
+  "status": true,
+  "message": "Work order details",
+  "result": {
+    "work_order_id": 1,
+    "licensee": "RedLogik\nP.O Box: 7777\n C RIng Road\nDoha, State of Qatar",
+    "licensee_contact": "+974 55733398",
+    "customer": "Delta Doha Corporation\nP.O Box: 7777\n C RIng Road\nDoha, State of Qatar",
+    "status": "ongoing",
+    "rl_no": 2000,
+    "ref_no": "FR4577",
+    "date": "01 January 2020",
+    "jobs": [
+      {
+        "job_id": 1,
+        "job_details": "Doha - Dukan\n40 ft Trailer",
+        "scheduled_at": "01 January 2020, 5 PM",
+        "executions": 10,
+        "execution_inprocess": 5
+      },
+      {
+        "job_id": 2,
+        "job_details": "Doha\n20 Ton forklift",
+        "scheduled_at": "01 January 2020, 5 PM",
+        "executions": 10,
+        "execution_inprocess": 5
+      }
+    ]
+  }
+}

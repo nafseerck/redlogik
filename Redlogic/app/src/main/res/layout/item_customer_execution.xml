@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <LinearLayout
+        android:id="@+id/liItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="7dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="105dp">
+
+                <View
+                    android:id="@+id/viLeft"
+                    android:layout_width="4dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/grad_10" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="11dp"
+                        android:layout_marginTop="17dp"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/tvName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_bold"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            tools:text="@string/rl_no" />
+
+                        <View
+                            android:layout_width="2dp"
+                            android:layout_height="15dp"
+                            android:layout_marginStart="4dp"
+                            android:background="@color/black" />
+
+                        <TextView
+                            android:id="@+id/tvRegNo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:fontFamily="@font/roboto"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            tools:text="@string/rl_no" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="11dp"
+                        android:layout_marginTop="15dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/roboto"
+                            android:text="@string/rl_no"
+                            android:textColor="@color/gray_141"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/roboto"
+                            android:text="@string/ref_no"
+                            android:textColor="@color/gray_141"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/tvTypeTxt"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.5"
+                            android:fontFamily="@font/roboto"
+                            android:text="@string/vehicle_equipment"
+                            android:textColor="@color/gray_141"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="11dp"
+                        android:layout_marginBottom="9dp">
+
+                        <TextView
+                            android:id="@+id/tvRelNo"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/roboto"
+                            android:text="@string/rl_no"
+                            android:textColor="@color/grad_5"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/tvRefNo"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/roboto"
+                            android:text="@string/ref_no"
+                            android:textColor="@color/grad_5"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/tvType"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.5"
+                            android:fontFamily="@font/roboto"
+                            android:text="@string/date"
+                            android:textColor="@color/grad_5"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</layout>

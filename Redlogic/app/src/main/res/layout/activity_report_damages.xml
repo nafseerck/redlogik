@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".dashboard.driver.damage.ReportDamagesActivity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/edWrite"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="30dp"
+                android:layout_weight="1"
+                android:gravity="top"
+                android:hint="@string/write"
+                android:padding="20dp" />
+
+            <LinearLayout
+                android:id="@+id/liTake"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginBottom="15dp"
+                android:gravity="center"
+                android:onClick="onTakeCamera">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/camera" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:fontFamily="@font/roboto"
+                    android:text="@string/take_photo" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
+                android:layout_marginBottom="20dp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvSend"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@color/gray_216"
+            android:fontFamily="@font/roboto"
+            android:gravity="center"
+            android:onClick="onSend"
+            android:text="@string/send"
+            android:textColor="@color/white" />
+    </LinearLayout>
+</layout>

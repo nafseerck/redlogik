@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <LinearLayout
+        android:id="@+id/liItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:weightSum="2.85">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.2"
+            android:orientation="vertical">
+
+            <View
+                android:id="@+id/viewTop"
+                android:layout_width="wrap_content"
+                android:layout_height="21dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                tools:text="Profiles" />
+
+            <View
+                android:id="@+id/viewBottom1"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/gray_235" />
+
+            <View
+                android:id="@+id/viewBottom2"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>

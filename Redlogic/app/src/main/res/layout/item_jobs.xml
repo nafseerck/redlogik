@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <LinearLayout
+        android:id="@+id/liItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            app:cardCornerRadius="5dp"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:id="@+id/card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp"
+                    android:background="@color/gray_244"
+                    android:gravity="center">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="30dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvTitleTxt1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_light"
+                            android:textColor="@color/gray_90"
+                            android:textSize="13sp"
+                            tools:text="Assigned by" />
+
+                        <TextView
+                            android:id="@+id/tvTitle1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:fontFamily="@font/roboto_light"
+                            android:textColor="@color/grad_7"
+                            android:textSize="16sp"
+                            tools:text="Abc logistics" />
+                    </LinearLayout>
+
+
+                    <ImageView
+                        android:id="@+id/imCall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="15dp"
+                        android:src="@mipmap/mobile" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/li2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="14dp"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvTitleTxt2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_light"
+                        android:textColor="@color/gray_90"
+                        android:textSize="13sp"
+                        tools:text="Assigned by" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/tvTitle2_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_light"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            tools:text="Abc logistics" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginEnd="15dp"
+                            android:src="@mipmap/arrow" />
+
+                        <TextView
+                            android:id="@+id/tvTitle2_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_light"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            tools:text="Abc logistics" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="14dp"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvTitleTxt3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_light"
+                        android:textColor="@color/gray_90"
+                        android:textSize="13sp"
+                        tools:text="Assigned by" />
+
+                    <TextView
+                        android:id="@+id/tvTitle3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:fontFamily="@font/roboto_light"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        tools:text="Abc logistics" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</layout>

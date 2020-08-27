@@ -1,0 +1,32 @@
+{
+  "status": true,
+  "message": "Execution details",
+  "result": {
+    "job_details": {
+      "job_id": 1,
+      "job_details": "Doha - Dukan\n40 ft Trailer",
+      "scheduled_at": "01 January 2020, 5 PM"
+    },
+    "milestone_details": [
+      {
+        "label": "Started from yard",
+        "status": "completed",
+        "completed_on": "01 January 2020, 5 PM"
+      },
+      {
+        "label": "Loading started",
+        "status": "completed",
+        "completed_on": "01 January 2020, 5 PM"
+      },
+      {
+        "label": "Unloading completed",
+        "status": "pending",
+        "completed_on": ""
+      }
+    ],
+    "download_document": {
+      "label": "Download POD",
+      "url": "path/to/file"
+    }
+  }
+}

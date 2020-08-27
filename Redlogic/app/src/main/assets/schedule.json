@@ -1,0 +1,21 @@
+{
+  "status": true,
+  "message": "Schedule List",
+  "data": [
+    {
+      "execution_id": "1",
+      "execution_details": "Doha - Dukan\n40 ft Trailer",
+      "timestamp": "1587279575"
+    },
+    {
+      "job_id": "2",
+      "execution_details": "Doha \n20T forkliftr",
+      "timestamp": "1587279575"
+    },
+    {
+      "job_id": "3",
+      "execution_details": "Doha - Dukan\n40 ft Trailer",
+      "timestamp": "1587279575"
+    }
+  ]
+}

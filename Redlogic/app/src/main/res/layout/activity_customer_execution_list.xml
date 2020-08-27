@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/gray_234"
+        android:orientation="vertical"
+        android:paddingStart="31dp"
+        android:paddingEnd="31dp"
+        tools:context=".dashboard.customer.execution.CustomerExecutionListActivity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17dp">
+
+            <TextView
+                android:id="@+id/tvAll"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight=".6"
+                android:fontFamily="@font/roboto"
+                android:gravity="center_vertical"
+                android:onClick="onAll"
+                android:text="@string/all"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvOngoing"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/roboto"
+                android:gravity="center_vertical"
+                android:onClick="onGoing"
+                android:text="@string/ongoing"
+                android:textColor="@color/gray_131"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvCompleted"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1.3"
+                android:fontFamily="@font/roboto"
+                android:gravity="center_vertical"
+                android:onClick="onCompleted"
+                android:text="@string/completed"
+                android:textColor="@color/gray_131"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvPending"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/roboto"
+                android:gravity="center_vertical"
+                android:onClick="onPending"
+                android:text="@string/pending"
+                android:textColor="@color/gray_131"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp" />
+    </LinearLayout>
+</layout>
