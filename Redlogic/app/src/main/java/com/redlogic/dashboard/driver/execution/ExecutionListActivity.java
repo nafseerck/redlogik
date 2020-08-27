@@ -89,6 +89,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
             public void onResponseSuccess(String responseBodyString) {
                 ExecutionChecklistResponseModel responseModel = new Gson().fromJson(responseBodyString, ExecutionChecklistResponseModel.class);
                 listExecute = responseModel.getData();
+
                 setAdapter();
                 hideDialog();
             }
@@ -125,7 +126,15 @@ public class ExecutionListActivity extends BaseLoaderActivity {
                             mBinding.tvTitleTxt.setText(mydate);
 //                            data.setValue(b ? "checked" : "unchecked");
                             data.getData().get(0).setValue(b);
+                            updateApi();
+
                         });
+                        Object value = data.getData().get(0).getValue();
+                        if (value != null && value.equals("1")) {
+                            mBinding.imCheck.setChecked(true);
+                        } else {
+                            mBinding.imCheck.setChecked(false);
+                        }
                     }
                 })
                 .attachTo(binding.recyclerView);
@@ -137,6 +146,44 @@ public class ExecutionListActivity extends BaseLoaderActivity {
             e.printStackTrace();
         }
         slimAdapter.updateData(listExecute.getTasks());
+    }
+
+    private void updateApi() {
+        showDialog();
+        for (int i = 0; i < listExecute.getTasks().size(); i++) {
+            if (listExecute.getTasks().get(i).getData().get(0).getValue() == null
+                    || listExecute.getTasks().get(i).getData().get(0).getValue().equals(false)) {
+                listExecute.getTasks().get(i).getData().get(0).setValue(false);
+            } else {
+                listExecute.getTasks().get(i).getData().get(0).setValue(true);
+            }
+        }
+        ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);
+        ExecutionChecklistRequestModel requestModel = new ExecutionChecklistRequestModel();
+        List<ExecutionChecklistResponseModel.DataBeanX> listJob = new ArrayList<>();
+        ExecutionChecklistResponseModel.DataBeanX item = new ExecutionChecklistResponseModel.DataBeanX();
+        item.setJob_id(listExecute.getJob_id());
+        item.setService_master_id(listExecute.getService_master_id());
+        item.setTasks(listExecute.getTasks());
+        listJob.add(item);
+        requestModel.setJob(listJob);
+
+        Call<ResponseBody> call = apiServiceProvider.apiServices.callExecutionChecklistSubmit(requestModel);
+        ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();
+        apiParams.call = call;
+        apiParams.retrofitListener = new RetrofitListener() {
+            @Override
+            public void onResponseSuccess(String responseBodyString) {
+                hideDialog();
+            }
+
+            @Override
+            public void onResponseError(ErrorObject errorObject) {
+                hideDialog();
+            }
+        };
+        apiServiceProvider.callApi(apiParams);
+
     }
 
     public void onComplete(View view) {
@@ -162,6 +209,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
         item.setTasks(listExecute.getTasks());
         listJob.add(item);
         requestModel.setJob(listJob);
+
         Call<ResponseBody> call = apiServiceProvider.apiServices.callExecutionChecklistSubmit(requestModel);
         ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();
         apiParams.call = call;
