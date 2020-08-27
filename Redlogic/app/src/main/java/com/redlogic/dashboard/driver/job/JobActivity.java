@@ -65,7 +65,7 @@ public class JobActivity extends BaseLoaderActivity {
         binding.include1.imCall.setOnClickListener(v -> call(data.getAssignee_phone()));
         binding.include2.imCall.setOnClickListener(v -> call(data.getCustomer_phone()));
         binding.include1.card.setOnClickListener(v ->callAcceptOrReject() );
-        if (DeliveriesActivity.selectedPosition == 2||DeliveriesActivity.selectedPosition == 3) {
+        if (DeliveriesActivity.selectedPosition == 2||DeliveriesActivity.selectedPosition == 3 || DeliveriesActivity.selectedPosition == 1) {
             binding.tvAccept.setVisibility(View.GONE);
             binding.tvReject.setVisibility(View.GONE);
         }
@@ -82,16 +82,16 @@ public class JobActivity extends BaseLoaderActivity {
     }
 
     public void onAccept(View view) {
-        //callAcceptOrReject();
+        callAcceptOrReject();
     }
 
     public void onReject(View view) {
-        //DeclineActivity.start(JobActivity.this);
+        DeclineActivity.start(JobActivity.this);
     }
 
     public void onMap(View view) {
-        RouteMapActivity.start(this);
-//        CoreUtils.openRoutesMaps(this, data.getTo_location());
+        //RouteMapActivity.start(this);
+        CoreUtils.openRoutesMaps(this, data.getTo_location());
     }
 
 

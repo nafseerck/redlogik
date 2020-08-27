@@ -67,7 +67,7 @@ public class DeliveriesActivity extends BaseLoaderActivity implements TextWatche
         addItem(getString(R.string.delivery_new), R.mipmap.latest, 0);
         addItem(getString(R.string.delivery_in_process), R.mipmap.inprocess, 1);
         addItem(getString(R.string.delivery_completed), R.mipmap.completed, 2);
-        addItem(getString(R.string.delivery_rejected), R.mipmap.rejected, 3);
+        //addItem(getString(R.string.delivery_rejected), R.mipmap.rejected, 3);
         setAdapter();
 
         setItems();
@@ -109,7 +109,7 @@ public class DeliveriesActivity extends BaseLoaderActivity implements TextWatche
         });
         Point size = new Point();
         getWindowManager().getDefaultDisplay().getRealSize(size);
-        int width = size.x / 4;
+        int width = size.x / 3;
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width, ViewGroup.LayoutParams.MATCH_PARENT);
         mBinding.liItem.setLayoutParams(layoutParams);
         binding.liItem.addView(injector);

@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import com.google.gson.Gson;
@@ -59,6 +62,20 @@ public class LoginActivity extends BaseLoaderActivity implements TextWatcher {
 //        binding.edUsername.setText("RL62234791");
 //        binding.edUsername.setText("RL32282114");
 //        binding.edPassword.setText("Asdf@1234");
+
+        binding.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (!isChecked) {
+                    // show password
+                    binding.edPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+                } else {
+                    // hide password
+                    binding.edPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                }
+            }
+        });
     }
 
     public void onLogin(View view) {

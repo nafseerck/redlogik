@@ -85,6 +85,15 @@
                     android:paddingStart="24dp"
                     android:paddingEnd="24dp"
                     android:textColor="@color/gray_72" />
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:layout_width="wrap_content"
+                    android:id="@+id/checkbox"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/lato"
+                    android:layout_height="wrap_content"
+                    android:text="show password">
+
+                </androidx.appcompat.widget.AppCompatCheckBox>
 
                 <View
                     android:layout_width="0dp"

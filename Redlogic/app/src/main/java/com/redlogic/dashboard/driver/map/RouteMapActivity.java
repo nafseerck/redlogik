@@ -48,6 +48,7 @@ public class RouteMapActivity extends BaseLoaderActivity implements OnMapReadyCa
                 .findFragmentById(R.id.map);
         if (mapFragment != null)
             mapFragment.getMapAsync(this);
+        showGps();
         getAddress();
         if (!isCustomer) {
             binding.include.liItem.setVisibility(View.GONE);
@@ -83,8 +84,8 @@ public class RouteMapActivity extends BaseLoaderActivity implements OnMapReadyCa
                 .addOnFailureListener(this, e -> {
                 });
         mFusedLocationClient.getLocationAvailability().addOnSuccessListener(locationAvailability -> {
-            if (!locationAvailability.isLocationAvailable()) {
-                showGps();
+            if (locationAvailability.isLocationAvailable()) {
+                //showGps();
             }
         });
     }

@@ -28,6 +28,8 @@ import com.redlogic.utils.core.CoreUtils;
 import com.redlogic.utils.image.FileConversion;
 import com.redlogic.utils.image.ImageUtils;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 import okhttp3.ResponseBody;
@@ -42,6 +44,7 @@ public class DeclarationActivity extends BaseLoaderActivity {
     boolean isUpload;
     private String base64;
     private boolean isSecond;
+    String pdf;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, DeclarationActivity.class);
@@ -125,6 +128,15 @@ public class DeclarationActivity extends BaseLoaderActivity {
                         "Generated\nTimesheet Successfully");
                 binding.liDraw.setVisibility(View.GONE);
                 binding.liGenerated.setVisibility(View.VISIBLE);
+
+                try {
+
+                    JSONObject obj = new JSONObject(responseBodyString);
+                    pdf=obj.getString("download_url");
+
+                } catch (Throwable t) {
+
+                }
                 hideDialog();
             }
 
@@ -180,6 +192,7 @@ public class DeclarationActivity extends BaseLoaderActivity {
     }
 
     public void onDownload(View view) {
+        //FileConversion.downloadPdf(this, "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/"+pdf);
         FileConversion.downloadPdf(this, "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
         showToast("Downloading...");
         showToast("Please check you downloads folder");

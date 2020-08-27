@@ -33,6 +33,7 @@ import net.idik.lib.slimadapter.SlimInjector;
 import net.idik.lib.slimadapter.viewinjector.IViewInjector;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
@@ -110,7 +111,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
                         ItemExecutionBinding mBinding = DataBindingUtil.bind(injector.findViewById(R.id.liItem));
                         if (mBinding == null) return;
                         mBinding.tvTitle.setText(data.getDescription());
-                        mBinding.tvTitleTxt.setText(dateTime);
+
                         mBinding.liItem.setOnClickListener(v -> {
                         });
                         if (isSecondTime) {
@@ -120,6 +121,8 @@ public class ExecutionListActivity extends BaseLoaderActivity {
                             TimeSheetActivity.start(ExecutionListActivity.this);
                         });
                         mBinding.imCheck.setOnCheckedChangeListener((compoundButton, b) -> {
+                            String mydate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+                            mBinding.tvTitleTxt.setText(mydate);
 //                            data.setValue(b ? "checked" : "unchecked");
                             data.getData().get(0).setValue(b);
                         });

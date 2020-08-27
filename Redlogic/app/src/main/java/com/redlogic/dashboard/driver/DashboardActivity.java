@@ -121,7 +121,7 @@ public class DashboardActivity extends BaseLoaderActivity {
         list.add(getItem(getString(R.string.delivery_new), data.getNew_work_count(), R.mipmap.latest, 0));
         list.add(getItem(getString(R.string.delivery_in_process), data.getIn_progress_count(), R.mipmap.inprocess, 1));
         list.add(getItem(getString(R.string.delivery_completed), data.getCompleted_count(), R.mipmap.completed, 2));
-        list.add(getItem(getString(R.string.delivery_rejected), data.getRejected(), R.mipmap.rejected, 3));
+       // list.add(getItem(getString(R.string.delivery_rejected), data.getRejected(), R.mipmap.rejected, 3));
         slimAdapter.updateData(list);
 
     }
