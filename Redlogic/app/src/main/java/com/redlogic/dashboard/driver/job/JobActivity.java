@@ -3,8 +3,10 @@ package com.redlogic.dashboard.driver.job;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
+import com.google.gson.Gson;
 import com.redlogic.R;
 import com.redlogic.dashboard.driver.decline.DeclineActivity;
 import com.redlogic.dashboard.driver.deliveries.DeliveriesActivity;
@@ -64,8 +66,12 @@ public class JobActivity extends BaseLoaderActivity {
 
         binding.include1.imCall.setOnClickListener(v -> call(data.getAssignee_phone()));
         binding.include2.imCall.setOnClickListener(v -> call(data.getCustomer_phone()));
-        binding.include1.card.setOnClickListener(v ->callAcceptOrReject() );
-        if (DeliveriesActivity.selectedPosition == 2||DeliveriesActivity.selectedPosition == 3 || DeliveriesActivity.selectedPosition == 1) {
+        binding.include1.card.setOnClickListener(v -> {
+            if (!DeliveriesActivity.isnewJob) {
+                callAcceptOrReject();
+            }
+        });
+        if (DeliveriesActivity.selectedPosition == 2 || DeliveriesActivity.selectedPosition == 3 || DeliveriesActivity.selectedPosition == 1) {
             binding.tvAccept.setVisibility(View.GONE);
             binding.tvReject.setVisibility(View.GONE);
         }
