@@ -231,7 +231,8 @@ public class ExecutionListActivity extends BaseLoaderActivity {
             @Override
             public void onResponseSuccess(String responseBodyString) {
                 showToast("Job Closed");
-                DeclarationActivity.isPod = new Random().nextBoolean();
+//                DeclarationActivity.isPod = new Random().nextBoolean();
+                DeclarationActivity.isPod = true;
                 DeclarationActivity.start(ExecutionListActivity.this);
                 finish();
             }
