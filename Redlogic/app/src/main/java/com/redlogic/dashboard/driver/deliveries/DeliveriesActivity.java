@@ -46,6 +46,7 @@ import retrofit2.Call;
 public class DeliveriesActivity extends BaseLoaderActivity implements TextWatcher {
     public static int selectedPosition;
     public static boolean isnewJob = false;
+    public static boolean isCompleted = false;
     private ActivityDeliveriesBinding binding;
     private LinearLayout selectedLiItem;
     private ImageView selectedImIcon;
@@ -124,20 +125,24 @@ public class DeliveriesActivity extends BaseLoaderActivity implements TextWatche
         switch (selectedPosition) {
             case 0:
                 isnewJob = true;
+                isCompleted = false;
                 getDeliveries("new");
                 binding.tvText.setText(R.string.delivery_new);
                 break;
             case 1:
+                isCompleted = false;
                 isnewJob = false;
                 getDeliveries("inprogress");
                 binding.tvText.setText(R.string.delivery_in_process);
                 break;
             case 2:
                 isnewJob = false;
+                isCompleted = true;
                 getDeliveries("completed");
                 binding.tvText.setText(R.string.delivery_completed);
                 break;
             case 3:
+                isCompleted = false;
                 isnewJob = false;
                 getDeliveries("rejected");
                 binding.tvText.setText(R.string.delivery_rejected);

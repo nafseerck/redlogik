@@ -12,8 +12,10 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 
+import com.google.gson.Gson;
 import com.redlogic.R;
 import com.redlogic.dashboard.driver.DashboardActivity;
 import com.redlogic.dashboard.driver.job.JobActivity;

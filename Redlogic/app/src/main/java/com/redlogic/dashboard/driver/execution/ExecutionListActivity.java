@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -14,6 +15,7 @@ import com.google.gson.Gson;
 import com.redlogic.R;
 import com.redlogic.dashboard.driver.damage.ReportDamagesActivity;
 import com.redlogic.dashboard.driver.declaration.DeclarationActivity;
+import com.redlogic.dashboard.driver.deliveries.DeliveriesActivity;
 import com.redlogic.dashboard.driver.job.JobActivity;
 import com.redlogic.dashboard.driver.request.ExecutionChecklistRequestModel;
 import com.redlogic.dashboard.driver.request.InitialChecklistRequestModel;
@@ -75,6 +77,10 @@ public class ExecutionListActivity extends BaseLoaderActivity {
                 getColor(R.color.grad_6)), ImageUtils.convertToIntArray(getColor(R.color.grad_6_trans),
                 getColor(R.color.grad_6_trans)), 20, binding.tvReport);
         callInitialChecklist();
+
+        if (DeliveriesActivity.isCompleted){
+            binding.tvComplete.setVisibility(View.GONE);
+        }
     }
 
     private void callInitialChecklist() {
@@ -126,39 +132,54 @@ public class ExecutionListActivity extends BaseLoaderActivity {
                             String mydate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
                             mBinding.tvTitleTxt.setText(mydate);
 //                            data.setValue(b ? "checked" : "unchecked");
-                            data.getData().get(0).setValue(b);
-                            updateApi();
+                            if (mBinding.imCheck.isChecked()) {
+                                data.setIs_completed(true);
+                                updateApi();
+                            }
 
                         });
-                        Object value = data.getData().get(0).getValue();
-                        if (value != null && value.equals("1")) {
-                            mBinding.imCheck.setChecked(true);
+
+                        if (data.getIs_completed()) {
+                            mBinding.imCheck.setVisibility(View.GONE);
+                            mBinding.imTic.setVisibility(View.VISIBLE);
                         } else {
-                            mBinding.imCheck.setChecked(false);
+                            mBinding.imCheck.setVisibility(View.VISIBLE);
+                            mBinding.imTic.setVisibility(View.GONE);
                         }
                     }
                 })
                 .attachTo(binding.recyclerView);
-        try {
-            for (int i = 0; i < listExecute.getTasks().get(0).getData().size(); i++) {
-                listExecute.getTasks().get(0).getData().get(i).setValue(listExecute.getTasks().get(0).getData().get(i).getValue().toString().equals("checked"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            for (int i = 0; i < listExecute.getTasks().get(0).getData().size(); i++) {
+//                listExecute.getTasks().get(0).getData().get(i).setValue(listExecute.getTasks().get(0).getData().get(i).getValue().toString().equals("checked"));
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         slimAdapter.updateData(listExecute.getTasks());
+        updateCompleteJobBtn();
+    }
+
+    private void updateCompleteJobBtn() {
+        int lastTask = listExecute.getTasks().size();
+        if (listExecute.getTasks().get(lastTask-1).getIs_completed()){
+            binding.tvComplete.setEnabled(true);
+        }else {
+            binding.tvComplete.setEnabled(false);
+        }
+    }
+
+    private void updateCompleteJobBtnLastExecution() {
+        int lastTask = listExecute.getTasks().size();
+        if (listExecute.getTasks().get(lastTask-2).getIs_completed()){
+            binding.tvComplete.setEnabled(true);
+        }else {
+            binding.tvComplete.setEnabled(false);
+        }
     }
 
     private void updateApi() {
         showDialog();
-        for (int i = 0; i < listExecute.getTasks().size(); i++) {
-            if (listExecute.getTasks().get(i).getData().get(0).getValue() == null
-                    || listExecute.getTasks().get(i).getData().get(0).getValue().equals(false)) {
-                listExecute.getTasks().get(i).getData().get(0).setValue(false);
-            } else {
-                listExecute.getTasks().get(i).getData().get(0).setValue(true);
-            }
-        }
         ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);
         ExecutionChecklistRequestModel requestModel = new ExecutionChecklistRequestModel();
         List<ExecutionChecklistResponseModel.DataBeanX> listJob = new ArrayList<>();
@@ -176,6 +197,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
             @Override
             public void onResponseSuccess(String responseBodyString) {
                 hideDialog();
+                updateCompleteJobBtnLastExecution();
             }
 
             @Override
@@ -189,10 +211,38 @@ public class ExecutionListActivity extends BaseLoaderActivity {
 
     public void onComplete(View view) {
 //        if (isSecondTime) {
-        callExecutionChecklistSubmit();
+//        callExecutionChecklistSubmit();
+        callCloseJob();
+
 //            return;
 //        }
 //        callInitialChecklistSubmit();
+    }
+
+    private void callCloseJob() {
+        InitialChecklistRequestModel requestModel = new InitialChecklistRequestModel();
+        requestModel.setJob_id(String.valueOf(listExecute.getJob_id()));
+
+        ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);
+        Call<ResponseBody> call = apiServiceProvider.apiServices.callCloseJob(requestModel);
+        ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();
+        apiParams.call = call;
+        apiParams.retrofitListener = new RetrofitListener() {
+            @Override
+            public void onResponseSuccess(String responseBodyString) {
+                showToast("Job Closed");
+                DeclarationActivity.isPod = new Random().nextBoolean();
+                DeclarationActivity.start(ExecutionListActivity.this);
+                finish();
+            }
+
+            @Override
+            public void onResponseError(ErrorObject errorObject) {
+
+            }
+        };
+        apiServiceProvider.callApi(apiParams);
+
     }
 
     private void callExecutionChecklistSubmit() {

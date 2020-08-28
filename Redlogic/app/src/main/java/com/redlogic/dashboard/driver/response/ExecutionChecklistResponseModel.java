@@ -86,7 +86,7 @@ public class ExecutionChecklistResponseModel {
             private int id;
             private String description;
             private int is_active;
-            private Object is_completed;
+            private boolean is_completed;
             private Object completed_on;
             private List<DataBean> data;
 
@@ -114,7 +114,7 @@ public class ExecutionChecklistResponseModel {
                 this.is_active = is_active;
             }
 
-            public Object getIs_completed() {
+            public boolean getIs_completed() {
                 return is_completed;
             }
 
