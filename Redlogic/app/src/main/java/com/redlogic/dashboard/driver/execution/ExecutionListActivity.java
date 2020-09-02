@@ -50,6 +50,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
     private ExecutionChecklistResponseModel.DataBeanX listExecute;
     private boolean isSecondTime;
     private SlimAdapter slimAdapter;
+    int nextCompleteCheckBoxId=0;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, ExecutionListActivity.class);
@@ -133,8 +134,16 @@ public class ExecutionListActivity extends BaseLoaderActivity {
                             mBinding.tvTitleTxt.setText(mydate);
 //                            data.setValue(b ? "checked" : "unchecked");
                             if (mBinding.imCheck.isChecked()) {
-                                data.setIs_completed(true);
-                                updateApi();
+                                if (data.getId() == listExecute.getTasks().get(nextCompleteCheckBoxId).getId()){
+                                    data.setIs_completed(true);
+                                    updateApi();
+                                }else {
+                                    showToast("Complete Tasks orderly");
+                                    if (mBinding.imCheck.isChecked()){
+                                        mBinding.imCheck.setChecked(false);
+                                    }
+                                }
+
                             }
 
                         });
@@ -158,6 +167,16 @@ public class ExecutionListActivity extends BaseLoaderActivity {
 //        }
         slimAdapter.updateData(listExecute.getTasks());
         updateCompleteJobBtn();
+        getNextCheckboxToComplete();
+    }
+
+    private void getNextCheckboxToComplete() {
+        for (int i=0;i<listExecute.getTasks().size();i++){
+            if (!listExecute.getTasks().get(i).getIs_completed()){
+                nextCompleteCheckBoxId = i;
+                break;
+            }
+        }
     }
 
     private void updateCompleteJobBtn() {
