@@ -217,6 +217,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
             public void onResponseSuccess(String responseBodyString) {
                 hideDialog();
                 updateCompleteJobBtnLastExecution();
+                getNextCheckboxToComplete();
             }
 
             @Override
