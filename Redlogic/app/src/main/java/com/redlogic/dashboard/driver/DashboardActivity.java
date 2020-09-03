@@ -92,6 +92,7 @@ public class DashboardActivity extends BaseLoaderActivity {
         binding.tvRole.setText(responseModel.getData().getRole());
         binding.tvRegNo.setText(String.format("Reg No:%s", responseModel.getData().getReg_no()));
         binding.tvVehicleType.setText(responseModel.getData().getVehicle_type());
+        sosMobileNumber = responseModel.getData().getSos_no();
         setAdapter(responseModel.getData());
     }
 

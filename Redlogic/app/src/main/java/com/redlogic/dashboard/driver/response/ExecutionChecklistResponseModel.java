@@ -87,7 +87,7 @@ public class ExecutionChecklistResponseModel {
             private String description;
             private int is_active;
             private boolean is_completed;
-            private Object completed_on;
+            private String completed_on;
             private List<DataBean> data;
 
             public int getId() {
@@ -122,11 +122,11 @@ public class ExecutionChecklistResponseModel {
                 this.is_completed = is_completed;
             }
 
-            public Object getCompleted_on() {
+            public String getCompleted_on() {
                 return completed_on;
             }
 
-            public void setCompleted_on(Object completed_on) {
+            public void setCompleted_on(String completed_on) {
                 this.completed_on = completed_on;
             }
 
@@ -152,7 +152,7 @@ public class ExecutionChecklistResponseModel {
                 private int id;
                 private int field_type_id;
                 private String label;
-                private Object value;
+                private String value;
                 private String items;
                 private String updated_on;
                 private String updated_by;
@@ -181,11 +181,11 @@ public class ExecutionChecklistResponseModel {
                     this.label = label;
                 }
 
-                public Object getValue() {
+                public String getValue() {
                     return value;
                 }
 
-                public void setValue(Object value) {
+                public void setValue(String value) {
                     this.value = value;
                 }
 

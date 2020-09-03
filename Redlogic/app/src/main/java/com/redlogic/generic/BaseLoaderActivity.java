@@ -49,6 +49,7 @@ public class BaseLoaderActivity extends BaseActivity {
     private View imCal;
     private RecyclerView recyclerView;
     private View relContent;
+    public String sosMobileNumber="";
 
     @Override
     public void setContentView(int view) {
@@ -128,6 +129,12 @@ public class BaseLoaderActivity extends BaseActivity {
     }
 
     public void onSos(View view) {
+        if (!sosMobileNumber.isEmpty()){
+            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", sosMobileNumber, null));
+            startActivity(intent);
+        }else {
+            showToast("SOS phone number not loaded");
+        }
     }
 
     public void onCalender(View view) {

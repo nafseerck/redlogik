@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -35,9 +34,12 @@ import net.idik.lib.slimadapter.SlimAdapter;
 import net.idik.lib.slimadapter.SlimInjector;
 import net.idik.lib.slimadapter.viewinjector.IViewInjector;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 import okhttp3.ResponseBody;
@@ -136,6 +138,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
                             if (mBinding.imCheck.isChecked()) {
                                 if (data.getId() == listExecute.getTasks().get(nextCompleteCheckBoxId).getId()){
                                     data.setIs_completed(true);
+                                    data.setCompleted_on(getCurrentTime());
                                     updateApi();
                                 }else {
                                     showToast("Complete Tasks orderly");
@@ -170,6 +173,13 @@ public class ExecutionListActivity extends BaseLoaderActivity {
         getNextCheckboxToComplete();
     }
 
+    private String getCurrentTime() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        Date currentTime = Calendar.getInstance().getTime();
+        String currentDateandTime = sdf.format(currentTime);
+        return currentDateandTime;
+    }
+
     private void getNextCheckboxToComplete() {
         for (int i=0;i<listExecute.getTasks().size();i++){
             if (!listExecute.getTasks().get(i).getIs_completed()){
@@ -199,6 +209,9 @@ public class ExecutionListActivity extends BaseLoaderActivity {
 
     private void updateApi() {
         showDialog();
+        setActive();
+        addCompletedOnAndValueFields();
+
         ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);
         ExecutionChecklistRequestModel requestModel = new ExecutionChecklistRequestModel();
         List<ExecutionChecklistResponseModel.DataBeanX> listJob = new ArrayList<>();
@@ -208,6 +221,9 @@ public class ExecutionListActivity extends BaseLoaderActivity {
         item.setTasks(listExecute.getTasks());
         listJob.add(item);
         requestModel.setJob(listJob);
+
+        Gson gson = new Gson();
+        Log.d("update_job", "updateApi: "+gson.toJson(requestModel));
 
         Call<ResponseBody> call = apiServiceProvider.apiServices.callExecutionChecklistSubmit(requestModel);
         ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();
@@ -227,6 +243,24 @@ public class ExecutionListActivity extends BaseLoaderActivity {
         };
         apiServiceProvider.callApi(apiParams);
 
+    }
+
+    private void addCompletedOnAndValueFields() {
+        for (int i=0;i<listExecute.getTasks().size();i++){
+            if (listExecute.getTasks().get(i).getCompleted_on() == null){
+                listExecute.getTasks().get(i).setCompleted_on("");
+            }
+            if (listExecute.getTasks().get(i).getData().get(0).getValue() == null){
+                listExecute.getTasks().get(i).getData().get(0).setValue("");
+            }
+        }
+    }
+
+    private void setActive() {
+        for (int i=0;i<listExecute.getTasks().size();i++){
+            ExecutionChecklistResponseModel.DataBeanX.TasksBean active = listExecute.getTasks().get(i);
+            active.setIs_active(active.getIs_active()+1);
+        }
     }
 
     public void onComplete(View view) {

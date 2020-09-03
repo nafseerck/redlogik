@@ -53,10 +53,15 @@ public class DashboardResponseModel {
         private String role;
         private String vehicle_type;
         private String reg_no;
+        private String sos_no;
         private String new_work_count;
         private String in_progress_count;
         private String completed_count;
         private String rejected;
+
+        public String getSos_no() {
+            return sos_no;
+        }
 
         public String getUserid() {
             return userid;
