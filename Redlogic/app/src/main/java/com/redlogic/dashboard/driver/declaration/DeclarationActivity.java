@@ -195,7 +195,7 @@ public class DeclarationActivity extends BaseLoaderActivity {
 
     public void onDownload(View view) {
         //FileConversion.downloadPdf(this, "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/"+pdf);
-        FileConversion.downloadPdf(this, "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
+        FileConversion.downloadPdf(this, pdf);
         showToast("Downloading...");
         showToast("Please check you downloads folder");
     }

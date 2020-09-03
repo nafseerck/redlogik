@@ -3,7 +3,6 @@ package com.redlogic.dashboard.driver.execution;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -139,7 +138,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
                                 if (data.getId() == listExecute.getTasks().get(nextCompleteCheckBoxId).getId()){
                                     data.setIs_completed(true);
                                     data.setCompleted_on(getCurrentTime());
-                                    updateApi();
+                                    executionChecklistSubmit();
                                 }else {
                                     showToast("Complete Tasks orderly");
                                     if (mBinding.imCheck.isChecked()){
@@ -207,7 +206,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
         }
     }
 
-    private void updateApi() {
+    private void executionChecklistSubmit() {
         showDialog();
         setActive();
         addCompletedOnAndValueFields();
@@ -222,8 +221,8 @@ public class ExecutionListActivity extends BaseLoaderActivity {
         listJob.add(item);
         requestModel.setJob(listJob);
 
-        Gson gson = new Gson();
-        Log.d("update_job", "updateApi: "+gson.toJson(requestModel));
+//        Gson gson = new Gson();
+//        Log.d("update_job", "updateApi: "+gson.toJson(requestModel));
 
         Call<ResponseBody> call = apiServiceProvider.apiServices.callExecutionChecklistSubmit(requestModel);
         ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();
