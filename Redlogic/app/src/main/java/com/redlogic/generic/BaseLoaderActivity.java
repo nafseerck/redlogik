@@ -49,7 +49,7 @@ public class BaseLoaderActivity extends BaseActivity {
     private View imCal;
     private RecyclerView recyclerView;
     private View relContent;
-    public String sosMobileNumber="";
+    public static String sosMobileNumber="";
 
     @Override
     public void setContentView(int view) {

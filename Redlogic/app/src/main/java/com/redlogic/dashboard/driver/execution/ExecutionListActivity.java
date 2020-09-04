@@ -220,7 +220,8 @@ public class ExecutionListActivity extends BaseLoaderActivity {
     }
 
     private void executionChecklistSubmit() {
-//        showDialog();
+//        showToastDialog();
+        showDialog();
         addCompletedOnAndValueFields();
 
         ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);

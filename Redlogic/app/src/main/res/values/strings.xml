@@ -5,8 +5,8 @@
 <!--    <string name="google_maps_key">AIzaSyArj_CZHCsOvoWVK4Kpj9qxrdY-oR9nbrk</string>-->
     <string name="google_maps_key">AIzaSyCzhO37JuMJEFCAG3nL6f9mqn6QLxcfCaw</string>
     <string name="arabic">العربية</string>
-    <string name="welcome_to_redlogik">Welcome to redlogik!</string>
-    <string name="sign_in_as_customer">Sign into Redlogik</string>
+    <string name="welcome_to_redlogik">Welcome to Elcy!</string>
+    <string name="sign_in_as_customer">Sign into Elcy</string>
     <string name="sign_in">Sign In</string>
     <string name="username">Username</string>
     <string name="password">Password</string>

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -38,6 +39,7 @@ import retrofit2.Call;
 public class CustomerDashboardActivity extends BaseLoaderActivity {
 
     private ActivityCustomerDashboardBinding binding;
+    private String TAG="jithin_tag";
 
     public static void start(Context context) {
         Intent intent = new Intent(context, CustomerDashboardActivity.class);
@@ -78,6 +80,9 @@ public class CustomerDashboardActivity extends BaseLoaderActivity {
                 hideDialog();
                 DashboardResponse responseModel = new Gson().fromJson(response, DashboardResponse.class);
                 setDashboardDetails(responseModel);
+
+                Gson gson = new Gson();
+                Log.d(TAG, "onResponseSuccess: "+gson.toJson(responseModel));
             }
 
             @Override
