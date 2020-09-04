@@ -3,6 +3,7 @@ package com.redlogic.dashboard.driver.execution;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -89,6 +90,10 @@ public class ExecutionListActivity extends BaseLoaderActivity {
         ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);
         InitialChecklistRequestModel requestModel = new InitialChecklistRequestModel();
         requestModel.setJob_id(data.getJob_id());
+
+//        Gson gson = new Gson();
+//        Log.d("checklist_res", "onRequest: "+gson.toJson(requestModel));
+
         Call<ResponseBody> call = apiServiceProvider.apiServices.callExecutionChecklist(requestModel);
         ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();
         apiParams.call = call;
@@ -98,6 +103,9 @@ public class ExecutionListActivity extends BaseLoaderActivity {
             public void onResponseSuccess(String responseBodyString) {
                 ExecutionChecklistResponseModel responseModel = new Gson().fromJson(responseBodyString, ExecutionChecklistResponseModel.class);
                 listExecute = responseModel.getData();
+
+//                Gson gson = new Gson();
+//                Log.d("checklist_res", "onResponseSuccess: "+gson.toJson(responseModel));
 
                 setAdapter();
                 hideDialog();
@@ -208,7 +216,6 @@ public class ExecutionListActivity extends BaseLoaderActivity {
 
     private void executionChecklistSubmit() {
         showDialog();
-        setActive();
         addCompletedOnAndValueFields();
 
         ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);
@@ -222,7 +229,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
         requestModel.setJob(listJob);
 
 //        Gson gson = new Gson();
-//        Log.d("update_job", "updateApi: "+gson.toJson(requestModel));
+//        Log.d("update_job", "request: "+gson.toJson(requestModel));
 
         Call<ResponseBody> call = apiServiceProvider.apiServices.callExecutionChecklistSubmit(requestModel);
         ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();
@@ -230,6 +237,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
         apiParams.retrofitListener = new RetrofitListener() {
             @Override
             public void onResponseSuccess(String responseBodyString) {
+
                 hideDialog();
                 updateCompleteJobBtnLastExecution();
                 getNextCheckboxToComplete();
@@ -252,13 +260,6 @@ public class ExecutionListActivity extends BaseLoaderActivity {
             if (listExecute.getTasks().get(i).getData().get(0).getValue() == null){
                 listExecute.getTasks().get(i).getData().get(0).setValue("");
             }
-        }
-    }
-
-    private void setActive() {
-        for (int i=0;i<listExecute.getTasks().size();i++){
-            ExecutionChecklistResponseModel.DataBeanX.TasksBean active = listExecute.getTasks().get(i);
-            active.setIs_active(active.getIs_active()+1);
         }
     }
 
