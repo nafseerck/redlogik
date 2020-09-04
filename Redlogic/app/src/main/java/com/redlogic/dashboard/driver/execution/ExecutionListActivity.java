@@ -165,6 +165,11 @@ public class ExecutionListActivity extends BaseLoaderActivity {
                             mBinding.imCheck.setVisibility(View.VISIBLE);
                             mBinding.imTic.setVisibility(View.GONE);
                         }
+                        if (data.getIs_active() == 0){
+                            mBinding.imCheck.setEnabled(false);
+                        }else {
+                            mBinding.imCheck.setEnabled(true);
+                        }
                     }
                 })
                 .attachTo(binding.recyclerView);
@@ -215,7 +220,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
     }
 
     private void executionChecklistSubmit() {
-        showDialog();
+//        showDialog();
         addCompletedOnAndValueFields();
 
         ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);
