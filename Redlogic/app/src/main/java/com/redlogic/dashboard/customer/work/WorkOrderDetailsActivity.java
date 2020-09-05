@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.gson.Gson;
 import com.redlogic.R;
 import com.redlogic.dashboard.customer.execution.CustomerExecutionListActivity;
+import com.redlogic.dashboard.customer.request.WorkOrderApprovalRequestModel;
 import com.redlogic.dashboard.customer.request.WorkOrderRequestModel;
 import com.redlogic.dashboard.customer.response.WorkOrderDetailsResponse;
 import com.redlogic.dashboard.customer.response.WorkOrderListingResponse;
@@ -61,6 +62,12 @@ public class WorkOrderDetailsActivity extends BaseLoaderActivity {
 
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        if (WorkOrderListingActivity.deliveryType.matches("new")){
+            binding.tvApprove.setVisibility(View.VISIBLE);
+        }else {
+            binding.tvApprove.setVisibility(View.GONE);
+        }
 
          slimAdapter = SlimAdapter.create()
                 .register(R.layout.item_work_order_details, new SlimInjector<WorkOrderDetailsResponse.DataBean.JobsBean>() {
@@ -135,5 +142,30 @@ public class WorkOrderDetailsActivity extends BaseLoaderActivity {
     }
 
     public void onApprove(View view) {
+
+//        ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);
+//        WorkOrderApprovalRequestModel requestModel = new WorkOrderApprovalRequestModel();
+//        requestModel.setWork_order_id(data.getWork_order_id());
+//        requestModel.setUser_id();
+//        requestModel.setStatus("approved");
+//        requestModel.setReason("");
+//
+//        Call<ResponseBody> call = apiServiceProvider.apiServices.callWorkOrderapproval(requestModel);
+//        ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();
+//        apiParams.call = call;
+//        showDialog();
+//        apiParams.retrofitListener = new RetrofitListener() {
+//            @Override
+//            public void onResponseSuccess(String response) {
+//
+//            }
+//
+//            @Override
+//            public void onResponseError(ErrorObject errorObject) {
+//                hideDialog();
+//            }
+//        };
+//        apiServiceProvider.callApi(apiParams);
+
     }
 }

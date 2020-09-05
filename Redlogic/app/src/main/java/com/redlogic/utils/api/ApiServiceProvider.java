@@ -1,5 +1,6 @@
 package com.redlogic.utils.api;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;

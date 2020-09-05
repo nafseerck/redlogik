@@ -203,7 +203,7 @@ public class BaseLoaderActivity extends BaseActivity {
     }
 
     private void dashBoard() {
-        DashboardActivity.start(this);
+//        DashboardActivity.start(this);
     }
 
     public void goToLogin() {

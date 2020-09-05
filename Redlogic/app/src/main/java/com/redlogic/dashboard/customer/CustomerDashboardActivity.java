@@ -39,7 +39,6 @@ import retrofit2.Call;
 public class CustomerDashboardActivity extends BaseLoaderActivity {
 
     private ActivityCustomerDashboardBinding binding;
-    private String TAG="jithin_tag";
 
     public static void start(Context context) {
         Intent intent = new Intent(context, CustomerDashboardActivity.class);
@@ -81,8 +80,6 @@ public class CustomerDashboardActivity extends BaseLoaderActivity {
                 DashboardResponse responseModel = new Gson().fromJson(response, DashboardResponse.class);
                 setDashboardDetails(responseModel);
 
-                Gson gson = new Gson();
-                Log.d(TAG, "onResponseSuccess: "+gson.toJson(responseModel));
             }
 
             @Override
@@ -131,8 +128,8 @@ public class CustomerDashboardActivity extends BaseLoaderActivity {
                     public void onInject(@NonNull DashboardResponse.DataBean.CustomerDetailsBean.OngoingJobsBean data, @NonNull IViewInjector injector) {
                         ItemOnGoingBinding mBinding = DataBindingUtil.bind(injector.findViewById(R.id.liItem));
                         if (mBinding == null) return;
-                        mBinding.tvScheduledAt.setText(data.getScheduled_at());
-                        mBinding.tvTitle21.setText(data.getJob_details());
+                        mBinding.tvScheduledAt.setText(data.getJob_details().getScheduled_at());
+//                        mBinding.tvTitle21.setText(data.getJob_details());
                         mBinding.liItem.setOnClickListener(v -> {
                         });
                     }

@@ -2,6 +2,7 @@ package com.redlogic.utils.api;
 
 
 import com.redlogic.dashboard.customer.request.CustomerExecutionRequestModel;
+import com.redlogic.dashboard.customer.request.WorkOrderApprovalRequestModel;
 import com.redlogic.dashboard.customer.request.WorkOrderRequestModel;
 import com.redlogic.dashboard.driver.request.AcceptOrRejectRequestModel;
 import com.redlogic.dashboard.driver.request.ExecutionChecklistRequestModel;
@@ -53,6 +54,9 @@ public interface ApiServices {
 
     @POST("workorder-details")
     Call<ResponseBody> callWorkOrderDetails(@Body WorkOrderRequestModel requestModel);
+
+    @POST("workorder-approval")
+    Call<ResponseBody> callWorkOrderapproval(@Body WorkOrderApprovalRequestModel requestModel);
 
     @POST("acceptorreject")
     Call<ResponseBody> callAcceptOrReject(@Body AcceptOrRejectRequestModel requestModel);

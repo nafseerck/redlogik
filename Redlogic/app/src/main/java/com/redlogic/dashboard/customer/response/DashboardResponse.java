@@ -138,15 +138,18 @@ public class DashboardResponse {
             }
             public static class OngoingJobsBean {
                 /**
-                 * job_id : 1
-                 * job_details : 40 ft Trailer
-                 Doha - Dukan
-                 * scheduled_at : 01 January 2020, 5 PM
+                 * "job_id":3,
+                 *                "service_id":1,
+                 *                "job_details":{
+                 *                   "from_location":"Al Ghuwariyah",
+                 *                   "to_location":"Hamad seaport",
+                 *                   "equipment_type":"20 ft Flatbed Trailer",
+                 *                   "scheduled_at":"2020-09-04T14:38:00+00:00"
+                 *                }
                  */
 
                 private int job_id;
-                private String job_details;
-                private String scheduled_at;
+                private JobDetailsBean job_details;
 
                 public int getJob_id() {
                     return job_id;
@@ -156,20 +159,58 @@ public class DashboardResponse {
                     this.job_id = job_id;
                 }
 
-                public String getJob_details() {
+                public JobDetailsBean getJob_details() {
                     return job_details;
                 }
 
-                public void setJob_details(String job_details) {
+                public void setJob_details(String JobDetailsBean) {
                     this.job_details = job_details;
                 }
 
-                public String getScheduled_at() {
-                    return scheduled_at;
-                }
+                public static class JobDetailsBean {
+                    /**
+                     * from_location : Abu Dhalouf
+                     * to_location : Abu Nakhla
+                     * equipment_type : 20 ft Flatbed Trailer
+                     * scheduled_at : 2020-08-14T17:38:00+00:00
+                     */
 
-                public void setScheduled_at(String scheduled_at) {
-                    this.scheduled_at = scheduled_at;
+                    private String from_location;
+                    private String to_location;
+                    private String equipment_type;
+                    private String scheduled_at;
+
+                    public String getFrom_location() {
+                        return from_location;
+                    }
+
+                    public void setFrom_location(String from_location) {
+                        this.from_location = from_location;
+                    }
+
+                    public String getTo_location() {
+                        return to_location;
+                    }
+
+                    public void setTo_location(String to_location) {
+                        this.to_location = to_location;
+                    }
+
+                    public String getEquipment_type() {
+                        return equipment_type;
+                    }
+
+                    public void setEquipment_type(String equipment_type) {
+                        this.equipment_type = equipment_type;
+                    }
+
+                    public String getScheduled_at() {
+                        return scheduled_at;
+                    }
+
+                    public void setScheduled_at(String scheduled_at) {
+                        this.scheduled_at = scheduled_at;
+                    }
                 }
             }
 

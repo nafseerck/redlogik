@@ -50,6 +50,7 @@ public class WorkOrderListingActivity extends BaseLoaderActivity {
     private TextView selectedTvTitle;
     List<WorkOrderListingResponse.DataBean.WorkOrdersBean> data = new ArrayList<>();
     private SlimAdapter slimAdapter;
+    public static String deliveryType;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, WorkOrderListingActivity.class);
@@ -176,15 +177,19 @@ public class WorkOrderListingActivity extends BaseLoaderActivity {
     private void setItems() {
         switch (selectedPosition) {
             case 0:
+                deliveryType = "new";
                 getDeliveries("new");
                 break;
             case 1:
+                deliveryType = "inprocess";
                 getDeliveries("inprocess");
                 break;
             case 2:
+                deliveryType = "completed";
                 getDeliveries("completed");
                 break;
             case 3:
+                deliveryType = "rejected";
                 getDeliveries("rejected");
                 break;
         }
