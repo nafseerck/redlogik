@@ -91,6 +91,7 @@ public interface ApiServices {
     @POST("notification")
     Call<ResponseBody> callUpdateLocation();
 
-    @POST("shedules")
+//    @POST("shedules")
+    @POST("customer-shedules")
     Call<ResponseBody> callSchedules();
 }

@@ -32,6 +32,7 @@ import retrofit2.Call;
 public class ScheduleActivity extends BaseLoaderActivity {
 
     private ActivityScheduleBinding binding;
+    private String TAG="jithin_check";
 
     public static void start(Context context) {
         Intent intent = new Intent(context, ScheduleActivity.class);
@@ -66,6 +67,9 @@ public class ScheduleActivity extends BaseLoaderActivity {
                 hideDialog();
                 SchedulesResponseModel responseModel = new Gson().fromJson(responseBodyString, SchedulesResponseModel.class);
                 setAdapter(responseModel.getData());
+
+                Gson gson = new Gson();
+                Log.d(TAG, "onResponseSuccess: "+gson.toJson(responseModel));
             }
 
             @Override

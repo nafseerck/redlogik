@@ -91,8 +91,6 @@ public class ExecutionListActivity extends BaseLoaderActivity {
         InitialChecklistRequestModel requestModel = new InitialChecklistRequestModel();
         requestModel.setJob_id(data.getJob_id());
 
-//        Gson gson = new Gson();
-//        Log.d("checklist_res", "onRequest: "+gson.toJson(requestModel));
 
         Call<ResponseBody> call = apiServiceProvider.apiServices.callExecutionChecklist(requestModel);
         ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();
@@ -103,9 +101,6 @@ public class ExecutionListActivity extends BaseLoaderActivity {
             public void onResponseSuccess(String responseBodyString) {
                 ExecutionChecklistResponseModel responseModel = new Gson().fromJson(responseBodyString, ExecutionChecklistResponseModel.class);
                 listExecute = responseModel.getData();
-
-//                Gson gson = new Gson();
-//                Log.d("checklist_res", "onResponseSuccess: "+gson.toJson(responseModel));
 
                 setAdapter();
                 hideDialog();
@@ -233,9 +228,6 @@ public class ExecutionListActivity extends BaseLoaderActivity {
         item.setTasks(listExecute.getTasks());
         listJob.add(item);
         requestModel.setJob(listJob);
-
-//        Gson gson = new Gson();
-//        Log.d("update_job", "request: "+gson.toJson(requestModel));
 
         Call<ResponseBody> call = apiServiceProvider.apiServices.callExecutionChecklistSubmit(requestModel);
         ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();

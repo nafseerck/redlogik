@@ -3,6 +3,7 @@ package com.redlogic.dashboard.customer.work;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -122,6 +123,7 @@ public class WorkOrderDetailsActivity extends BaseLoaderActivity {
             public void onResponseSuccess(String response) {
                 hideDialog();
                 WorkOrderDetailsResponse responseModel = new Gson().fromJson(response, WorkOrderDetailsResponse.class);
+
                 result = responseModel.getData();
                 List<Object> list = new ArrayList<>();
                 list.add(result);
@@ -142,30 +144,34 @@ public class WorkOrderDetailsActivity extends BaseLoaderActivity {
     }
 
     public void onApprove(View view) {
+        showDialog();
 
-//        ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);
-//        WorkOrderApprovalRequestModel requestModel = new WorkOrderApprovalRequestModel();
-//        requestModel.setWork_order_id(data.getWork_order_id());
+        ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);
+        WorkOrderApprovalRequestModel requestModel = new WorkOrderApprovalRequestModel();
+        requestModel.setWork_order_id(data.getWork_order_id());
+        requestModel.setStatus("approved");
 //        requestModel.setUser_id();
-//        requestModel.setStatus("approved");
-//        requestModel.setReason("");
-//
-//        Call<ResponseBody> call = apiServiceProvider.apiServices.callWorkOrderapproval(requestModel);
-//        ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();
-//        apiParams.call = call;
-//        showDialog();
-//        apiParams.retrofitListener = new RetrofitListener() {
-//            @Override
-//            public void onResponseSuccess(String response) {
-//
-//            }
-//
-//            @Override
-//            public void onResponseError(ErrorObject errorObject) {
-//                hideDialog();
-//            }
-//        };
-//        apiServiceProvider.callApi(apiParams);
+        requestModel.setReason("");
+
+        Call<ResponseBody> call = apiServiceProvider.apiServices.callWorkOrderapproval(requestModel);
+        ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();
+        apiParams.call = call;
+        showDialog();
+        apiParams.retrofitListener = new RetrofitListener() {
+            @Override
+            public void onResponseSuccess(String response) {
+                hideDialog();
+                finish();
+
+            }
+
+            @Override
+            public void onResponseError(ErrorObject errorObject) {
+                hideDialog();
+                finish();
+            }
+        };
+        apiServiceProvider.callApi(apiParams);
 
     }
 }
