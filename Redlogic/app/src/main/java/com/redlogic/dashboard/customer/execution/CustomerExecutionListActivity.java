@@ -55,7 +55,7 @@ public class CustomerExecutionListActivity extends BaseLoaderActivity {
         roboto = ResourcesCompat.getFont(this, R.font.roboto);
         robotoMedium = ResourcesCompat.getFont(this, R.font.roboto_medium);
         setAdapter();
-        getList();
+        getList("");
     }
 
     private void setAdapter() {
@@ -95,7 +95,7 @@ public class CustomerExecutionListActivity extends BaseLoaderActivity {
                 .attachTo(binding.recyclerView);
     }
 
-    private void getList() {
+    private void getList(String type) {
         ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);
         WorkOrderRequestModel requestModel = new WorkOrderRequestModel();
         requestModel.setWork_order_id(WorkOrderDetailsActivity.data.getWork_order_id());
@@ -108,9 +108,22 @@ public class CustomerExecutionListActivity extends BaseLoaderActivity {
             public void onResponseSuccess(String response) {
                 hideDialog();
                 ExecutionListResponse responseModel = new Gson().fromJson(response, ExecutionListResponse.class);
+                List<ExecutionListResponse.DataBean> responseData = responseModel.getData();
                 data.clear();
-                data.addAll(responseModel.getData());
-                slimAdapter.updateData(data);
+                if (type.isEmpty()){
+                    data.addAll(responseModel.getData());
+                    slimAdapter.updateData(data);
+                }else {
+                    for (int i = 0; i < responseData.size(); i++) {
+                        if (responseData.get(i).getStatus().matches(type)){
+                            data.add(responseData.get(i));
+                            slimAdapter.updateData(data);
+                        }else {
+                            slimAdapter.updateData(data);
+                        }
+                    }
+                }
+
             }
 
             @Override
@@ -134,7 +147,7 @@ public class CustomerExecutionListActivity extends BaseLoaderActivity {
         binding.tvAll.setTextColor(getColor(R.color.gray_131));
         binding.tvCompleted.setTextColor(getColor(R.color.gray_131));
         binding.tvPending.setTextColor(getColor(R.color.gray_131));
-        getList();
+        getList("inprogress");
     }
 
     public void onCompleted(View view) {
@@ -150,7 +163,7 @@ public class CustomerExecutionListActivity extends BaseLoaderActivity {
         binding.tvAll.setTextColor(getColor(R.color.gray_131));
         binding.tvOngoing.setTextColor(getColor(R.color.gray_131));
         binding.tvPending.setTextColor(getColor(R.color.gray_131));
-        getList();
+        getList("completed");
     }
 
     public void onAll(View view) {
@@ -166,7 +179,7 @@ public class CustomerExecutionListActivity extends BaseLoaderActivity {
         binding.tvOngoing.setTextColor(getColor(R.color.gray_131));
         binding.tvCompleted.setTextColor(getColor(R.color.gray_131));
         binding.tvPending.setTextColor(getColor(R.color.gray_131));
-        getList();
+        getList("");
     }
 
     public void onPending(View view) {
@@ -182,6 +195,6 @@ public class CustomerExecutionListActivity extends BaseLoaderActivity {
         binding.tvAll.setTextColor(getColor(R.color.gray_131));
         binding.tvCompleted.setTextColor(getColor(R.color.gray_131));
         binding.tvOngoing.setTextColor(getColor(R.color.gray_131));
-        getList();
+        getList("pending");
     }
 }

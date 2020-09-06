@@ -5,11 +5,15 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
@@ -19,19 +23,35 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
 import com.jetradarmobile.rxlocationsettings.RxLocationSettings;
 import com.redlogic.R;
+import com.redlogic.dashboard.customer.request.CustomerExecutionRequestModel;
+import com.redlogic.dashboard.customer.response.CustomerLiveMapResponse;
 import com.redlogic.dashboard.customer.response.ExecutionDetailsResponse;
 import com.redlogic.databinding.ActivityRouteMapBinding;
 import com.redlogic.generic.BaseLoaderActivity;
+import com.redlogic.utils.api.ApiServiceProvider;
+import com.redlogic.utils.api.listeners.RetrofitListener;
+import com.redlogic.utils.api.models.ErrorObject;
 import com.redlogic.utils.core.CoreUtils;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+
+import static com.redlogic.dashboard.customer.execution.CustomerExecutionDetailsActivity.executionId;
 
 public class RouteMapActivity extends BaseLoaderActivity implements OnMapReadyCallback {
 
     public static boolean isCustomer;
     public static ExecutionDetailsResponse.DataBean result;
     private GoogleMap mMap;
+    private LatLng startLatLng,endLatLng;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, RouteMapActivity.class);
@@ -50,6 +70,7 @@ public class RouteMapActivity extends BaseLoaderActivity implements OnMapReadyCa
             mapFragment.getMapAsync(this);
         showGps();
         getAddress();
+        getLiveMap();
         if (!isCustomer) {
             binding.include.liItem.setVisibility(View.GONE);
         }else {
@@ -79,7 +100,7 @@ public class RouteMapActivity extends BaseLoaderActivity implements OnMapReadyCa
         mFusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, location -> {
                     LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
+//                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
                 })
                 .addOnFailureListener(this, e -> {
                 });
@@ -100,6 +121,58 @@ public class RouteMapActivity extends BaseLoaderActivity implements OnMapReadyCa
             }
         }
         locationOperation();
+    }
+
+    private void getLiveMap () {
+        showDialog();
+
+        ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);
+        CustomerExecutionRequestModel requestModel = new CustomerExecutionRequestModel();
+        requestModel.setExecution_id(executionId);
+        Call<ResponseBody> call = apiServiceProvider.apiServices.callCustomerLiveMaps(requestModel);
+        ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();
+        apiParams.call = call;
+        apiParams.retrofitListener = new RetrofitListener() {
+            @Override
+            public void onResponseSuccess(String response) {
+                hideDialog();
+
+                CustomerLiveMapResponse responseModel = new Gson().fromJson(response, CustomerLiveMapResponse.class);
+                Double startLat,startLng,endLat,endLng;
+                startLat = Double.parseDouble(responseModel.getData().getStart_lat());
+                startLng = Double.parseDouble(responseModel.getData().getStart_long());
+
+                endLat = Double.parseDouble(responseModel.getData().getEnd_lat());
+                endLng = Double.parseDouble(responseModel.getData().getEnd_long());
+
+                startLatLng = new LatLng(startLat,startLng);
+                endLatLng = new LatLng(endLat,endLng);
+
+                createMarker(startLatLng,"Source","Start location");
+                createMarker(endLatLng,"Destination","End location");
+
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(startLatLng));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(9));
+
+
+            }
+
+            @Override
+            public void onResponseError(ErrorObject errorObject) {
+                hideDialog();
+            }
+        };
+        apiServiceProvider.callApi(apiParams);
+    }
+
+    protected Marker createMarker(LatLng latLng, String title, String snippet) {
+
+        return mMap.addMarker(new MarkerOptions()
+                .position(latLng)
+                .anchor(0.5f, 0.5f)
+                .title(title)
+                .snippet(snippet)
+                .icon(bitmapDescriptorFromVector(RouteMapActivity.this)));
     }
 
     @Override
@@ -124,5 +197,14 @@ public class RouteMapActivity extends BaseLoaderActivity implements OnMapReadyCa
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             getAddress();
         }
+    }
+
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context) {
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, R.drawable.ic_map);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 }

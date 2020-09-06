@@ -6,7 +6,6 @@ import com.redlogic.dashboard.customer.request.WorkOrderApprovalRequestModel;
 import com.redlogic.dashboard.customer.request.WorkOrderRequestModel;
 import com.redlogic.dashboard.driver.request.AcceptOrRejectRequestModel;
 import com.redlogic.dashboard.driver.request.ExecutionChecklistRequestModel;
-import com.redlogic.dashboard.driver.request.ExecutionChecklistSubmitRequestModel;
 import com.redlogic.dashboard.driver.request.GeneratePodRequestModel;
 import com.redlogic.dashboard.driver.request.GenerateTimeSheetRequestModel;
 import com.redlogic.dashboard.driver.request.InitialChecklistRequestModel;
@@ -87,6 +86,9 @@ public interface ApiServices {
 
     @POST("update_location")
     Call<ResponseBody> callUpdateLocation(@Body UpdateLocationeRequestModel requestModel);
+
+    @POST("customer-livemaps")
+    Call<ResponseBody> callCustomerLiveMaps(@Body CustomerExecutionRequestModel requestModel);
 
     @POST("notification")
     Call<ResponseBody> callUpdateLocation();

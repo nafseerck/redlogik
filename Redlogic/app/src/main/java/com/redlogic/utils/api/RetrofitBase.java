@@ -130,6 +130,8 @@ public class RetrofitBase {
             ResponseBody responseBody = (ResponseBody) response.body();
             if (responseBody != null) {
                 String responses = responseBody.string();
+                Gson gson = new Gson();
+                Log.d("jithin_check", "validateResponse: "+gson.toJson(responses));
                 retrofitListener.onResponseSuccess(responses);
             }
         } else {

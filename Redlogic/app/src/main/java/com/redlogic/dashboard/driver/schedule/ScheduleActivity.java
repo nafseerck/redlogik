@@ -3,7 +3,6 @@ package com.redlogic.dashboard.driver.schedule;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -68,8 +67,6 @@ public class ScheduleActivity extends BaseLoaderActivity {
                 SchedulesResponseModel responseModel = new Gson().fromJson(responseBodyString, SchedulesResponseModel.class);
                 setAdapter(responseModel.getData());
 
-                Gson gson = new Gson();
-                Log.d(TAG, "onResponseSuccess: "+gson.toJson(responseModel));
             }
 
             @Override
@@ -89,7 +86,7 @@ public class ScheduleActivity extends BaseLoaderActivity {
                     public void onInject(@NonNull final SchedulesResponseModel.DataBean data, @NonNull IViewInjector injector) {
                         ItemNotificationBinding mBinding = DataBindingUtil.bind(injector.findViewById(R.id.liItem));
                         if (mBinding == null) return;
-                        mBinding.tvTitle.setText(String.format("%s to %s", data.getFromlocation(), data.getTolocation()));
+                        mBinding.tvTitle.setText(String.format("%s to %s", data.getJob_details().getFrom_location(), data.getJob_details().getTo_location()));
                         String dateTime = CoreUtils.getParsedStamp("dd-MMM-yyyy,hh:mm aa", data.getTimestamp());
                         mBinding.tvTitleTxt.setText(dateTime);
                         mBinding.liItem.setOnClickListener(v -> {

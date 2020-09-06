@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.akexorcist.roundcornerprogressbar.CenteredRoundCornerProgressBar;
 import com.redlogic.R;
-import com.redlogic.dashboard.driver.DashboardActivity;
 import com.redlogic.dashboard.driver.notification.NotificationActivity;
 import com.redlogic.dashboard.driver.schedule.ScheduleActivity;
 import com.redlogic.databinding.ItemMenuItemBinding;
@@ -178,7 +177,7 @@ public class BaseLoaderActivity extends BaseActivity {
                                     break;
 
                                     case "Settings":
-                                        //language();
+//                                        language();
                                     break;
                             }
                         });
