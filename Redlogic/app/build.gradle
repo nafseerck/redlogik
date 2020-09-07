@@ -34,7 +34,7 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 //            buildConfigField("String", "BASE_URL", "\"https://estracker2.redlogik.com/index.php/\"")
-            buildConfigField("String", "BASE_URL", "\"https://lstracker2.redlogik.com/index.php/\"")
+            buildConfigField("String", "BASE_URL", "\"https://prodapi.logisticsconnect.com/\"")
         }
     }
 
