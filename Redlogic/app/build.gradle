@@ -26,7 +26,8 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "BASE_URL", "\"https://lstracker2.redlogik.com/index.php/\"")
+            buildConfigField("String", "BASE_URL", "\"https://prodapi.logisticsconnect.com/\"")
+          //  buildConfigField("String", "BASE_URL", "\"https://lstracker2.redlogik.com/index.php/\"")
 //            buildConfigField("String", "BASE_URL", "\"https://lstracker2.redlogik.com/redlogic/\"")
         }
         release {

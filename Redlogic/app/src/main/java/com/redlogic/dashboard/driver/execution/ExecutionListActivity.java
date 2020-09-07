@@ -282,7 +282,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
         apiParams.retrofitListener = new RetrofitListener() {
             @Override
             public void onResponseSuccess(String responseBodyString) {
-                showToast("Job Closed");
+                showToast("Job completed Successfully");
 //                DeclarationActivity.isPod = new Random().nextBoolean();
                 DeclarationActivity.isPod = true;
                 DeclarationActivity.start(ExecutionListActivity.this);
