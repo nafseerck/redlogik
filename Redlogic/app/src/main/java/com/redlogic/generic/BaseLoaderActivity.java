@@ -1,8 +1,12 @@
 package com.redlogic.generic;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.telecom.TelecomManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -10,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -48,7 +53,8 @@ public class BaseLoaderActivity extends BaseActivity {
     private View imCal;
     private RecyclerView recyclerView;
     private View relContent;
-    public static String sosMobileNumber="";
+    public static String sosMobileNumber = "";
+    private String TAG="tag_jithin";
 
     @Override
     public void setContentView(int view) {
@@ -128,9 +134,22 @@ public class BaseLoaderActivity extends BaseActivity {
     }
 
     public void onSos(View view) {
-        if (!sosMobileNumber.isEmpty()){
-            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", sosMobileNumber, null));
-            startActivity(intent);
+        if (!sosMobileNumber.isEmpty()) {
+//            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", sosMobileNumber, null));
+//            startActivity(intent);
+
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.CALL_PHONE},
+                        1);
+            }else {
+                TelecomManager telecomManager = (TelecomManager) getSystemService(TELECOM_SERVICE);
+                Uri uri = Uri.fromParts("tel", sosMobileNumber, null);
+                Bundle extras = new Bundle();
+                extras.putBoolean(TelecomManager.EXTRA_START_CALL_WITH_SPEAKERPHONE, false);
+                telecomManager.placeCall(uri, extras);
+            }
+
         }else {
             showToast("SOS phone number not loaded");
         }
@@ -222,4 +241,10 @@ public class BaseLoaderActivity extends BaseActivity {
 
         }
     };
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+    }
 }

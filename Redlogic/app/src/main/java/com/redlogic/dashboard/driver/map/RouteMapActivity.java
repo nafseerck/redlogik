@@ -138,21 +138,26 @@ public class RouteMapActivity extends BaseLoaderActivity implements OnMapReadyCa
                 hideDialog();
 
                 CustomerLiveMapResponse responseModel = new Gson().fromJson(response, CustomerLiveMapResponse.class);
-                Double startLat,startLng,endLat,endLng;
-                startLat = Double.parseDouble(responseModel.getData().getStart_lat());
-                startLng = Double.parseDouble(responseModel.getData().getStart_long());
+                try {
 
-                endLat = Double.parseDouble(responseModel.getData().getEnd_lat());
-                endLng = Double.parseDouble(responseModel.getData().getEnd_long());
+                    Double startLat,startLng,endLat,endLng;
+                    startLat = Double.parseDouble(responseModel.getData().getStart_lat());
+                    startLng = Double.parseDouble(responseModel.getData().getStart_long());
 
-                startLatLng = new LatLng(startLat,startLng);
-                endLatLng = new LatLng(endLat,endLng);
+                    endLat = Double.parseDouble(responseModel.getData().getEnd_lat());
+                    endLng = Double.parseDouble(responseModel.getData().getEnd_long());
 
-                createMarker(startLatLng,"Source","Start location");
-                createMarker(endLatLng,"Destination","End location");
+                    startLatLng = new LatLng(startLat,startLng);
+                    endLatLng = new LatLng(endLat,endLng);
 
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(startLatLng));
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(9));
+                    createMarker(startLatLng,"Source","Start location");
+                    createMarker(endLatLng,"Destination","End location");
+
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(startLatLng));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(9));
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
 
 
             }
