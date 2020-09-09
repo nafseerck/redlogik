@@ -3,7 +3,6 @@ package com.redlogic.dashboard.driver.execution;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -34,13 +33,14 @@ import net.idik.lib.slimadapter.SlimAdapter;
 import net.idik.lib.slimadapter.SlimInjector;
 import net.idik.lib.slimadapter.viewinjector.IViewInjector;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Random;
+import java.util.TimeZone;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -53,6 +53,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
     private boolean isSecondTime;
     private SlimAdapter slimAdapter;
     int nextCompleteCheckBoxId=0;
+    private String TAG=  "tag_jithin";
 
     public static void start(Context context) {
         Intent intent = new Intent(context, ExecutionListActivity.class);
@@ -134,7 +135,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
                             TimeSheetActivity.start(ExecutionListActivity.this);
                         });
                         mBinding.imCheck.setOnCheckedChangeListener((compoundButton, b) -> {
-                            String mydate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+                            String mydate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
                             mBinding.tvTitleTxt.setText(mydate);
 //                            data.setValue(b ? "checked" : "unchecked");
                             if (mBinding.imCheck.isChecked()) {
@@ -181,10 +182,10 @@ public class ExecutionListActivity extends BaseLoaderActivity {
     }
 
     private String getCurrentTime() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        Date currentTime = Calendar.getInstance().getTime();
-        String currentDateandTime = sdf.format(currentTime);
-        return currentDateandTime;
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        df.setTimeZone(TimeZone.getTimeZone("gmt"));
+        String gmtTime = df.format(new Date());
+        return gmtTime;
     }
 
     private void getNextCheckboxToComplete() {

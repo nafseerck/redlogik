@@ -3,15 +3,12 @@ package com.redlogic.dashboard.driver.job;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
-import com.google.gson.Gson;
 import com.redlogic.R;
 import com.redlogic.dashboard.driver.decline.DeclineActivity;
 import com.redlogic.dashboard.driver.deliveries.DeliveriesActivity;
 import com.redlogic.dashboard.driver.execution.ExecutionListActivity;
-import com.redlogic.dashboard.driver.map.RouteMapActivity;
 import com.redlogic.dashboard.driver.request.AcceptOrRejectRequestModel;
 import com.redlogic.dashboard.driver.response.JobsResponseModel;
 import com.redlogic.databinding.ActivityJobBinding;
@@ -68,7 +65,7 @@ public class JobActivity extends BaseLoaderActivity {
         binding.include2.imCall.setOnClickListener(v -> call(data.getCustomer_phone()));
         binding.include1.card.setOnClickListener(v -> {
             if (!DeliveriesActivity.isnewJob) {
-                callAcceptOrReject();
+                callAcceptOrReject("accept");
             }
         });
         if (DeliveriesActivity.selectedPosition == 2 || DeliveriesActivity.selectedPosition == 3 || DeliveriesActivity.selectedPosition == 1) {
@@ -88,11 +85,11 @@ public class JobActivity extends BaseLoaderActivity {
     }
 
     public void onAccept(View view) {
-        callAcceptOrReject();
+        callAcceptOrReject("accept");
     }
 
     public void onReject(View view) {
-        DeclineActivity.start(JobActivity.this);
+        callAcceptOrReject("reject");
     }
 
     public void onMap(View view) {
@@ -101,11 +98,11 @@ public class JobActivity extends BaseLoaderActivity {
     }
 
 
-    private void callAcceptOrReject() {
+    private void callAcceptOrReject(String status) {
         ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);
         AcceptOrRejectRequestModel requestModel = new AcceptOrRejectRequestModel();
         requestModel.setJob_id(data.getJob_id());
-        requestModel.setStatus("accept");
+        requestModel.setStatus(status);
         requestModel.setDescription("");
         Call<ResponseBody> call = apiServiceProvider.apiServices.callAcceptOrReject(requestModel);
         ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();
@@ -116,8 +113,13 @@ public class JobActivity extends BaseLoaderActivity {
             public void onResponseSuccess(String responseBodyString) {
                 hideDialog();
                 //showToast("Job Accepted Successfully");
-                ExecutionListActivity.start(JobActivity.this);
-                finish();
+                if (status.matches("accept")){
+                    ExecutionListActivity.start(JobActivity.this);
+                    finish();
+                }else {
+                    DeclineActivity.start(JobActivity.this);
+                    finish();
+                }
             }
 
             @Override

@@ -3,7 +3,6 @@ package com.redlogic.dashboard.driver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -21,7 +20,6 @@ import com.redlogic.utils.api.ApiServiceProvider;
 import com.redlogic.utils.api.listeners.RetrofitListener;
 import com.redlogic.utils.api.models.ErrorObject;
 import com.redlogic.utils.image.ImageUtils;
-import com.redlogic.utils.json.Utils;
 
 import net.idik.lib.slimadapter.SlimAdapter;
 import net.idik.lib.slimadapter.SlimInjector;
@@ -59,8 +57,14 @@ public class DashboardActivity extends BaseLoaderActivity {
         setBurger();
 //        String jsonFileString = Utils.getJsonFromAssets(getApplicationContext(), "bezkoder.json");
 //        Log.i("data", jsonFileString);
-        getDashboard();
 //        TimeSheetActivity.start(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        getDashboard();
     }
 
     private void getDashboard() {
