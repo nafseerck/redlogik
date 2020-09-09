@@ -58,4 +58,5 @@
     <string name="pending">Pending</string>
     <string name="vehicle_equipment">Vehicle/Equipment</string>
     <string name="download_pod">Download POD</string>
+    <string name="clear">Clear</string>
 </resources>
