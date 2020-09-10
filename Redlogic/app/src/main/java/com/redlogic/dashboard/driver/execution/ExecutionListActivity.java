@@ -140,9 +140,11 @@ public class ExecutionListActivity extends BaseLoaderActivity {
 //                            data.setValue(b ? "checked" : "unchecked");
                             if (mBinding.imCheck.isChecked()) {
                                 if (data.getId() == listExecute.getTasks().get(nextCompleteCheckBoxId).getId()){
+
                                     data.setIs_completed(true);
                                     data.setCompleted_on(getCurrentTime());
                                     executionChecklistSubmit();
+
                                 }else {
                                     showToast("Complete Tasks orderly");
                                     if (mBinding.imCheck.isChecked()){
@@ -153,6 +155,13 @@ public class ExecutionListActivity extends BaseLoaderActivity {
                             }
 
                         });
+                        if (isDateMatches(data.getData().get(0).getUpdated_on())){
+                            mBinding.imCheck.setEnabled(true);
+                            mBinding.imCheck.setClickable(true);
+                        }else {
+                            mBinding.imCheck.setEnabled(false);
+                            mBinding.imCheck.setClickable(false);
+                        }
 
                         if (data.getIs_completed()) {
                             mBinding.imCheck.setVisibility(View.GONE);
@@ -179,6 +188,32 @@ public class ExecutionListActivity extends BaseLoaderActivity {
         slimAdapter.updateData(listExecute.getTasks());
         updateCompleteJobBtn();
         getNextCheckboxToComplete();
+    }
+
+    private boolean isDateMatches(String updatedOn) {
+        Date orderDate = convertStringToDate(updatedOn);
+        if (orderDate == null){
+            return false;
+        }else {
+            Date currentDate = Calendar.getInstance().getTime();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            if (dateFormat.format(orderDate).matches(dateFormat.format(currentDate))){
+                return true;
+            }else {
+                return false;
+            }
+        }
+    }
+
+    private Date convertStringToDate(String updatedOn) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            Date date = format.parse(updatedOn);
+            return date;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private String getCurrentTime() {

@@ -62,6 +62,7 @@ public class JobsResponseModel {
         private String end_lat;
         private String end_long;
         private String assigned_by;
+        private List<CargoDetails> cargo_details;
         private String material;
         private String quantity;
         private String unit;
@@ -69,6 +70,10 @@ public class JobsResponseModel {
         private String customer;
         private String customer_phone;
         private String customer_address;
+
+        public List<CargoDetails> getCargo_details() {
+            return cargo_details;
+        }
 
         public String getJob_id() {
             return job_id;
@@ -180,6 +185,34 @@ public class JobsResponseModel {
 
         public void setCustomer_address(String customer_address) {
             this.customer_address = customer_address;
+        }
+
+        private class CargoDetails {
+            String material;
+            String quantity;
+            String weight;
+            String unit;
+            String dimension;
+
+            public String getMaterial() {
+                return material;
+            }
+
+            public String getQuantity() {
+                return quantity;
+            }
+
+            public String getWeight() {
+                return weight;
+            }
+
+            public String getUnit() {
+                return unit;
+            }
+
+            public String getDimension() {
+                return dimension;
+            }
         }
     }
 }

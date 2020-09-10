@@ -145,6 +145,14 @@
                         android:textSize="16sp"
                         tools:text="Abc logistics" />
                 </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerVewCargo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/item_cargo_details"
+                    android:visibility="gone"
+                    tools:itemCount="2"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </LinearLayout>

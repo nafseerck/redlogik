@@ -84,6 +84,10 @@ public class JobActivity extends BaseLoaderActivity {
 //        });
     }
 
+    private void setCargoAdapter() {
+
+    }
+
     public void onAccept(View view) {
         callAcceptOrReject("accept");
     }
