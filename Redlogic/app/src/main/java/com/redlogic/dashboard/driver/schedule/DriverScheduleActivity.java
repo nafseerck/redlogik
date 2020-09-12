@@ -23,6 +23,9 @@ import net.idik.lib.slimadapter.SlimAdapter;
 import net.idik.lib.slimadapter.SlimInjector;
 import net.idik.lib.slimadapter.viewinjector.IViewInjector;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -33,6 +36,7 @@ public class DriverScheduleActivity extends BaseLoaderActivity {
 
     private ActivityDriverScheduleBinding binding;
     private String TAG="jithin_check";
+    List<SchedulesResponse.DataBean> list;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, DriverScheduleActivity.class);
@@ -47,6 +51,34 @@ public class DriverScheduleActivity extends BaseLoaderActivity {
         setTitle("Schedule");
         hideSchedules();
         callSchedules();
+
+        binding.calenderView.setOnDateChangeListener((calendarView, year, month, day) -> {
+            try {
+
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                Date date = sdf.parse(day+"-"+(month+1)+"-"+year);
+                String selectedDate = sdf.format(date);
+                if (list != null && !list.isEmpty()){
+                    setFilteredList(selectedDate);
+                }
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        });
+
+    }
+
+    private void setFilteredList(String selectedDate) {
+        List<SchedulesResponse.DataBean> filteredList = new ArrayList<>();
+        for (int i=0;i<list.size();i++){
+            String date = CoreUtils.getParsedStamp("dd-MM-yyyy",list.get(i).getTimestamp());
+            if (selectedDate.matches(date)){
+                filteredList.add(list.get(i));
+            }
+        }
+        setAdapter(filteredList);
     }
 
     private void callSchedules() {
@@ -60,7 +92,10 @@ public class DriverScheduleActivity extends BaseLoaderActivity {
             public void onResponseSuccess(String responseBodyString) {
                 hideDialog();
                 SchedulesResponse responseModel = new Gson().fromJson(responseBodyString, SchedulesResponse.class);
-                setAdapter(responseModel.getData());
+                list = responseModel.getData();
+//                setAdapter(responseModel.getData());
+                String today = CoreUtils.getParsedCurrentDate("dd-MM-yyyy");
+                setFilteredList(today);
 
             }
 
@@ -86,7 +121,7 @@ public class DriverScheduleActivity extends BaseLoaderActivity {
                         mBinding.tvTitleTxt.setText(dateTime);
                         mBinding.liItem.setOnClickListener(v -> {
                         });
-                        binding.calenderView.setDate(data.getTimestamp() * 1000);
+//                        binding.calenderView.setDate(data.getTimestamp() * 1000);
                     }
                 })
                 .attachTo(binding.recyclerView);
