@@ -1,4 +1,4 @@
-package com.redlogic.dashboard.customer.response;
+package com.redlogic.dashboard.driver.response;
 
 import java.util.List;
 
@@ -40,48 +40,33 @@ public class SchedulesResponse {
 
     public static class DataBean {
         /**
-         * execution_id : 1
-         * execution_details : Doha - Dukan
-         40 ft Trailer
+         * fromlocation : Doha - Dukan
+         * 40 ft Trailer
+         * tolocation : Doha - Dukan
+         * 40 ft Trailer
          * timestamp : 1587279575
          * job_id : 2
          */
 
-        private String execution_id;
-        private String execution_details;
-        private String timestamp;
+        private String fromlocation;
+        private String tolocation;
+        private long timestamp;
         private String job_id;
 
-        public String getExecution_id() {
-            return execution_id;
+        public String getFromlocation() {
+            return fromlocation;
         }
 
-        public void setExecution_id(String execution_id) {
-            this.execution_id = execution_id;
+        public String getTolocation() {
+            return tolocation;
         }
 
-        public String getExecution_details() {
-            return execution_details;
-        }
-
-        public void setExecution_details(String execution_details) {
-            this.execution_details = execution_details;
-        }
-
-        public String getTimestamp() {
+        public long getTimestamp() {
             return timestamp;
-        }
-
-        public void setTimestamp(String timestamp) {
-            this.timestamp = timestamp;
         }
 
         public String getJob_id() {
             return job_id;
-        }
-
-        public void setJob_id(String job_id) {
-            this.job_id = job_id;
         }
     }
 }

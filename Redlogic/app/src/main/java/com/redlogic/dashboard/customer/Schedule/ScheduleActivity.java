@@ -1,4 +1,4 @@
-package com.redlogic.dashboard.driver.schedule;
+package com.redlogic.dashboard.customer.Schedule;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.gson.Gson;
 import com.redlogic.R;
-import com.redlogic.dashboard.driver.response.SchedulesResponseModel;
+import com.redlogic.dashboard.customer.response.SchedulesCustomerResponseModel;
 import com.redlogic.databinding.ActivityScheduleBinding;
 import com.redlogic.databinding.ItemNotificationBinding;
 import com.redlogic.generic.BaseLoaderActivity;
@@ -64,7 +64,7 @@ public class ScheduleActivity extends BaseLoaderActivity {
             @Override
             public void onResponseSuccess(String responseBodyString) {
                 hideDialog();
-                SchedulesResponseModel responseModel = new Gson().fromJson(responseBodyString, SchedulesResponseModel.class);
+                SchedulesCustomerResponseModel responseModel = new Gson().fromJson(responseBodyString, SchedulesCustomerResponseModel.class);
                 setAdapter(responseModel.getData());
 
             }
@@ -77,13 +77,13 @@ public class ScheduleActivity extends BaseLoaderActivity {
         apiServiceProvider.callApi(apiParams);
     }
 
-    private void setAdapter(List<SchedulesResponseModel.DataBean> dataList) {
+    private void setAdapter(List<SchedulesCustomerResponseModel.DataBean> dataList) {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         SlimAdapter slimAdapter = SlimAdapter.create()
-                .register(R.layout.item_notification, new SlimInjector<SchedulesResponseModel.DataBean>() {
+                .register(R.layout.item_notification, new SlimInjector<SchedulesCustomerResponseModel.DataBean>() {
 
                     @Override
-                    public void onInject(@NonNull final SchedulesResponseModel.DataBean data, @NonNull IViewInjector injector) {
+                    public void onInject(@NonNull final SchedulesCustomerResponseModel.DataBean data, @NonNull IViewInjector injector) {
                         ItemNotificationBinding mBinding = DataBindingUtil.bind(injector.findViewById(R.id.liItem));
                         if (mBinding == null) return;
                         mBinding.tvTitle.setText(String.format("%s to %s", data.getJob_details().getFrom_location(), data.getJob_details().getTo_location()));

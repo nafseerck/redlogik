@@ -22,8 +22,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.akexorcist.roundcornerprogressbar.CenteredRoundCornerProgressBar;
 import com.redlogic.R;
+import com.redlogic.dashboard.customer.Schedule.ScheduleActivity;
 import com.redlogic.dashboard.driver.notification.NotificationActivity;
-import com.redlogic.dashboard.driver.schedule.ScheduleActivity;
+import com.redlogic.dashboard.driver.schedule.DriverScheduleActivity;
 import com.redlogic.databinding.ItemMenuItemBinding;
 import com.redlogic.language.LanguageActivity;
 import com.redlogic.login.LoginActivity;
@@ -156,7 +157,12 @@ public class BaseLoaderActivity extends BaseActivity {
     }
 
     public void onCalender(View view) {
-        ScheduleActivity.start(this);
+        if (appPrefes.getBoolData(PrefConstants.isCustomer)){
+            ScheduleActivity.start(this);
+        }else {
+            DriverScheduleActivity.start(this);
+        }
+
     }
 
     public void onNotification(View view) {
@@ -217,7 +223,11 @@ public class BaseLoaderActivity extends BaseActivity {
     }
 
     private void schedue() {
-        ScheduleActivity.start(this);
+        if (appPrefes.getBoolData(PrefConstants.isCustomer)){
+            ScheduleActivity.start(this);
+        }else {
+            DriverScheduleActivity.start(this);
+        }
     }
 
     private void dashBoard() {

@@ -98,5 +98,5 @@ public interface ApiServices {
     Call<ResponseBody> callCustomerSchedules();
 
     @POST("shedules")
-    Call<ResponseBody> callSchedules();
+    Call<ResponseBody> callDriverSchedules();
 }

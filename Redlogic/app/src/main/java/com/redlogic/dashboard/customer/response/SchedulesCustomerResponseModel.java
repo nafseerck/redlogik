@@ -1,8 +1,8 @@
-package com.redlogic.dashboard.driver.response;
+package com.redlogic.dashboard.customer.response;
 
 import java.util.List;
 
-public class SchedulesResponseModel {
+public class SchedulesCustomerResponseModel {
     /**
      * status : true
      * message : Schedule List
