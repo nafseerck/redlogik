@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -31,7 +30,6 @@ import com.redlogic.utils.image.ImageUtils;
 
 import net.idik.lib.slimadapter.SlimAdapter;
 import net.idik.lib.slimadapter.SlimInjector;
-import net.idik.lib.slimadapter.viewinjector.IViewInjector;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -39,7 +37,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.TimeZone;
 
 import okhttp3.ResponseBody;
@@ -54,6 +51,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
     private SlimAdapter slimAdapter;
     int nextCompleteCheckBoxId=0;
     private String TAG=  "tag_jithin";
+    public static String jobId;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, ExecutionListActivity.class);
@@ -118,63 +116,61 @@ public class ExecutionListActivity extends BaseLoaderActivity {
     private void setAdapter() {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         slimAdapter = SlimAdapter.create()
-                .register(R.layout.item_execution, new SlimInjector<ExecutionChecklistResponseModel.DataBeanX.TasksBean>() {
+                .register(R.layout.item_execution, (SlimInjector<ExecutionChecklistResponseModel.DataBeanX.TasksBean>) (data, injector) -> {
 
-                    @Override
-                    public void onInject(@NonNull final ExecutionChecklistResponseModel.DataBeanX.TasksBean data, @NonNull IViewInjector injector) {
-                        ItemExecutionBinding mBinding = DataBindingUtil.bind(injector.findViewById(R.id.liItem));
-                        if (mBinding == null) return;
-                        mBinding.tvTitle.setText(data.getDescription());
+                    ItemExecutionBinding mBinding = DataBindingUtil.bind(injector.findViewById(R.id.liItem));
+                    if (mBinding == null) return;
+                    mBinding.tvTitle.setText(data.getDescription());
 
-                        mBinding.liItem.setOnClickListener(v -> {
-                        });
-                        if (isSecondTime) {
-                            mBinding.imShape.setVisibility(View.GONE);
-                        }
-                        mBinding.imShape.setOnClickListener(v -> {
-                            TimeSheetActivity.start(ExecutionListActivity.this);
-                        });
-                        mBinding.imCheck.setOnCheckedChangeListener((compoundButton, b) -> {
-                            String mydate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
-                            mBinding.tvTitleTxt.setText(mydate);
+                    mBinding.liItem.setOnClickListener(v -> {
+                    });
+                    if (isSecondTime) {
+                        mBinding.imShape.setVisibility(View.GONE);
+                    }
+                    mBinding.imShape.setOnClickListener(v -> {
+                        TimeSheetActivity.start(ExecutionListActivity.this);
+                    });
+                    mBinding.imCheck.setOnCheckedChangeListener((compoundButton, b) -> {
+                        String mydate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+                        mBinding.tvTitleTxt.setText(mydate);
 //                            data.setValue(b ? "checked" : "unchecked");
-                            if (mBinding.imCheck.isChecked()) {
-                                if (data.getId() == listExecute.getTasks().get(nextCompleteCheckBoxId).getId()){
+                        if (mBinding.imCheck.isChecked()) {
+                            if (data.getId() == listExecute.getTasks().get(nextCompleteCheckBoxId).getId()){
 
-                                    data.setIs_completed(true);
-                                    data.setCompleted_on(getCurrentTime());
-                                    executionChecklistSubmit();
+                                data.setIs_completed(true);
+                                data.setCompleted_on(getCurrentTime());
+                                executionChecklistSubmit();
 
-                                }else {
-                                    showToast("Complete Tasks orderly");
-                                    if (mBinding.imCheck.isChecked()){
-                                        mBinding.imCheck.setChecked(false);
-                                    }
+                            }else {
+                                showToast("Complete Tasks orderly");
+                                if (mBinding.imCheck.isChecked()){
+                                    mBinding.imCheck.setChecked(false);
                                 }
-
                             }
 
-                        });
-                        if (isDateMatches(data.getData().get(0).getUpdated_on())){
-                            mBinding.imCheck.setEnabled(true);
-                            mBinding.imCheck.setClickable(true);
-                        }else {
-                            mBinding.imCheck.setEnabled(false);
-                            mBinding.imCheck.setClickable(false);
                         }
 
-                        if (data.getIs_completed()) {
-                            mBinding.imCheck.setVisibility(View.GONE);
-                            mBinding.imTic.setVisibility(View.VISIBLE);
-                        } else {
-                            mBinding.imCheck.setVisibility(View.VISIBLE);
-                            mBinding.imTic.setVisibility(View.GONE);
-                        }
-                        if (data.getIs_active() == 0){
-                            mBinding.imCheck.setEnabled(false);
-                        }else {
-                            mBinding.imCheck.setEnabled(true);
-                        }
+                    });
+
+                    if (JobActivity.isDateValid()){
+                        mBinding.imCheck.setEnabled(true);
+                        mBinding.imCheck.setClickable(true);
+                    }else {
+                        mBinding.imCheck.setEnabled(false);
+                        mBinding.imCheck.setClickable(false);
+                    }
+
+                    if (data.getIs_completed()) {
+                        mBinding.imCheck.setVisibility(View.GONE);
+                        mBinding.imTic.setVisibility(View.VISIBLE);
+                    } else {
+                        mBinding.imCheck.setVisibility(View.VISIBLE);
+                        mBinding.imTic.setVisibility(View.GONE);
+                    }
+                    if (data.getIs_active() == 0){
+                        mBinding.imCheck.setEnabled(false);
+                    }else {
+                        mBinding.imCheck.setEnabled(true);
                     }
                 })
                 .attachTo(binding.recyclerView);
@@ -188,32 +184,6 @@ public class ExecutionListActivity extends BaseLoaderActivity {
         slimAdapter.updateData(listExecute.getTasks());
         updateCompleteJobBtn();
         getNextCheckboxToComplete();
-    }
-
-    private boolean isDateMatches(String updatedOn) {
-        Date orderDate = convertStringToDate(updatedOn);
-        if (orderDate == null){
-            return false;
-        }else {
-            Date currentDate = Calendar.getInstance().getTime();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-            if (dateFormat.format(orderDate).matches(dateFormat.format(currentDate))){
-                return true;
-            }else {
-                return false;
-            }
-        }
-    }
-
-    private Date convertStringToDate(String updatedOn) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try {
-            Date date = format.parse(updatedOn);
-            return date;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     private String getCurrentTime() {
@@ -275,6 +245,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
                 hideDialog();
                 updateCompleteJobBtnLastExecution();
                 getNextCheckboxToComplete();
+                slimAdapter.updateData(listExecute.getTasks());
             }
 
             @Override
@@ -298,17 +269,17 @@ public class ExecutionListActivity extends BaseLoaderActivity {
     }
 
     public void onComplete(View view) {
-//        if (isSecondTime) {
-//        callExecutionChecklistSubmit();
-        callCloseJob();
-
-//            return;
-//        }
-//        callInitialChecklistSubmit();
+        callCompleteJob();
     }
 
-    private void callCloseJob() {
-        InitialChecklistRequestModel requestModel = new InitialChecklistRequestModel();
+    private void callCompleteJob() {
+        showToast("Job completed Successfully");
+        jobId = String.valueOf(listExecute.getJob_id());
+        DeclarationActivity.isPod = true;
+        DeclarationActivity.start(ExecutionListActivity.this);
+        finish();
+
+        /*InitialChecklistRequestModel requestModel = new InitialChecklistRequestModel();
         requestModel.setJob_id(String.valueOf(listExecute.getJob_id()));
 
         ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);
@@ -319,10 +290,8 @@ public class ExecutionListActivity extends BaseLoaderActivity {
             @Override
             public void onResponseSuccess(String responseBodyString) {
                 showToast("Job completed Successfully");
-//                DeclarationActivity.isPod = new Random().nextBoolean();
-                DeclarationActivity.isPod = true;
-                DeclarationActivity.start(ExecutionListActivity.this);
-                finish();
+                DeclarationActivity.isPod = new Random().nextBoolean();
+
             }
 
             @Override
@@ -330,11 +299,11 @@ public class ExecutionListActivity extends BaseLoaderActivity {
 
             }
         };
-        apiServiceProvider.callApi(apiParams);
+        apiServiceProvider.callApi(apiParams);*/
 
     }
 
-    private void callExecutionChecklistSubmit() {
+    /*private void callExecutionChecklistSubmit() {
         showDialog();
         ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);
         ExecutionChecklistRequestModel requestModel = new ExecutionChecklistRequestModel();
@@ -368,7 +337,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
             }
         };
         apiServiceProvider.callApi(apiParams);
-    }
+    }*/
 
 //    private void callInitialChecklistSubmit() {
 //        showDialog();

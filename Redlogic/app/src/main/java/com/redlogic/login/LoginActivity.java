@@ -7,7 +7,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -96,7 +95,15 @@ public class LoginActivity extends BaseLoaderActivity implements TextWatcher {
                 showToast("Login successful");
                 LoginResponseModel loginResponseModel = new Gson().fromJson(responseBodyString, LoginResponseModel.class);
 
-                appPrefes.saveBoolData(PrefConstants.isCustomer, !loginResponseModel.getData().getRole().equals("Driver"));
+                if (loginResponseModel.getData().getUser_type().matches("3")){
+                    appPrefes.saveBoolData(PrefConstants.isCustomer, true);
+                }
+
+                if (loginResponseModel.getData().getUser_type().matches("2")){
+                    appPrefes.saveBoolData(PrefConstants.isCustomer, false);
+                }
+
+
                 appPrefes.saveData(PrefConstants.loginData, responseBodyString);
                 appPrefes.saveData(PrefConstants.token, loginResponseModel.getData().getToken());
 

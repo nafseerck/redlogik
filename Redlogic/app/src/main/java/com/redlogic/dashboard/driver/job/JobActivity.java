@@ -3,6 +3,7 @@ package com.redlogic.dashboard.driver.job;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.redlogic.R;
@@ -26,6 +27,7 @@ public class JobActivity extends BaseLoaderActivity {
 
     public static JobsResponseModel.DataBean data;
     private ActivityJobBinding binding;
+    private String TAG="tag_jithin";
 
     public static void start(Context context) {
         Intent intent = new Intent(context, JobActivity.class);
@@ -89,11 +91,33 @@ public class JobActivity extends BaseLoaderActivity {
     }
 
     public void onAccept(View view) {
-        callAcceptOrReject("accept");
+        if (isDateValid()){
+//            callAcceptOrReject("accept");
+            Log.d(TAG, "onAccept: ");
+        }else {
+            Log.d(TAG, "onNotAccept: ");
+            showToast("Date expired");
+        }
     }
 
     public void onReject(View view) {
-        callAcceptOrReject("reject");
+        if (isDateValid()){
+//            callAcceptOrReject("reject");
+            Log.d(TAG, "onAccept: ");
+        }else {
+            showToast("Date expired");
+        }
+
+    }
+
+    public static boolean isDateValid(){
+        String dateTime = CoreUtils.getParsedStamp("dd-MM-yyyy", data.getTimestamp());
+        String currentDate = CoreUtils.getParsedCurrentDate("dd-MM-yyyy");
+        if (dateTime.matches(currentDate)){
+            return true;
+        }else {
+            return false;
+        }
     }
 
     public void onMap(View view) {

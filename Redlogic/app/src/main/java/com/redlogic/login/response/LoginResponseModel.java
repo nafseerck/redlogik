@@ -39,10 +39,16 @@ public class LoginResponseModel {
         /**
          * token : djaagkadgkjjskfksjd
          * role : driver
+         * user_type: 3
          */
 
         private String token;
         private String role;
+        private String user_type;
+
+        public String getUser_type() {
+            return user_type;
+        }
 
         public String getToken() {
             return token;

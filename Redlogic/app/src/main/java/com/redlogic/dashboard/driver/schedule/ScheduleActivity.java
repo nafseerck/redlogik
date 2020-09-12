@@ -56,7 +56,7 @@ public class ScheduleActivity extends BaseLoaderActivity {
 
     private void callSchedules() {
         ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);
-        Call<ResponseBody> call = apiServiceProvider.apiServices.callSchedules();
+        Call<ResponseBody> call = apiServiceProvider.apiServices.callCustomerSchedules();
         ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();
         apiParams.call = call;
         showDialog();

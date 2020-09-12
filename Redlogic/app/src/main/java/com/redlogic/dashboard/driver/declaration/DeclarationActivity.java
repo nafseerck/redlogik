@@ -16,8 +16,10 @@ import android.view.View;
 
 import com.redlogic.R;
 import com.redlogic.dashboard.driver.DashboardActivity;
+import com.redlogic.dashboard.driver.execution.ExecutionListActivity;
 import com.redlogic.dashboard.driver.job.JobActivity;
 import com.redlogic.dashboard.driver.request.GeneratePodRequestModel;
+import com.redlogic.dashboard.driver.request.InitialChecklistRequestModel;
 import com.redlogic.dashboard.driver.response.JobsResponseModel;
 import com.redlogic.databinding.ActivityDeclarationBinding;
 import com.redlogic.generic.BaseLoaderActivity;
@@ -89,7 +91,11 @@ public class DeclarationActivity extends BaseLoaderActivity {
             showToast("Please draw signature");
             return;
         }
-        callGeneratePod();
+        if (binding.tvGenerate.getText().toString().matches("Close Job")){
+            callCloseJob();
+        }else {
+            callGeneratePod();
+        }
     }
 
     public void onDraw(View view) {
@@ -146,6 +152,29 @@ public class DeclarationActivity extends BaseLoaderActivity {
             }
         };
         apiServiceProvider.callApi(apiParams);
+    }
+
+    private void callCloseJob() {
+        InitialChecklistRequestModel requestModel = new InitialChecklistRequestModel();
+        requestModel.setJob_id(ExecutionListActivity.jobId);
+
+        ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);
+        Call<ResponseBody> call = apiServiceProvider.apiServices.callCloseJob(requestModel);
+        ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();
+        apiParams.call = call;
+        apiParams.retrofitListener = new RetrofitListener() {
+            @Override
+            public void onResponseSuccess(String responseBodyString) {
+                showToast("Job Closed");
+            }
+
+            @Override
+            public void onResponseError(ErrorObject errorObject) {
+
+            }
+        };
+        apiServiceProvider.callApi(apiParams);
+
     }
 
     @Override

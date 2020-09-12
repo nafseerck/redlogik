@@ -95,5 +95,8 @@ public interface ApiServices {
 
 //    @POST("shedules")
     @POST("customer-shedules")
+    Call<ResponseBody> callCustomerSchedules();
+
+    @POST("shedules")
     Call<ResponseBody> callSchedules();
 }
