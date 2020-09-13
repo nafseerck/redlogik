@@ -8,7 +8,7 @@ import android.view.View;
 
 import com.redlogic.R;
 import com.redlogic.dashboard.driver.DashboardActivity;
-import com.redlogic.dashboard.driver.job.JobActivity;
+import com.redlogic.dashboard.driver.job.JobActivity2;
 import com.redlogic.dashboard.driver.request.AcceptOrRejectRequestModel;
 import com.redlogic.databinding.ActivityDeclineBinding;
 import com.redlogic.generic.BaseLoaderActivity;
@@ -54,7 +54,7 @@ public class DeclineActivity extends BaseLoaderActivity {
     private void callAcceptOrReject() {
         ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);
         AcceptOrRejectRequestModel requestModel = new AcceptOrRejectRequestModel();
-        requestModel.setJob_id(JobActivity.data.getJob_id());
+        requestModel.setJob_id(JobActivity2.data.getJob_id());
         requestModel.setStatus("reject");
         requestModel.setDescription(binding.edWrite.getText().toString());
         Call<ResponseBody> call = apiServiceProvider.apiServices.callAcceptOrReject(requestModel);

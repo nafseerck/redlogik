@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -13,7 +14,7 @@ import com.redlogic.R;
 import com.redlogic.dashboard.driver.damage.ReportDamagesActivity;
 import com.redlogic.dashboard.driver.declaration.DeclarationActivity;
 import com.redlogic.dashboard.driver.deliveries.DeliveriesActivity;
-import com.redlogic.dashboard.driver.job.JobActivity;
+import com.redlogic.dashboard.driver.job.JobActivity2;
 import com.redlogic.dashboard.driver.request.ExecutionChecklistRequestModel;
 import com.redlogic.dashboard.driver.request.InitialChecklistRequestModel;
 import com.redlogic.dashboard.driver.response.ExecutionChecklistResponseModel;
@@ -30,6 +31,7 @@ import com.redlogic.utils.image.ImageUtils;
 
 import net.idik.lib.slimadapter.SlimAdapter;
 import net.idik.lib.slimadapter.SlimInjector;
+import net.idik.lib.slimadapter.viewinjector.IViewInjector;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -64,7 +66,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
         setContentView(R.layout.activity_execution_list);
         binding = (ActivityExecutionListBinding) viewDataBinding;
         setTitle("Execution List");
-        data = JobActivity.data;
+        data = JobActivity2.data;
         binding.include.tvTitleTxt1.setText(R.string.customer);
         binding.include.tvTitle1.setText(data.getCustomer());
         binding.include.imCall.setOnClickListener(v -> call(data.getCustomer_phone()));
@@ -116,61 +118,65 @@ public class ExecutionListActivity extends BaseLoaderActivity {
     private void setAdapter() {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         slimAdapter = SlimAdapter.create()
-                .register(R.layout.item_execution, (SlimInjector<ExecutionChecklistResponseModel.DataBeanX.TasksBean>) (data, injector) -> {
+                .register(R.layout.item_execution, new SlimInjector<ExecutionChecklistResponseModel.DataBeanX.TasksBean>() {
 
-                    ItemExecutionBinding mBinding = DataBindingUtil.bind(injector.findViewById(R.id.liItem));
-                    if (mBinding == null) return;
-                    mBinding.tvTitle.setText(data.getDescription());
+                    @Override
+                    public void onInject(@NonNull final ExecutionChecklistResponseModel.DataBeanX.TasksBean data, @NonNull IViewInjector injector) {
 
-                    mBinding.liItem.setOnClickListener(v -> {
-                    });
-                    if (isSecondTime) {
-                        mBinding.imShape.setVisibility(View.GONE);
-                    }
-                    mBinding.imShape.setOnClickListener(v -> {
-                        TimeSheetActivity.start(ExecutionListActivity.this);
-                    });
-                    mBinding.imCheck.setOnCheckedChangeListener((compoundButton, b) -> {
-                        String mydate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
-                        mBinding.tvTitleTxt.setText(mydate);
+                        ItemExecutionBinding mBinding = DataBindingUtil.bind(injector.findViewById(R.id.liItem));
+                        if (mBinding == null) return;
+                        mBinding.tvTitle.setText(data.getDescription());
+
+                        mBinding.liItem.setOnClickListener(v -> {
+                        });
+                        if (isSecondTime) {
+                            mBinding.imShape.setVisibility(View.GONE);
+                        }
+                        mBinding.imShape.setOnClickListener(v -> {
+                            TimeSheetActivity.start(ExecutionListActivity.this);
+                        });
+                        mBinding.imCheck.setOnCheckedChangeListener((compoundButton, b) -> {
+                            String mydate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+                            mBinding.tvTitleTxt.setText(mydate);
 //                            data.setValue(b ? "checked" : "unchecked");
-                        if (mBinding.imCheck.isChecked()) {
-                            if (data.getId() == listExecute.getTasks().get(nextCompleteCheckBoxId).getId()){
+                            if (mBinding.imCheck.isChecked()) {
+                                if (data.getId() == listExecute.getTasks().get(nextCompleteCheckBoxId).getId()) {
 
-                                data.setIs_completed(true);
-                                data.setCompleted_on(getCurrentTime());
-                                executionChecklistSubmit();
+                                    data.setIs_completed(true);
+                                    data.setCompleted_on(getCurrentTime());
+                                    executionChecklistSubmit();
 
-                            }else {
-                                showToast("Complete Tasks orderly");
-                                if (mBinding.imCheck.isChecked()){
-                                    mBinding.imCheck.setChecked(false);
+                                } else {
+                                    showToast("Complete Tasks orderly");
+                                    if (mBinding.imCheck.isChecked()) {
+                                        mBinding.imCheck.setChecked(false);
+                                    }
                                 }
+
                             }
 
+                        });
+
+                        if (JobActivity2.isDateValid()) {
+                            mBinding.imCheck.setEnabled(true);
+                            mBinding.imCheck.setClickable(true);
+                        } else {
+                            mBinding.imCheck.setEnabled(false);
+                            mBinding.imCheck.setClickable(false);
                         }
 
-                    });
-
-                    if (JobActivity.isDateValid()){
-                        mBinding.imCheck.setEnabled(true);
-                        mBinding.imCheck.setClickable(true);
-                    }else {
-                        mBinding.imCheck.setEnabled(false);
-                        mBinding.imCheck.setClickable(false);
-                    }
-
-                    if (data.getIs_completed()) {
-                        mBinding.imCheck.setVisibility(View.GONE);
-                        mBinding.imTic.setVisibility(View.VISIBLE);
-                    } else {
-                        mBinding.imCheck.setVisibility(View.VISIBLE);
-                        mBinding.imTic.setVisibility(View.GONE);
-                    }
-                    if (data.getIs_active() == 0){
-                        mBinding.imCheck.setEnabled(false);
-                    }else {
-                        mBinding.imCheck.setEnabled(true);
+                        if (data.getIs_completed()) {
+                            mBinding.imCheck.setVisibility(View.GONE);
+                            mBinding.imTic.setVisibility(View.VISIBLE);
+                        } else {
+                            mBinding.imCheck.setVisibility(View.VISIBLE);
+                            mBinding.imTic.setVisibility(View.GONE);
+                        }
+                        if (data.getIs_active() == 0) {
+                            mBinding.imCheck.setEnabled(false);
+                        } else {
+                            mBinding.imCheck.setEnabled(true);
+                        }
                     }
                 })
                 .attachTo(binding.recyclerView);

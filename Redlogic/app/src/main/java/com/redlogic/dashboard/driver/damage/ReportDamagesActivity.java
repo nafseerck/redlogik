@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.redlogic.BuildConfig;
 import com.redlogic.R;
-import com.redlogic.dashboard.driver.job.JobActivity;
+import com.redlogic.dashboard.driver.job.JobActivity2;
 import com.redlogic.dashboard.driver.request.ReportDamageRequestModel;
 import com.redlogic.databinding.ActivityReportDamagesBinding;
 import com.redlogic.databinding.ItemFilesBinding;
@@ -168,7 +168,7 @@ public class ReportDamagesActivity extends BaseLoaderActivity {
     private void callReportDamage() {
         ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);
         ReportDamageRequestModel requestModel = new ReportDamageRequestModel();
-        requestModel.setJob_id(JobActivity.data.getJob_id());
+        requestModel.setJob_id(JobActivity2.data.getJob_id());
         requestModel.setDamage_desc(binding.edWrite.getText().toString());
         requestModel.setAttachement(listAttachment);
         Call<ResponseBody> call = apiServiceProvider.apiServices.callReportDamage(requestModel);

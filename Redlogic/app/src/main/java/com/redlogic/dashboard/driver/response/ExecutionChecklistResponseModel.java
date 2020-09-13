@@ -153,7 +153,6 @@ public class ExecutionChecklistResponseModel {
                 private int field_type_id;
                 private String label;
                 private String value;
-                private String items;
                 private String updated_on;
                 private String updated_by;
 
@@ -187,14 +186,6 @@ public class ExecutionChecklistResponseModel {
 
                 public void setValue(String value) {
                     this.value = value;
-                }
-
-                public String getItems() {
-                    return items;
-                }
-
-                public void setItems(String items) {
-                    this.items = items;
                 }
 
                 public String getUpdated_on() {

@@ -187,7 +187,7 @@ public class JobsResponseModel {
             this.customer_address = customer_address;
         }
 
-        private class CargoDetails {
+        public static class CargoDetails {
             String material;
             String quantity;
             String weight;
