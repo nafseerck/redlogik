@@ -30,7 +30,6 @@ import com.redlogic.utils.api.ApiServiceProvider;
 import com.redlogic.utils.api.listeners.RetrofitListener;
 import com.redlogic.utils.api.models.ErrorObject;
 import com.redlogic.utils.image.ImageUtils;
-import com.redlogic.utils.json.Utils;
 
 import net.idik.lib.slimadapter.SlimAdapter;
 import net.idik.lib.slimadapter.SlimInjector;
@@ -181,8 +180,8 @@ public class WorkOrderListingActivity extends BaseLoaderActivity {
                 getDeliveries("new");
                 break;
             case 1:
-                deliveryType = "inprocess";
-                getDeliveries("inprocess");
+                deliveryType = "inprogress";
+                getDeliveries("inprogress");
                 break;
             case 2:
                 deliveryType = "completed";
