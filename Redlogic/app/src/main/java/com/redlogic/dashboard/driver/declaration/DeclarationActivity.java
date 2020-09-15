@@ -79,8 +79,11 @@ public class DeclarationActivity extends BaseLoaderActivity {
 
     public void onGenerate(View view) {
         if (isSecond) {
-            DashboardActivity.startExit(this);
+            if (binding.tvGenerate.getText().toString().matches("Close Job")){
+                callCloseJob();
+            }
             return;
+
         }
         if (isUpload) {
             if (base64 == null) {
@@ -91,11 +94,7 @@ public class DeclarationActivity extends BaseLoaderActivity {
             showToast("Please draw signature");
             return;
         }
-        if (binding.tvGenerate.getText().toString().matches("Close Job")){
-            callCloseJob();
-        }else {
-            callGeneratePod();
-        }
+        callGeneratePod();
     }
 
     public void onDraw(View view) {
@@ -166,6 +165,7 @@ public class DeclarationActivity extends BaseLoaderActivity {
             @Override
             public void onResponseSuccess(String responseBodyString) {
                 showToast("Job Closed");
+                DashboardActivity.startExit(DeclarationActivity.this);
             }
 
             @Override

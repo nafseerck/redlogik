@@ -68,8 +68,9 @@ public class JobActivity2 extends BaseLoaderActivity {
         binding.tvTitle211.setText(data.getFrom_location());
         binding.tvTitle221.setText(data.getTo_location());
         if (data.getCargo_details() == null || data.getCargo_details().isEmpty()){
-            binding.tvTitleTxt31.setText("Marterial & Quantity");
+
         }else {
+            binding.tvTitleTxt31.setText("Marterial & Quantity");
             setCargoAdapter(data.getCargo_details());
         }
 
@@ -128,7 +129,6 @@ public class JobActivity2 extends BaseLoaderActivity {
             Log.d(TAG, "onAccept: ");
         }else {
             Log.d(TAG, "onNotAccept: ");
-            showToast("Date expired");
         }
     }
 
@@ -136,8 +136,6 @@ public class JobActivity2 extends BaseLoaderActivity {
         if (isDateValid()){
             callAcceptOrReject("reject");
             Log.d(TAG, "onAccept: ");
-        }else {
-            showToast("Date expired");
         }
 
     }

@@ -157,10 +157,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
 
                         });
 
-                        if (JobActivity2.isDateValid()) {
-                            mBinding.imCheck.setEnabled(true);
-                            mBinding.imCheck.setClickable(true);
-                        } else {
+                        if (!JobActivity2.isDateValid()) {
                             mBinding.imCheck.setEnabled(false);
                             mBinding.imCheck.setClickable(false);
                         }
@@ -172,11 +169,11 @@ public class ExecutionListActivity extends BaseLoaderActivity {
                             mBinding.imCheck.setVisibility(View.VISIBLE);
                             mBinding.imTic.setVisibility(View.GONE);
                         }
-                        if (data.getIs_active() == 0) {
+                        /*if (data.getIs_active() == 0) {
                             mBinding.imCheck.setEnabled(false);
                         } else {
                             mBinding.imCheck.setEnabled(true);
-                        }
+                        }*/
                     }
                 })
                 .attachTo(binding.recyclerView);
