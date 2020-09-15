@@ -66,9 +66,6 @@
             android:name=".dashboard.driver.execution.ExecutionListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".dashboard.driver.job.JobActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".dashboard.driver.job.JobActivity2"
             android:screenOrientation="portrait" />
         <activity
