@@ -28,6 +28,7 @@ import net.idik.lib.slimadapter.SlimAdapter;
 import net.idik.lib.slimadapter.SlimInjector;
 import net.idik.lib.slimadapter.viewinjector.IViewInjector;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -38,6 +39,7 @@ public class JobActivity2 extends BaseLoaderActivity {
     public static JobsResponseModel.DataBean data;
     private ActivityJob2Binding binding;
     private String TAG="tag_jithin";
+    public static ArrayList<String> acceptedJobs = new ArrayList<>();
 
     public static void start(Context context) {
         Intent intent = new Intent(context, JobActivity2.class);
@@ -100,6 +102,13 @@ public class JobActivity2 extends BaseLoaderActivity {
 //            binding.tvTime.setText(String.format("%s", value.getRows().get(0)
 //                    .getElements().get(0).getDuration().getText()));
 //        });
+
+        //isAcceptedJob-temporary
+        for (int i=0;i<acceptedJobs.size();i++){
+            if (acceptedJobs.get(i).matches(data.getJob_id())){
+                binding.bottomButtonLayout.setVisibility(View.GONE);
+            }
+        }
     }
 
     private void setCargoAdapter(List<JobsResponseModel.DataBean.CargoDetails> cargo_details) {
@@ -171,6 +180,7 @@ public class JobActivity2 extends BaseLoaderActivity {
             public void onResponseSuccess(String responseBodyString) {
                 hideDialog();
                 //showToast("Job Accepted Successfully");
+                acceptedJobs.add(data.getJob_id());
                 if (status.matches("accept")){
                     ExecutionListActivity.start(JobActivity2.this);
                     finish();
