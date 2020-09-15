@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
+import com.google.maps.android.SphericalUtil;
 import com.jetradarmobile.rxlocationsettings.RxLocationSettings;
 import com.redlogic.R;
 import com.redlogic.dashboard.customer.request.CustomerExecutionRequestModel;
@@ -52,6 +53,8 @@ public class RouteMapActivity extends BaseLoaderActivity implements OnMapReadyCa
     public static ExecutionDetailsResponse.DataBean result;
     private GoogleMap mMap;
     private LatLng startLatLng,endLatLng;
+    private String TAG="tag_jithin";
+    ActivityRouteMapBinding binding;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, RouteMapActivity.class);
@@ -62,7 +65,7 @@ public class RouteMapActivity extends BaseLoaderActivity implements OnMapReadyCa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_map);
-        ActivityRouteMapBinding binding = (ActivityRouteMapBinding) viewDataBinding;
+        binding = (ActivityRouteMapBinding) viewDataBinding;
         setTitle("Route Map");
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -138,26 +141,8 @@ public class RouteMapActivity extends BaseLoaderActivity implements OnMapReadyCa
                 hideDialog();
 
                 CustomerLiveMapResponse responseModel = new Gson().fromJson(response, CustomerLiveMapResponse.class);
-                try {
 
-                    Double startLat,startLng,endLat,endLng;
-                    startLat = Double.parseDouble(responseModel.getData().getStart_lat());
-                    startLng = Double.parseDouble(responseModel.getData().getStart_long());
-
-                    endLat = Double.parseDouble(responseModel.getData().getEnd_lat());
-                    endLng = Double.parseDouble(responseModel.getData().getEnd_long());
-
-                    startLatLng = new LatLng(startLat,startLng);
-                    endLatLng = new LatLng(endLat,endLng);
-
-                    createMarker(startLatLng,"Source","Start location");
-                    createMarker(endLatLng,"Destination","End location");
-
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(startLatLng));
-                    mMap.animateCamera(CameraUpdateFactory.zoomTo(9));
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
+                pinLocations(responseModel);
 
 
             }
@@ -168,6 +153,35 @@ public class RouteMapActivity extends BaseLoaderActivity implements OnMapReadyCa
             }
         };
         apiServiceProvider.callApi(apiParams);
+    }
+
+    private void pinLocations(CustomerLiveMapResponse responseModel) {
+
+        try {
+
+            Double startLat,startLng,endLat,endLng;
+            startLat = Double.parseDouble(responseModel.getData().getStart_lat());
+            startLng = Double.parseDouble(responseModel.getData().getStart_long());
+
+            endLat = Double.parseDouble(responseModel.getData().getEnd_lat());
+            endLng = Double.parseDouble(responseModel.getData().getEnd_long());
+
+            Double distance = SphericalUtil.computeDistanceBetween(startLatLng, endLatLng);
+            distance = distance/1000;
+            binding.include.titleKm.setVisibility(View.VISIBLE);
+            binding.include.titleKm.setText(distance+"  KM");
+
+            startLatLng = new LatLng(startLat,startLng);
+            endLatLng = new LatLng(endLat,endLng);
+
+            createMarker(startLatLng,"Source","Start location");
+            createMarker(endLatLng,"Destination","End location");
+
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(startLatLng));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(9));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     protected Marker createMarker(LatLng latLng, String title, String snippet) {

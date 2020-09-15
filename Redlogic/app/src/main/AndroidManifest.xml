@@ -15,9 +15,13 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_logo_elcy_round"
         android:supportsRtl="true"
+        android:exported="false"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="LockedOrientationActivity">
+
+<!--        <service android:name=".LocationServiece"/>-->
+
         <activity
             android:name=".dashboard.driver.schedule.DriverScheduleActivity"
             android:screenOrientation="portrait"/>

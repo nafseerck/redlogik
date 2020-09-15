@@ -53,5 +53,9 @@ public class SplashActivity extends BaseLoaderActivity {
                 finish();
             }
         }, 2500);
+
+//        Intent intent = new Intent(this, LocationServiece.class);
+//        startService(intent);
+
     }
 }

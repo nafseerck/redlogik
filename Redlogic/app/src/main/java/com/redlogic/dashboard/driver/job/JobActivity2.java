@@ -124,7 +124,7 @@ public class JobActivity2 extends BaseLoaderActivity {
 
     public void onAccept(View view) {
         if (isDateValid()){
-//            callAcceptOrReject("accept");
+            callAcceptOrReject("accept");
             Log.d(TAG, "onAccept: ");
         }else {
             Log.d(TAG, "onNotAccept: ");
@@ -134,7 +134,7 @@ public class JobActivity2 extends BaseLoaderActivity {
 
     public void onReject(View view) {
         if (isDateValid()){
-//            callAcceptOrReject("reject");
+            callAcceptOrReject("reject");
             Log.d(TAG, "onAccept: ");
         }else {
             showToast("Date expired");
