@@ -38,7 +38,7 @@ public class JobActivity2 extends BaseLoaderActivity {
 
     public static JobsResponseModel.DataBean data;
     private ActivityJob2Binding binding;
-    private String TAG="tag_jithin";
+    private String TAG = "tag_jithin";
     public static ArrayList<String> acceptedJobs = new ArrayList<>();
 
     public static void start(Context context) {
@@ -69,9 +69,9 @@ public class JobActivity2 extends BaseLoaderActivity {
         binding.tvTitleTxt21.setText(dateTime);
         binding.tvTitle211.setText(data.getFrom_location());
         binding.tvTitle221.setText(data.getTo_location());
-        if (data.getCargo_details() == null || data.getCargo_details().isEmpty()){
+        if (data.getCargo_details() == null || data.getCargo_details().isEmpty()) {
 
-        }else {
+        } else {
             binding.tvTitleTxt31.setText("Marterial & Quantity");
             setCargoAdapter(data.getCargo_details());
         }
@@ -84,9 +84,9 @@ public class JobActivity2 extends BaseLoaderActivity {
         binding.imCall1.setOnClickListener(v -> call(data.getAssignee_phone()));
         binding.imCall2.setOnClickListener(v -> call(data.getCustomer_phone()));
         binding.card1.setOnClickListener(v -> {
-            if (!DeliveriesActivity.isnewJob) {
-                callAcceptOrReject("accept");
-            }
+
+            callAcceptOrReject("accept");
+
         });
         if (DeliveriesActivity.selectedPosition == 2 || DeliveriesActivity.selectedPosition == 3 || DeliveriesActivity.selectedPosition == 1) {
             binding.tvAccept.setVisibility(View.GONE);
@@ -104,8 +104,8 @@ public class JobActivity2 extends BaseLoaderActivity {
 //        });
 
         //isAcceptedJob-temporary
-        for (int i=0;i<acceptedJobs.size();i++){
-            if (acceptedJobs.get(i).matches(data.getJob_id())){
+        for (int i = 0; i < acceptedJobs.size(); i++) {
+            if (acceptedJobs.get(i).matches(data.getJob_id())) {
                 binding.bottomButtonLayout.setVisibility(View.GONE);
             }
         }
@@ -133,28 +133,28 @@ public class JobActivity2 extends BaseLoaderActivity {
     }
 
     public void onAccept(View view) {
-        if (isDateValid()){
+        if (isDateValid()) {
             callAcceptOrReject("accept");
             Log.d(TAG, "onAccept: ");
-        }else {
+        } else {
             Log.d(TAG, "onNotAccept: ");
         }
     }
 
     public void onReject(View view) {
-        if (isDateValid()){
+        if (isDateValid()) {
             callAcceptOrReject("reject");
             Log.d(TAG, "onAccept: ");
         }
 
     }
 
-    public static boolean isDateValid(){
+    public static boolean isDateValid() {
         String dateTime = CoreUtils.getParsedStamp("dd-MM-yyyy", data.getTimestamp());
         String currentDate = CoreUtils.getParsedCurrentDate("dd-MM-yyyy");
-        if (dateTime.matches(currentDate)){
+        if (dateTime.matches(currentDate)) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -181,10 +181,10 @@ public class JobActivity2 extends BaseLoaderActivity {
                 hideDialog();
                 //showToast("Job Accepted Successfully");
                 acceptedJobs.add(data.getJob_id());
-                if (status.matches("accept")){
+                if (status.matches("accept")) {
                     ExecutionListActivity.start(JobActivity2.this);
                     finish();
-                }else {
+                } else {
                     DeclineActivity.start(JobActivity2.this);
                     finish();
                 }
