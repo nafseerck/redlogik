@@ -14,7 +14,7 @@ import com.redlogic.R;
 import com.redlogic.dashboard.driver.damage.ReportDamagesActivity;
 import com.redlogic.dashboard.driver.declaration.DeclarationActivity;
 import com.redlogic.dashboard.driver.deliveries.DeliveriesActivity;
-import com.redlogic.dashboard.driver.job.JobActivity2;
+import com.redlogic.dashboard.driver.job.JobActivity;
 import com.redlogic.dashboard.driver.request.ExecutionChecklistRequestModel;
 import com.redlogic.dashboard.driver.request.InitialChecklistRequestModel;
 import com.redlogic.dashboard.driver.response.ExecutionChecklistResponseModel;
@@ -66,7 +66,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
         setContentView(R.layout.activity_execution_list);
         binding = (ActivityExecutionListBinding) viewDataBinding;
         setTitle("Execution List");
-        data = JobActivity2.data;
+        data = JobActivity.data;
         binding.include.tvTitleTxt1.setText(R.string.customer);
         binding.include.tvTitle1.setText(data.getCustomer());
         binding.include.imCall.setOnClickListener(v -> call(data.getCustomer_phone()));
@@ -157,7 +157,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
 
                         });
 
-                        if (!JobActivity2.isDateValid()) {
+                        if (!JobActivity.isDateValid()) {
                             mBinding.imCheck.setEnabled(false);
                             mBinding.imCheck.setClickable(false);
                         }

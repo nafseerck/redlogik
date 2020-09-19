@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.gson.Gson;
 import com.redlogic.R;
-import com.redlogic.dashboard.driver.job.JobActivity2;
+import com.redlogic.dashboard.driver.job.JobActivity;
 import com.redlogic.dashboard.driver.request.JobsRequestModel;
 import com.redlogic.dashboard.driver.response.JobsResponseModel;
 import com.redlogic.databinding.ActivityDeliveriesBinding;
@@ -191,8 +191,8 @@ public class DeliveriesActivity extends BaseLoaderActivity implements TextWatche
                                 getParsedStamp("dd-MMM-yyyy,hh:mm aa", data.getTimestamp());
                         mBinding.tvDateTime.setText(dateTime);
                         mBinding.liItem.setOnClickListener(v -> {
-                            JobActivity2.data = data;
-                            JobActivity2.start(DeliveriesActivity.this);
+                            JobActivity.data = data;
+                            JobActivity.start(DeliveriesActivity.this);
                         });
                     }
                 })

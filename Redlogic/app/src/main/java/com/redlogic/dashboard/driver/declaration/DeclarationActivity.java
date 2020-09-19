@@ -17,7 +17,7 @@ import android.view.View;
 import com.redlogic.R;
 import com.redlogic.dashboard.driver.DashboardActivity;
 import com.redlogic.dashboard.driver.execution.ExecutionListActivity;
-import com.redlogic.dashboard.driver.job.JobActivity2;
+import com.redlogic.dashboard.driver.job.JobActivity;
 import com.redlogic.dashboard.driver.request.GeneratePodRequestModel;
 import com.redlogic.dashboard.driver.request.InitialChecklistRequestModel;
 import com.redlogic.dashboard.driver.response.JobsResponseModel;
@@ -60,7 +60,7 @@ public class DeclarationActivity extends BaseLoaderActivity {
 
         binding = (ActivityDeclarationBinding) viewDataBinding;
         setTitle("Declaration");
-        data = JobActivity2.data;
+        data = JobActivity.data;
         binding.include.tvTitleTxt1.setText(R.string.customer);
         binding.include.tvTitle1.setText(data.getCustomer());
         binding.include.imCall.setOnClickListener(v -> call(data.getCustomer_phone()));

@@ -15,7 +15,7 @@ import com.redlogic.dashboard.driver.deliveries.DeliveriesActivity;
 import com.redlogic.dashboard.driver.execution.ExecutionListActivity;
 import com.redlogic.dashboard.driver.request.AcceptOrRejectRequestModel;
 import com.redlogic.dashboard.driver.response.JobsResponseModel;
-import com.redlogic.databinding.ActivityJob2Binding;
+import com.redlogic.databinding.ActivityJobBinding;
 import com.redlogic.databinding.ItemCargoDetailsBinding;
 import com.redlogic.generic.BaseLoaderActivity;
 import com.redlogic.utils.api.ApiServiceProvider;
@@ -34,23 +34,23 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-public class JobActivity2 extends BaseLoaderActivity {
+public class JobActivity extends BaseLoaderActivity {
 
     public static JobsResponseModel.DataBean data;
-    private ActivityJob2Binding binding;
+    private ActivityJobBinding binding;
     private String TAG = "tag_jithin";
     public static ArrayList<String> acceptedJobs = new ArrayList<>();
 
     public static void start(Context context) {
-        Intent intent = new Intent(context, JobActivity2.class);
+        Intent intent = new Intent(context, JobActivity.class);
         context.startActivity(intent);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_job2);
-        binding = (ActivityJob2Binding) viewDataBinding;
+        setContentView(R.layout.activity_job);
+        binding = (ActivityJobBinding) viewDataBinding;
         setTitle("Job");
         ImageUtils.setRoundedBackground(this, ImageUtils.convertToIntArray(getColor(R.color.grad_1),
                 getColor(R.color.grad_1)), ImageUtils.convertToIntArray(getColor(R.color.grad_1_trans),
@@ -85,7 +85,9 @@ public class JobActivity2 extends BaseLoaderActivity {
         binding.imCall2.setOnClickListener(v -> call(data.getCustomer_phone()));
         binding.card1.setOnClickListener(v -> {
 
-            callAcceptOrReject("accept");
+            if (isDateValid()){
+                callAcceptOrReject("accept");
+            }
 
         });
         if (DeliveriesActivity.selectedPosition == 2 || DeliveriesActivity.selectedPosition == 3 || DeliveriesActivity.selectedPosition == 1) {
@@ -124,6 +126,8 @@ public class JobActivity2 extends BaseLoaderActivity {
                         cargoDetailsBinding.material.setText(data.getMaterial());
                         cargoDetailsBinding.quantity.setText(data.getQuantity());
                         cargoDetailsBinding.weight.setText(data.getWeight());
+                        cargoDetailsBinding.unit.setText(data.getUnit());
+                        cargoDetailsBinding.dimension.setText(data.getDimension());
 
                     }
                 })
@@ -182,10 +186,10 @@ public class JobActivity2 extends BaseLoaderActivity {
                 //showToast("Job Accepted Successfully");
                 acceptedJobs.add(data.getJob_id());
                 if (status.matches("accept")) {
-                    ExecutionListActivity.start(JobActivity2.this);
+                    ExecutionListActivity.start(JobActivity.this);
                     finish();
                 } else {
-                    DeclineActivity.start(JobActivity2.this);
+                    DeclineActivity.start(JobActivity.this);
                     finish();
                 }
             }

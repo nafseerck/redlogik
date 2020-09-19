@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@mipmap/map"
-        tools:context=".dashboard.driver.job.JobActivity2">
+        tools:context=".dashboard.driver.job.JobActivity">
 
         <LinearLayout
             android:id="@+id/top_route_layout"
