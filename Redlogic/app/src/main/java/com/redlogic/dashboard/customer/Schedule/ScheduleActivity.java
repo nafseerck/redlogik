@@ -76,9 +76,16 @@ public class ScheduleActivity extends BaseLoaderActivity {
     private void setFilteredList(String selectedDate) {
         List<SchedulesCustomerResponseModel.DataBean> filteredList = new ArrayList<>();
         for (int i=0;i<list.size();i++){
-            String date = CoreUtils.getParsedStamp("dd-MM-yyyy",list.get(i).getTimestamp());
-            if (selectedDate.matches(date)){
-                filteredList.add(list.get(i));
+            if(!list.get(i).getTimestamp().isEmpty() && !list.get(i).getTimestamp().equals("")) {
+                try{
+                String date = CoreUtils.getParsedStamp("dd-MM-yyyy", Long.parseLong(list.get(i).getTimestamp()));
+                if (selectedDate.matches(date)) {
+                    filteredList.add(list.get(i));
+                }
+                }catch (Exception e)
+                {
+                    showToast("Invalid dates in backend");
+                }
             }
         }
         setAdapter(filteredList);
@@ -121,11 +128,11 @@ public class ScheduleActivity extends BaseLoaderActivity {
                         ItemNotificationBinding mBinding = DataBindingUtil.bind(injector.findViewById(R.id.liItem));
                         if (mBinding == null) return;
                         mBinding.tvTitle.setText(String.format("%s to %s", data.getJob_details().getFrom_location(), data.getJob_details().getTo_location()));
-                        String dateTime = CoreUtils.getParsedStamp("dd-MMM-yyyy,hh:mm aa", data.getTimestamp());
+                        String dateTime = CoreUtils.getParsedStamp("dd-MMM-yyyy,hh:mm aa", Long.parseLong(data.getTimestamp()));
                         mBinding.tvTitleTxt.setText(dateTime);
                         mBinding.liItem.setOnClickListener(v -> {
                         });
-                        binding.calenderView.setDate(data.getTimestamp() * 1000);
+                        binding.calenderView.setDate(Long.parseLong(data.getTimestamp()) * 1000);
                     }
                 })
                 .attachTo(binding.recyclerView);

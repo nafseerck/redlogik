@@ -50,19 +50,41 @@ public class SchedulesCustomerResponseModel {
          *             "timestamp": 1599229200
          */
 
-        private long timestamp;
+        private String timestamp;
         private JobDetailsBean job_details;
+        private int execution_id;
+        private int service_id;
 
         public JobDetailsBean getJob_details() {
             return job_details;
         }
 
-        public long getTimestamp() {
+        public String getTimestamp() {
             return timestamp;
         }
 
-        public void setTimestamp(long timestamp) {
+        public void setTimestamp(String timestamp) {
             this.timestamp = timestamp;
+        }
+
+        public void setJob_details(JobDetailsBean job_details) {
+            this.job_details = job_details;
+        }
+
+        public int getExecution_id() {
+            return execution_id;
+        }
+
+        public void setExecution_id(int execution_id) {
+            this.execution_id = execution_id;
+        }
+
+        public int getService_id() {
+            return service_id;
+        }
+
+        public void setService_id(int service_id) {
+            this.service_id = service_id;
         }
 
         public static class JobDetailsBean {
