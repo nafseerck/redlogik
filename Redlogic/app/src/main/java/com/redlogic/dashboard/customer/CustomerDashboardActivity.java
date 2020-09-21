@@ -129,7 +129,8 @@ public class CustomerDashboardActivity extends BaseLoaderActivity {
                         ItemOnGoingBinding mBinding = DataBindingUtil.bind(injector.findViewById(R.id.liItem));
                         if (mBinding == null) return;
                         mBinding.tvScheduledAt.setText(data.getJob_details().getScheduled_at());
-//                        mBinding.tvTitle21.setText(data.getJob_details());
+                        mBinding.tvTitle21.setText(data.getJob_details().getFrom_location());
+                        mBinding.tvTitle22.setText(data.getJob_details().getTo_location());
                         mBinding.liItem.setOnClickListener(v -> {
                         });
                     }

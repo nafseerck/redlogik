@@ -25,6 +25,7 @@ import com.redlogic.generic.BaseLoaderActivity;
 import com.redlogic.utils.api.ApiServiceProvider;
 import com.redlogic.utils.api.listeners.RetrofitListener;
 import com.redlogic.utils.api.models.ErrorObject;
+import com.redlogic.utils.core.CoreUtils;
 import com.redlogic.utils.image.ImageUtils;
 import com.redlogic.utils.json.Utils;
 
@@ -32,8 +33,13 @@ import net.idik.lib.slimadapter.SlimAdapter;
 import net.idik.lib.slimadapter.SlimInjector;
 import net.idik.lib.slimadapter.viewinjector.IViewInjector;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -98,7 +104,13 @@ public class WorkOrderDetailsActivity extends BaseLoaderActivity {
                         mBinding.tvLicensee.setText(data.getLicensee_address().getAddress_line_1());
                         mBinding.tvAddress.setText(data.getLicensee_address().getAddress_line_2());
                         mBinding.tvStatus.setText(data.getStatus());
-                        mBinding.tvDate.setText(data.getDate());
+                        String dateTime = data.getDate();
+
+
+                        mBinding.tvDate.setText(CoreUtils.getParsedDateTimeFromApi(data.getDate()));
+
+                        //mBinding.tvDate.setText(dateTime);
+                        //mBinding.tvDate.setText(data.getDate());
                         mBinding.tvRefNo.setText(data.getRef_no());
                         mBinding.tvRelNo.setText(data.getRl_no());
                         ImageUtils.setRoundedBackground(WorkOrderDetailsActivity.this,

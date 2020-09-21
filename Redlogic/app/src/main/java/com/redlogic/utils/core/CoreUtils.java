@@ -28,6 +28,7 @@ import com.redlogic.R;
 import com.redlogic.utils.image.ImageUtils;
 
 import java.io.File;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -146,6 +147,22 @@ public class CoreUtils {
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         return sdf.format(c.getTime());
+    }
+
+    public static String getParsedDateTimeFromApi(String date)
+    {
+        try {
+            Date date1=new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ssZ").parse(date);
+            DateFormat targetFormat = new SimpleDateFormat("dd-MMM-yyyy,hh:mm aa");
+            String formattedDate = targetFormat.format(date1);
+            return formattedDate;
+        }catch (Exception e)
+        {
+
+        }
+
+        return "";
+
     }
 
     public static void enableDisableConfirmButton(Context context, TextView button, boolean enable) {
