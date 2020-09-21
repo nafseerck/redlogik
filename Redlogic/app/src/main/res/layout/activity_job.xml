@@ -387,34 +387,70 @@
         </ScrollView>
 
         <LinearLayout
-            android:id="@+id/bottomButtonLayout"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_alignParentBottom="true">
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical">
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:layout_above="@+id/bottomButtonLayout"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center|left">
 
-            <TextView
-                android:id="@+id/tvAccept"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/gray_216"
-                android:fontFamily="@font/roboto"
-                android:gravity="center"
-                android:onClick="onAccept"
-                android:text="@string/accept"
-                android:textColor="@color/white" />
+                    <ImageView
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:background="@drawable/ic_outline_contact_mail_24"
+                        android:layout_marginLeft="10dp"/>
 
-            <TextView
-                android:id="@+id/tvReject"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/gray_216"
-                android:fontFamily="@font/roboto"
-                android:gravity="center"
-                android:onClick="onReject"
-                android:text="@string/reject"
-                android:textColor="@color/white" />
+                    <TextView
+                        android:padding="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Gate Passes"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+            <LinearLayout
+                android:id="@+id/bottomButtonLayout"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+               >
+
+                <TextView
+                    android:id="@+id/tvAccept"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/gray_216"
+                    android:fontFamily="@font/roboto"
+                    android:gravity="center"
+                    android:onClick="onAccept"
+                    android:text="@string/accept"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/tvReject"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/gray_216"
+                    android:fontFamily="@font/roboto"
+                    android:gravity="center"
+                    android:onClick="onReject"
+                    android:text="@string/reject"
+                    android:textColor="@color/white" />
+            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 </layout>

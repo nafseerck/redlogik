@@ -93,6 +93,9 @@ public class JobActivity extends BaseLoaderActivity {
         if (DeliveriesActivity.selectedPosition == 2 || DeliveriesActivity.selectedPosition == 3 || DeliveriesActivity.selectedPosition == 1) {
             binding.tvAccept.setVisibility(View.GONE);
             binding.tvReject.setVisibility(View.GONE);
+
+            binding.bottomButtonLayout.setVisibility(View.GONE);
+
         }
 
 //        String origin = "11.715602, 77.040184";
