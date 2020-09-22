@@ -145,6 +145,8 @@ public class JobActivity extends BaseLoaderActivity {
             Log.d(TAG, "onAccept: ");
         } else {
             Log.d(TAG, "onNotAccept: ");
+            // shivin : date validation
+            showToast("Execution : "+CoreUtils.getParsedStamp("dd-MM-yyyy", data.getTimestamp()));
         }
     }
 
@@ -152,6 +154,10 @@ public class JobActivity extends BaseLoaderActivity {
         if (isDateValid()) {
             callAcceptOrReject("reject");
             Log.d(TAG, "onAccept: ");
+        }else{
+            // shivin : date validation
+            showToast("Execution : "+CoreUtils.getParsedStamp("dd-MM-yyyy", data.getTimestamp()));
+
         }
 
     }

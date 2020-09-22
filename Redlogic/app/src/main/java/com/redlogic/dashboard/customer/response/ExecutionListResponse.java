@@ -14,6 +14,8 @@ public class ExecutionListResponse {
     private boolean status;
     private String message;
     private List<DataBean> data;
+    private List<String> result;
+    private String info;
 
     public boolean isStatus() {
         return status;

@@ -127,6 +127,9 @@ public class ExecutionListActivity extends BaseLoaderActivity {
                         if (mBinding == null) return;
                         mBinding.tvTitle.setText(data.getDescription());
 
+                        // shivin make the time visiblle if available in the model
+                        mBinding.tvTitleTxt.setText(data.getCompleted_on());
+
                         mBinding.liItem.setOnClickListener(v -> {
                         });
                         if (isSecondTime) {

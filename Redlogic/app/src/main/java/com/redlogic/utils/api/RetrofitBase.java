@@ -145,11 +145,18 @@ public class RetrofitBase {
                     return;
                 }
                 ErrorObject errorPojo = new Gson().fromJson(responses, ErrorObject.class);
+                if(errorPojo.getMessage() != null){
                 if (errorPojo.getMessage().equals("Invalid token")) {
                     context.goToLogin();
                 } else {
                     retrofitListener.onResponseError(errorPojo);
+                }}
+
+                // shivin : execution list response gives info field
+                if(errorPojo.getInfo() != null){
+                    retrofitListener.onResponseError(errorPojo);
                 }
+
             }
         }
     }

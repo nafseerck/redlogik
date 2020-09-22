@@ -12,6 +12,16 @@ public class ErrorObject {
     private boolean login_status;
     private boolean status;
     private String message;
+    private String info;
+    private boolean success;
+
+    public boolean getSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
 
     public boolean isLogin_status() {
         return login_status;
@@ -37,4 +47,11 @@ public class ErrorObject {
         this.message = message;
     }
 
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
 }

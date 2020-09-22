@@ -140,7 +140,8 @@ public class DeclarationActivity extends BaseLoaderActivity {
                     pdf=obj.getString("download_url");
 
                 } catch (Throwable t) {
-
+                    // shivin :
+                    showToast("POD is pending");
                 }
                 hideDialog();
             }

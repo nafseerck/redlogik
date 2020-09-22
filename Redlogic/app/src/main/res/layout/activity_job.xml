@@ -73,7 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="none"
-            android:layout_above="@+id/bottomButtonLayout"
+            android:layout_above="@+id/gate_pass"
             android:layout_below="@+id/top_route_layout">
 
             <LinearLayout
@@ -387,6 +387,7 @@
         </ScrollView>
 
         <LinearLayout
+            android:id="@+id/gate_pass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -424,8 +425,7 @@
             <LinearLayout
                 android:id="@+id/bottomButtonLayout"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
-               >
+                android:layout_height="56dp">
 
                 <TextView
                     android:id="@+id/tvAccept"
@@ -438,7 +438,6 @@
                     android:onClick="onAccept"
                     android:text="@string/accept"
                     android:textColor="@color/white" />
-
                 <TextView
                     android:id="@+id/tvReject"
                     android:layout_width="0dp"
@@ -450,6 +449,7 @@
                     android:onClick="onReject"
                     android:text="@string/reject"
                     android:textColor="@color/white" />
+
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
