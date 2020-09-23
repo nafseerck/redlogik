@@ -22,6 +22,7 @@ import com.redlogic.utils.api.ApiServiceProvider;
 import com.redlogic.utils.api.listeners.RetrofitListener;
 import com.redlogic.utils.api.models.ErrorObject;
 import com.redlogic.utils.core.CoreUtils;
+import com.redlogic.utils.image.FileConversion;
 import com.redlogic.utils.image.ImageUtils;
 
 import net.idik.lib.slimadapter.SlimAdapter;
@@ -35,6 +36,7 @@ public class CustomerExecutionDetailsActivity extends BaseLoaderActivity {
     public static String executionId;
     private ActivityCustomerExecutionDetailsBinding binding;
     private ExecutionDetailsResponse.DataBean result;
+    String pdf= new String("");
 
     public static void start(Context context) {
         Intent intent = new Intent(context, CustomerExecutionDetailsActivity.class);
@@ -113,6 +115,7 @@ public class CustomerExecutionDetailsActivity extends BaseLoaderActivity {
                 String dateTime = CoreUtils.getParsedStamp("dd-MMM-yyyy,hh:mm aa", result.getJob_details().getJob_details().getScheduled_at());
                 binding.include.tvTitleTxt2.setText(dateTime);
                 binding.include.tvTitle21.setText(result.getJob_details().getJob_details().getFrom_location());
+                pdf = result.getDownload_document().getUrl();
                 setAdapter();
             }
 
@@ -126,5 +129,18 @@ public class CustomerExecutionDetailsActivity extends BaseLoaderActivity {
 
 
     public void onDownload(View view) {
+
+        try {
+            if (pdf != null) {
+                FileConversion.downloadPdf(CustomerExecutionDetailsActivity.this, pdf);
+                showToast("Downloading...");
+                showToast("Please check you downloads folder");
+            } else {
+                showToast("POD not available");
+
+            }
+        }catch (Exception e){
+
+        }
     }
 }

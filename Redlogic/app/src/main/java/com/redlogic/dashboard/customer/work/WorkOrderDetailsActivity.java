@@ -107,7 +107,7 @@ public class WorkOrderDetailsActivity extends BaseLoaderActivity {
                         String dateTime = data.getDate();
 
 
-                        mBinding.tvDate.setText(CoreUtils.getParsedDateTimeFromApi(data.getDate()));
+                        mBinding.tvDate.setText(CoreUtils.getParsedDateTimeFromApi(data.getDate(),"dd-MMM-yyyy,hh:mm aa"));
 
                         //mBinding.tvDate.setText(dateTime);
                         //mBinding.tvDate.setText(data.getDate());
@@ -162,7 +162,7 @@ public class WorkOrderDetailsActivity extends BaseLoaderActivity {
         WorkOrderApprovalRequestModel requestModel = new WorkOrderApprovalRequestModel();
         requestModel.setWork_order_id(data.getWork_order_id());
         requestModel.setStatus("approved");
-//        requestModel.setUser_id();
+      //  requestModel.setUser_id("2");
         requestModel.setReason("");
 
         Call<ResponseBody> call = apiServiceProvider.apiServices.callWorkOrderapproval(requestModel);
@@ -174,6 +174,7 @@ public class WorkOrderDetailsActivity extends BaseLoaderActivity {
             public void onResponseSuccess(String response) {
                 hideDialog();
                 finish();
+                showToast("Work order approved successfully");
 
             }
 

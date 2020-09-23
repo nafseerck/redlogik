@@ -193,8 +193,13 @@ public class ExecutionListActivity extends BaseLoaderActivity {
     }
 
     private String getCurrentTime() {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        df.setTimeZone(TimeZone.getTimeZone("gmt"));
+      //  DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        // shivin disbale
+       // df.setTimeZone(TimeZone.getTimeZone("gmt"));
+        // make time in UTC format
+
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         String gmtTime = df.format(new Date());
         return gmtTime;
     }

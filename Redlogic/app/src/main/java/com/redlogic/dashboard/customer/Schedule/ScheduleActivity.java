@@ -79,7 +79,8 @@ public class ScheduleActivity extends BaseLoaderActivity {
             if(!list.get(i).getTimestamp().isEmpty() && !list.get(i).getTimestamp().equals("")) {
                 try{
                 String date = CoreUtils.getParsedStamp("dd-MM-yyyy", Long.parseLong(list.get(i).getTimestamp()));
-                if (selectedDate.matches(date)) {
+                String date1 = CoreUtils.getParsedDateTimeFromApi(list.get(i).getJob_details().getScheduled_at(),"dd-MM-yyyy");
+                if (selectedDate.matches(date1)) {
                     filteredList.add(list.get(i));
                 }
                 }catch (Exception e)

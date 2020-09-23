@@ -149,11 +149,11 @@ public class CoreUtils {
         return sdf.format(c.getTime());
     }
 
-    public static String getParsedDateTimeFromApi(String date)
+    public static String getParsedDateTimeFromApi(String date,String format)
     {
         try {
             Date date1=new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ssZ").parse(date);
-            DateFormat targetFormat = new SimpleDateFormat("dd-MMM-yyyy,hh:mm aa");
+            DateFormat targetFormat = new SimpleDateFormat(format);
             String formattedDate = targetFormat.format(date1);
             return formattedDate;
         }catch (Exception e)
