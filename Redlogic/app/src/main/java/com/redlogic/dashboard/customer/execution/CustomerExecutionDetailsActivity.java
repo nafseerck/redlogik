@@ -70,7 +70,7 @@ public class CustomerExecutionDetailsActivity extends BaseLoaderActivity {
                         mBinding.tvTitleTxt.setText(data.getCompleted_on());
                         if (data.getStatus() != 1) {
                             mBinding.imIcon.setVisibility(View.GONE);
-                            mBinding.progress.setVisibility(View.VISIBLE);
+                            mBinding.progress.setVisibility(View.GONE);
                             mBinding.tvTitleTxt.setVisibility(View.GONE);
                         } else {
                             mBinding.imIcon.setVisibility(View.VISIBLE);

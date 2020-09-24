@@ -145,8 +145,8 @@ public class ExecutionListActivity extends BaseLoaderActivity {
                             if (mBinding.imCheck.isChecked()) {
                                 if (data.getId() == listExecute.getTasks().get(nextCompleteCheckBoxId).getId()) {
 
-                                    data.setIs_completed(true);
-                                    data.setCompleted_on(getCurrentTime());
+                                   // data.setIs_completed(true);
+                                  //  data.setCompleted_on(getCurrentTime());
                                     executionChecklistSubmit();
 
                                 } else {
@@ -155,9 +155,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
                                         mBinding.imCheck.setChecked(false);
                                     }
                                 }
-
                             }
-
                         });
 
                         if (!JobActivity.isDateValid()) {
@@ -167,9 +165,11 @@ public class ExecutionListActivity extends BaseLoaderActivity {
 
                         if (data.getIs_completed()) {
                             mBinding.imCheck.setVisibility(View.GONE);
+                            mBinding.imCheck.setChecked(false);
                             mBinding.imTic.setVisibility(View.VISIBLE);
                         } else {
                             mBinding.imCheck.setVisibility(View.VISIBLE);
+                            mBinding.imCheck.setChecked(false);
                             mBinding.imTic.setVisibility(View.GONE);
                         }
                         /*if (data.getIs_active() == 0) {
@@ -224,7 +224,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
 
     private void updateCompleteJobBtnLastExecution() {
         int lastTask = listExecute.getTasks().size();
-        if (listExecute.getTasks().get(lastTask-2).getIs_completed()){
+        if (listExecute.getTasks().get(lastTask-1).getIs_completed()){
             binding.tvComplete.setEnabled(true);
         }else {
             binding.tvComplete.setEnabled(false);
@@ -242,9 +242,14 @@ public class ExecutionListActivity extends BaseLoaderActivity {
         ExecutionChecklistResponseModel.DataBeanX item = new ExecutionChecklistResponseModel.DataBeanX();
         item.setJob_id(listExecute.getJob_id());
         item.setService_master_id(listExecute.getService_master_id());
+
         item.setTasks(listExecute.getTasks());
         listJob.add(item);
         requestModel.setJob(listJob);
+
+        // set clicked check box time here
+        item.getTasks().get(nextCompleteCheckBoxId).setCompleted_on(getCurrentTime());
+        item.getTasks().get(nextCompleteCheckBoxId).setIs_completed(true);
 
         Call<ResponseBody> call = apiServiceProvider.apiServices.callExecutionChecklistSubmit(requestModel);
         ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();
@@ -280,7 +285,13 @@ public class ExecutionListActivity extends BaseLoaderActivity {
     }
 
     public void onComplete(View view) {
-        callCompleteJob();
+        int lastTask = listExecute.getTasks().size();
+        if (listExecute.getTasks().get(lastTask-1).getIs_completed()){
+            callCompleteJob();
+        }else {
+            binding.tvComplete.setEnabled(false);
+        }
+
     }
 
     private void callCompleteJob() {

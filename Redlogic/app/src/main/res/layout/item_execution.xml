@@ -68,7 +68,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:buttonTint="@color/grad_4"
-                android:visibility="gone"
+                android:checked="false"
+                android:visibility="visible"
                 android:scaleX="1.3"
                 android:scaleY="1.3" />
         </LinearLayout>
