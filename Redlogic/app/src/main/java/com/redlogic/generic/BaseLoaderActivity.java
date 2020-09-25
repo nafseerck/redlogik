@@ -37,10 +37,13 @@ import com.redlogic.dashboard.customer.Schedule.ScheduleActivity;
 import com.redlogic.dashboard.driver.job.JobActivity;
 import com.redlogic.dashboard.driver.notification.NotificationActivity;
 import com.redlogic.dashboard.driver.request.GatePassRequestModel;
+import com.redlogic.dashboard.driver.request.JobLocationUpdateRequestModel;
 import com.redlogic.dashboard.driver.response.GatePassListResponseModel;
+import com.redlogic.dashboard.driver.response.JobsLocationUpdateResponseModel;
 import com.redlogic.dashboard.driver.schedule.DriverScheduleActivity;
 import com.redlogic.databinding.ItemMenuItemBinding;
 import com.redlogic.language.LanguageActivity;
+import com.redlogic.language.request.SettingsRequestModel;
 import com.redlogic.location.LocationTrack;
 import com.redlogic.login.LoginActivity;
 import com.redlogic.utils.PrefConstants;
@@ -112,6 +115,7 @@ public class BaseLoaderActivity extends BaseActivity {
             requestLocatopnPermission();
         }
 
+        callSettings();
         super.setContentView(fullLayout);
     }
 
@@ -409,5 +413,34 @@ public class BaseLoaderActivity extends BaseActivity {
         }else {
             requestLocatopnPermission();
         }
+    }
+
+    private void callSettings() {
+        ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);
+        SettingsRequestModel settingsRequestModel = new SettingsRequestModel();
+        settingsRequestModel.setDevice_id("aaaduyadjg");
+        Call<ResponseBody> call = apiServiceProvider.apiServices.callSettings(settingsRequestModel);
+        ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();
+        apiParams.call = call;
+       // showDialog();
+        apiParams.retrofitListener = new RetrofitListener() {
+            @Override
+            public void onResponseSuccess(String responseBodyString) {
+               // hideDialog();
+                JobsLocationUpdateResponseModel responseModel = new Gson().fromJson(responseBodyString, JobsLocationUpdateResponseModel.class);
+
+                if(responseModel.isStatus()) {
+                    appPrefes.saveIntData("location_distance", responseModel.getLat_lon_frequency());
+                }
+            }
+
+            @Override
+            public void onResponseError(ErrorObject errorObject) {
+             //   hideDialog();
+                appPrefes.saveIntData("location_distance", 2000);
+
+            }
+        };
+        apiServiceProvider.callApi(apiParams);
     }
 }

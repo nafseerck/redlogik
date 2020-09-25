@@ -10,6 +10,7 @@ import com.redlogic.dashboard.driver.request.GatePassRequestModel;
 import com.redlogic.dashboard.driver.request.GeneratePodRequestModel;
 import com.redlogic.dashboard.driver.request.GenerateTimeSheetRequestModel;
 import com.redlogic.dashboard.driver.request.InitialChecklistRequestModel;
+import com.redlogic.dashboard.driver.request.JobLocationUpdateRequestModel;
 import com.redlogic.dashboard.driver.request.JobsRequestModel;
 import com.redlogic.dashboard.driver.request.ReportDamageRequestModel;
 import com.redlogic.dashboard.driver.request.UpdateLocationeRequestModel;
@@ -108,4 +109,7 @@ public interface ApiServices {
 
     @POST("sos")
     Call<ResponseBody> calSos(@Body SosRequestModel requestModel);
+
+    @POST("update_location")
+    Call<ResponseBody> callUpdateLocation(@Body JobLocationUpdateRequestModel requestModel);
 }

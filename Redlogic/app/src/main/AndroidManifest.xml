@@ -67,6 +67,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".dashboard.driver.job.JobActivity"
+            android:supportsPictureInPicture="true"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout"
             android:screenOrientation="portrait" />
         <activity
             android:name=".dashboard.driver.deliveries.DeliveriesActivity"

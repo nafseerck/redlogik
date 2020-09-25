@@ -16,12 +16,19 @@ import com.redlogic.dashboard.driver.DashboardActivity;
 import com.redlogic.generic.BaseActivity;
 import com.redlogic.generic.BaseLoaderActivity;
 import com.redlogic.language.LanguageActivity;
+import com.redlogic.language.request.SettingsRequestModel;
 import com.redlogic.location.LocationTrack;
 import com.redlogic.login.LoginActivity;
 import com.redlogic.utils.PrefConstants;
+import com.redlogic.utils.api.ApiServiceProvider;
+import com.redlogic.utils.api.listeners.RetrofitListener;
+import com.redlogic.utils.api.models.ErrorObject;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 
 public class SplashActivity extends BaseActivity {
 
@@ -112,4 +119,5 @@ public class SplashActivity extends BaseActivity {
             requestLocatopnPermission();
         }
     }
+
 }

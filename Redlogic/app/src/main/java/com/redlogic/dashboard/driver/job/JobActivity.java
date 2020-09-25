@@ -1,14 +1,24 @@
 package com.redlogic.dashboard.driver.job;
 
 import android.app.Dialog;
+import android.app.PictureInPictureParams;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.Point;
+import android.location.Location;
+import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Rational;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,12 +32,17 @@ import com.redlogic.dashboard.driver.deliveries.DeliveriesActivity;
 import com.redlogic.dashboard.driver.execution.ExecutionListActivity;
 import com.redlogic.dashboard.driver.request.AcceptOrRejectRequestModel;
 import com.redlogic.dashboard.driver.request.GatePassRequestModel;
+import com.redlogic.dashboard.driver.request.JobLocationUpdateRequestModel;
 import com.redlogic.dashboard.driver.response.GatePassListResponseModel;
 import com.redlogic.dashboard.driver.response.JobsResponseModel;
 import com.redlogic.databinding.ActivityJobBinding;
 import com.redlogic.databinding.ItemCargoDetailsBinding;
 import com.redlogic.databinding.ItemGatePassesBinding;
 import com.redlogic.generic.BaseLoaderActivity;
+import com.redlogic.generic.SosRequestModel;
+import com.redlogic.generic.SosResponseModel;
+import com.redlogic.location.LocationHelper;
+import com.redlogic.location.OnLocationHelperUpdateListener;
 import com.redlogic.utils.AppPrefes;
 import com.redlogic.utils.api.ApiServiceProvider;
 import com.redlogic.utils.api.listeners.RetrofitListener;
@@ -48,16 +63,16 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-public class JobActivity extends BaseLoaderActivity {
+public class JobActivity extends BaseLoaderActivity implements OnLocationHelperUpdateListener {
 
     public static JobsResponseModel.DataBean data;
     private ActivityJobBinding binding;
     private String TAG = "tag_jithin";
     public static ArrayList<String> acceptedJobs = new ArrayList<>();
     Dialog alertDialog;
-
-
-
+    boolean updateLocation = false;
+    LocationHelper locationHelper;
+    LocationManager locationManager;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, JobActivity.class);
@@ -138,6 +153,9 @@ public class JobActivity extends BaseLoaderActivity {
             }
         }
 
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationHelper = new LocationHelper(locationManager,this,this);
+
 
     }
 
@@ -197,8 +215,11 @@ public class JobActivity extends BaseLoaderActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void onMap(View view) {
         //RouteMapActivity.start(this);
+        callPictureInPicture();
+
         CoreUtils.openRoutesMaps(this, data.getTo_location());
     }
 
@@ -343,6 +364,93 @@ public class JobActivity extends BaseLoaderActivity {
 
         }
         return null;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void callPictureInPicture()
+    {
+        Display d = getWindowManager()
+                .getDefaultDisplay();
+        Point p = new Point();
+        d.getSize(p);
+        int width = p.x;
+        int height = p.y;
+
+        Rational ratio
+                = new Rational(width, height);
+        PictureInPictureParams.Builder
+                pip_Builder
+                = new PictureInPictureParams
+                .Builder();
+        pip_Builder.setAspectRatio(ratio).build();
+        enterPictureInPictureMode(pip_Builder.build());
+        updateLocation = true;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    protected void onUserLeaveHint() {
+        PictureInPictureParams params = new PictureInPictureParams.Builder().build();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            enterPictureInPictureMode(params);
+        }
+    }
+
+    @Override
+    public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode, Configuration newConfig) {
+        if (isInPictureInPictureMode) {
+            updateLocation = true;
+            binding.mainLayout.setVisibility(View.GONE);
+        } else {
+            updateLocation = false;
+            binding.mainLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onLocationUpdate(Location location) {
+        if(updateLocation)
+       // showToast(location.getLatitude()+""+location.getLongitude());
+        callLocationUpdateApi(location);
+    }
+
+    public void callLocationUpdateApi(Location location){
+        ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);
+        JobLocationUpdateRequestModel requestModel = new JobLocationUpdateRequestModel();
+
+        requestModel.setJob_id(String.valueOf(data.getJob_id()));
+        requestModel.setLatitude(String.valueOf(location.getLatitude()));
+        requestModel.setLongitude(String.valueOf(location.getLongitude()));
+
+        Call<ResponseBody> call = apiServiceProvider.apiServices.callUpdateLocation(requestModel);
+        ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();
+        apiParams.call = call;
+       // showDialog();
+        apiParams.retrofitListener = new RetrofitListener() {
+            @Override
+            public void onResponseSuccess(String responseBodyString) {
+                hideDialog();
+                try {
+
+                    SosResponseModel responseModel = new Gson().fromJson(responseBodyString, SosResponseModel.class);
+
+                    if (responseModel.isStatus()) {
+                      //  showToast(responseModel.getMessage());
+                    }else
+                    {
+                      //  showToast("Location not updated");
+                    }
+                }catch (Exception e){
+
+                }
+            }
+            @Override
+            public void onResponseError(ErrorObject errorObject) {
+              //  hideDialog();
+            //    showToast("Location not updated error");
+            }
+        };
+        apiServiceProvider.callApi(apiParams);
     }
 
 }
