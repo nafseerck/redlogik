@@ -140,7 +140,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
                         });
                         mBinding.imCheck.setOnCheckedChangeListener((compoundButton, b) -> {
                             String mydate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
-                            mBinding.tvTitleTxt.setText(mydate);
+                           // mBinding.tvTitleTxt.setText(mydate);
 //                            data.setValue(b ? "checked" : "unchecked");
                             if (mBinding.imCheck.isChecked()) {
                                 if (data.getId() == listExecute.getTasks().get(nextCompleteCheckBoxId).getId()) {
@@ -164,6 +164,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
                         }
 
                         if (data.getIs_completed()) {
+                            mBinding.tvTitleTxt.setText(data.getCompleted_on());
                             mBinding.imCheck.setVisibility(View.GONE);
                             mBinding.imCheck.setChecked(false);
                             mBinding.imTic.setVisibility(View.VISIBLE);

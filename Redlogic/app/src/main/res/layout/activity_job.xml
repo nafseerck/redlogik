@@ -451,7 +451,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             tools:listitem="@layout/item_gate_passes"
-                            android:visibility="gone"
+                            android:visibility="visible"
                             android:nestedScrollingEnabled="false"
                             tools:itemCount="2"/>
                     </LinearLayout>

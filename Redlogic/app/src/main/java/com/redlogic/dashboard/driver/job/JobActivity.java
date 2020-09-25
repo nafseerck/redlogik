@@ -11,6 +11,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.util.Rational;
 import android.view.Display;
@@ -23,6 +24,10 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.DownloadListener;
+import com.androidnetworking.interfaces.DownloadProgressListener;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
@@ -57,8 +62,10 @@ import net.idik.lib.slimadapter.viewinjector.IViewInjector;
 
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -265,11 +272,11 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
         Call<ResponseBody> call = apiServiceProvider.apiServices.callGatePass(requestModel);
         ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();
         apiParams.call = call;
-        showDialog();
+      //  showDialog();
         apiParams.retrofitListener = new RetrofitListener() {
             @Override
             public void onResponseSuccess(String responseBodyString) {
-                hideDialog();
+              //  hideDialog();
                try {
 
                    GatePassListResponseModel responseModel = new Gson().fromJson(responseBodyString, GatePassListResponseModel.class);
@@ -289,16 +296,15 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
 
             @Override
             public void onResponseError(ErrorObject errorObject) {
-                hideDialog();
+               // hideDialog();
             }
         };
         apiServiceProvider.callApi(apiParams);
     }
 
     private void setGatePassAdapter(List<GatePassListResponseModel.DataBean.GatePasses> gate_pass_list) {
-        binding.recyclerViewGatePass.setVisibility(View.VISIBLE);
         binding.recyclerViewGatePass.setLayoutManager(new LinearLayoutManager(this));
-        SlimAdapter slimAdapter = SlimAdapter.create()
+        SlimAdapter slimAdapter2 = SlimAdapter.create()
                 .register(R.layout.item_gate_passes, new SlimInjector<GatePassListResponseModel.DataBean.GatePasses>() {
                     @Override
                     public void onInject(GatePassListResponseModel.DataBean.GatePasses data, IViewInjector injector) {
@@ -308,17 +314,19 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
                         cargoDetailsBinding.tvPassName.setText(data.getName());
 
                         cargoDetailsBinding.ivImageDownload.setOnClickListener(v->{
-                            createDialogue(data.getDownload_url().get(0));
+                          //  downloadGatePass(data.getDownload_url().get(0));
+                            download(data.getDownload_url().get(0),data.getName());
+
                         });
                         cargoDetailsBinding.ivImageView.setOnClickListener(v->{
-                            downloadGatePass(data.getDownload_url().get(0));
+                            createDialogue(data.getDownload_url().get(0));
 
                         });
 
                     }
                 })
-                .attachTo(binding.recyclerVewCargo);
-        slimAdapter.updateData(gate_pass_list);
+                .attachTo(binding.recyclerViewGatePass);
+        slimAdapter2.updateData(gate_pass_list);
         binding.recyclerVewCargo.setNestedScrollingEnabled(false);
     }
 
@@ -333,6 +341,36 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
             showToast("Pass not available");
 
         }
+    }
+
+    public void download(String url,String image){
+
+        File appFolder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "RedLogic");
+        if (!appFolder.exists()) {
+            boolean mkdirs = appFolder.mkdirs();
+        }
+
+        AndroidNetworking.download(url, appFolder.getAbsolutePath(), image)
+                .setTag("downloadTest")
+                .setPriority(com.androidnetworking.common.Priority.MEDIUM)
+                .build()
+                .setDownloadProgressListener(new DownloadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesDownloaded, long totalBytes) {
+
+                    }
+                })
+                .startDownload(new DownloadListener() {
+                    @Override
+                    public void onDownloadComplete() {
+                        showToast("Downloaded successfully.");
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        showToast("Downloading failed. Try again.");
+                    }
+                });
     }
 
     Dialog createDialogue(String url) {
@@ -404,6 +442,7 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
         } else {
             updateLocation = false;
             binding.mainLayout.setVisibility(View.VISIBLE);
+            finish();
         }
     }
 
