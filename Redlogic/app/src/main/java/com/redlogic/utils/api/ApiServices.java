@@ -6,12 +6,14 @@ import com.redlogic.dashboard.customer.request.WorkOrderApprovalRequestModel;
 import com.redlogic.dashboard.customer.request.WorkOrderRequestModel;
 import com.redlogic.dashboard.driver.request.AcceptOrRejectRequestModel;
 import com.redlogic.dashboard.driver.request.ExecutionChecklistRequestModel;
+import com.redlogic.dashboard.driver.request.GatePassRequestModel;
 import com.redlogic.dashboard.driver.request.GeneratePodRequestModel;
 import com.redlogic.dashboard.driver.request.GenerateTimeSheetRequestModel;
 import com.redlogic.dashboard.driver.request.InitialChecklistRequestModel;
 import com.redlogic.dashboard.driver.request.JobsRequestModel;
 import com.redlogic.dashboard.driver.request.ReportDamageRequestModel;
 import com.redlogic.dashboard.driver.request.UpdateLocationeRequestModel;
+import com.redlogic.generic.SosRequestModel;
 import com.redlogic.language.request.SettingsRequestModel;
 import com.redlogic.login.request.LoginRequestModel;
 
@@ -99,4 +101,11 @@ public interface ApiServices {
 
     @POST("shedules")
     Call<ResponseBody> callDriverSchedules();
+
+    //25/09/2020
+    @POST("gatepasses")
+    Call<ResponseBody> callGatePass(@Body GatePassRequestModel requestModel);
+
+    @POST("sos")
+    Call<ResponseBody> calSos(@Body SosRequestModel requestModel);
 }

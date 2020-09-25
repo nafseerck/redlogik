@@ -14,6 +14,7 @@ import com.redlogic.dashboard.driver.response.SchedulesResponse;
 import com.redlogic.databinding.ActivityDriverScheduleBinding;
 import com.redlogic.databinding.ItemNotificationBinding;
 import com.redlogic.generic.BaseLoaderActivity;
+import com.redlogic.utils.AppPrefes;
 import com.redlogic.utils.api.ApiServiceProvider;
 import com.redlogic.utils.api.listeners.RetrofitListener;
 import com.redlogic.utils.api.models.ErrorObject;
@@ -49,6 +50,11 @@ public class DriverScheduleActivity extends BaseLoaderActivity {
         setContentView(R.layout.activity_driver_schedule);
         binding = (ActivityDriverScheduleBinding) viewDataBinding;
         setTitle("Schedule");
+
+        appPrefes =  appPrefes = new AppPrefes(this);
+        appPrefes.saveBoolData("is_job_id",false);
+        appPrefes.saveIntData("job_id",0);
+
         hideSchedules();
         callSchedules();
 

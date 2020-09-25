@@ -28,6 +28,7 @@ import com.redlogic.databinding.ActivityDeliveriesBinding;
 import com.redlogic.databinding.ItemDeliveryTabsBinding;
 import com.redlogic.databinding.ItemProcessBinding;
 import com.redlogic.generic.BaseLoaderActivity;
+import com.redlogic.utils.AppPrefes;
 import com.redlogic.utils.api.ApiServiceProvider;
 import com.redlogic.utils.api.listeners.RetrofitListener;
 import com.redlogic.utils.api.models.ErrorObject;
@@ -61,10 +62,23 @@ public class DeliveriesActivity extends BaseLoaderActivity implements TextWatche
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        appPrefes =  appPrefes = new AppPrefes(this);
+        appPrefes.saveBoolData("is_job_id",false);
+        appPrefes.saveIntData("job_id",0);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deliveries);
         binding = (ActivityDeliveriesBinding) viewDataBinding;
+
+        appPrefes =  appPrefes = new AppPrefes(this);
+        appPrefes.saveBoolData("is_job_id",false);
+        appPrefes.saveIntData("job_id",0);
+
         setTitle("Deliveries");
         addItem(getString(R.string.delivery_new), R.mipmap.latest, 0);
         addItem(getString(R.string.delivery_in_process), R.mipmap.inprocess, 1);

@@ -16,6 +16,7 @@ import com.redlogic.dashboard.driver.response.DashboardResponseModel;
 import com.redlogic.databinding.ActivityDashboardBinding;
 import com.redlogic.databinding.ItemDashboardBinding;
 import com.redlogic.generic.BaseLoaderActivity;
+import com.redlogic.utils.AppPrefes;
 import com.redlogic.utils.api.ApiServiceProvider;
 import com.redlogic.utils.api.listeners.RetrofitListener;
 import com.redlogic.utils.api.models.ErrorObject;
@@ -34,6 +35,7 @@ import retrofit2.Call;
 public class DashboardActivity extends BaseLoaderActivity {
 
     private ActivityDashboardBinding binding;
+    private AppPrefes appPrefes;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, DashboardActivity.class);
@@ -46,11 +48,18 @@ public class DashboardActivity extends BaseLoaderActivity {
         context.startActivity(intent);
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         binding = (ActivityDashboardBinding) viewDataBinding;
+
+        appPrefes =  appPrefes = new AppPrefes(this);
+        appPrefes.saveBoolData("is_job_id",false);
+        appPrefes.saveIntData("job_id",0);
+
+
         ImageUtils.setRoundedBackground(this, getColor(R.color.grad_4), 45, binding.tvUserIcon);
         ImageUtils.setRoundedBackgroundWithBorder(this, getColor(R.color.gray_14),
                 getColor(R.color.gray_151), 1, 18, binding.tvRegNo);
@@ -63,7 +72,9 @@ public class DashboardActivity extends BaseLoaderActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        appPrefes =  appPrefes = new AppPrefes(this);
+        appPrefes.saveBoolData("is_job_id",false);
+        appPrefes.saveIntData("job_id",0);
         getDashboard();
     }
 

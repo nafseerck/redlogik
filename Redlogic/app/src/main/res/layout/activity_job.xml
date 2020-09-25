@@ -393,6 +393,8 @@
             android:layout_alignParentBottom="true"
             android:orientation="vertical">
             <androidx.cardview.widget.CardView
+                android:id="@+id/gate_pass_card"
+                android:onClick="onGatePassClick"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -401,24 +403,39 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center|left">
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:background="@drawable/ic_outline_contact_mail_24"
-                        android:layout_marginLeft="10dp"/>
-
-                    <TextView
-                        android:padding="20dp"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Gate Passes"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        />
+                        android:orientation="horizontal"
+                        android:gravity="center|left">
 
+                        <ImageView
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:background="@drawable/ic_outline_contact_mail_24"
+                            android:layout_marginLeft="10dp"/>
+
+                        <TextView
+                            android:padding="20dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Gate Passes"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            />
+
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerViewGatePass"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:listitem="@layout/item_gate_passes"
+                        android:visibility="gone"
+                        android:nestedScrollingEnabled="false"
+                        tools:itemCount="2"/>
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>

@@ -1,5 +1,6 @@
 package com.redlogic.generic;
 
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.redlogic.R;
+import com.redlogic.location.LocationTrack;
 import com.redlogic.utils.AppPrefes;
 
 
@@ -61,5 +63,8 @@ public class BaseActivity extends AppCompatActivity {
         finish();
     }
 
+    public LocationTrack initLocationTrack(Context context) {
+        return new LocationTrack(context);
+    }
 
 }

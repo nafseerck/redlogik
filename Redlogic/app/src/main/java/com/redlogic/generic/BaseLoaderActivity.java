@@ -1,9 +1,16 @@
 package com.redlogic.generic;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.telecom.TelecomManager;
@@ -15,28 +22,43 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.akexorcist.roundcornerprogressbar.CenteredRoundCornerProgressBar;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.gson.Gson;
 import com.redlogic.R;
 import com.redlogic.dashboard.customer.Schedule.ScheduleActivity;
+import com.redlogic.dashboard.driver.job.JobActivity;
 import com.redlogic.dashboard.driver.notification.NotificationActivity;
+import com.redlogic.dashboard.driver.request.GatePassRequestModel;
+import com.redlogic.dashboard.driver.response.GatePassListResponseModel;
 import com.redlogic.dashboard.driver.schedule.DriverScheduleActivity;
 import com.redlogic.databinding.ItemMenuItemBinding;
 import com.redlogic.language.LanguageActivity;
+import com.redlogic.location.LocationTrack;
 import com.redlogic.login.LoginActivity;
 import com.redlogic.utils.PrefConstants;
+import com.redlogic.utils.api.ApiServiceProvider;
+import com.redlogic.utils.api.listeners.RetrofitListener;
+import com.redlogic.utils.api.models.ErrorObject;
 import com.redlogic.utils.popup.Popup;
 
 import net.idik.lib.slimadapter.SlimAdapter;
 import net.idik.lib.slimadapter.SlimInjector;
 import net.idik.lib.slimadapter.viewinjector.IViewInjector;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 
 
 /**
@@ -56,6 +78,14 @@ public class BaseLoaderActivity extends BaseActivity {
     private View relContent;
     public static String sosMobileNumber = "";
     private String TAG="tag_jithin";
+    LocationTrack locationTrack;
+    String NO_LOCATION_MSG = "No location Found";
+    Location currentLocation;
+
+    LocationManager locationManager;
+    private FusedLocationProviderClient fusedLocationClient;
+    private static final int REQ_CODE_LOCATION = 700;
+
 
     @Override
     public void setContentView(int view) {
@@ -73,6 +103,15 @@ public class BaseLoaderActivity extends BaseActivity {
         getLayoutInflater().inflate(view, subActivityContent, true);
         viewDataBinding = DataBindingUtil.bind(subActivityContent.getChildAt(0));
         setAdapter();
+        locationTrack = initLocationTrack(BaseLoaderActivity.this);
+
+        if(hasLocationPermission()) {
+            initializeLocationManager();
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        }else {
+            requestLocatopnPermission();
+        }
+
         super.setContentView(fullLayout);
     }
 
@@ -135,6 +174,9 @@ public class BaseLoaderActivity extends BaseActivity {
     }
 
     public void onSos(View view) {
+
+            callSosApi();
+
         if (!sosMobileNumber.isEmpty()) {
 //            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", sosMobileNumber, null));
 //            startActivity(intent);
@@ -252,9 +294,120 @@ public class BaseLoaderActivity extends BaseActivity {
         }
     };
 
+
+
+    public void callSosApi() {
+
+        ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);
+        SosRequestModel requestModel = new SosRequestModel();
+        if(appPrefes.getBoolData("is_job_id")) {
+            requestModel.setJob_id(String.valueOf(appPrefes.getIntData("job_id")));
+        }else {
+            requestModel.setJob_id("");
+        }
+
+        if(currentLocation != null ) {
+            requestModel.setLocation_details(getAddressFromLatLng(currentLocation.getLatitude(),currentLocation.getLongitude()));
+            requestModel.setLat(String.valueOf(currentLocation.getLatitude()));
+            requestModel.setLong_(String.valueOf(currentLocation.getLongitude()));
+        }else {
+            getFusedLocation();
+        }
+
+        Call<ResponseBody> call = apiServiceProvider.apiServices.calSos(requestModel);
+        ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();
+        apiParams.call = call;
+        showDialog();
+        apiParams.retrofitListener = new RetrofitListener() {
+            @Override
+            public void onResponseSuccess(String responseBodyString) {
+                hideDialog();
+                try {
+
+                    SosResponseModel responseModel = new Gson().fromJson(responseBodyString, SosResponseModel.class);
+
+                    if (responseModel.isStatus()) {
+                        showToast(responseModel.getMessage());
+                    }else
+                    {
+                        showToast("Sos not send");
+                    }
+                }catch (Exception e){
+
+                }
+            }
+
+            @Override
+            public void onResponseError(ErrorObject errorObject) {
+                hideDialog();
+                showToast("Sos not send");
+
+            }
+        };
+        apiServiceProvider.callApi(apiParams);
+
+
+    }
+
+    private void initializeLocationManager() {
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+    }
+
+    private String getAddressFromLatLng(double Inlatitude, double Inlongitude) {
+        Geocoder gCoder = new Geocoder(BaseLoaderActivity.this);
+        List<Address> addresses = null;
+        try {
+            addresses = gCoder.getFromLocation(Inlatitude, Inlongitude, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (addresses != null && addresses.size() > 0) {
+            return addresses.get(0).getAddressLine(0);
+        } else {
+            return NO_LOCATION_MSG;
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void getFusedLocation() {
+        if (currentLocation != null) {
+            //location fetched already
+            callSosApi();
+        } else {
+            //if location not fetched
+            fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
+                if (location != null) {
+                    currentLocation = location;
+                }
+                getFusedLocation();
+            });
+        }
+    }
+
+
+    private boolean hasLocationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void requestLocatopnPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQ_CODE_LOCATION);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
+        if (requestCode == REQ_CODE_LOCATION) {
+            initializeLocationManager();
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        }else {
+            requestLocatopnPermission();
+        }
     }
 }

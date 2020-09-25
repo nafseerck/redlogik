@@ -199,7 +199,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
        // df.setTimeZone(TimeZone.getTimeZone("gmt"));
         // make time in UTC format
 
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String gmtTime = df.format(new Date());
         return gmtTime;
     }
@@ -266,6 +266,9 @@ public class ExecutionListActivity extends BaseLoaderActivity {
 
             @Override
             public void onResponseError(ErrorObject errorObject) {
+                listExecute.getTasks().get(nextCompleteCheckBoxId).setIs_completed(false);
+                slimAdapter.updateData(listExecute.getTasks());
+                showToast("Some error occurred please try again");
                 hideDialog();
             }
         };

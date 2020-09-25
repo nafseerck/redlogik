@@ -14,6 +14,7 @@ import com.redlogic.dashboard.driver.response.NotificationListResponseModel;
 import com.redlogic.databinding.ActivityNotificationBinding;
 import com.redlogic.databinding.ItemNotificationBinding;
 import com.redlogic.generic.BaseLoaderActivity;
+import com.redlogic.utils.AppPrefes;
 import com.redlogic.utils.api.ApiServiceProvider;
 import com.redlogic.utils.api.listeners.RetrofitListener;
 import com.redlogic.utils.api.models.ErrorObject;
@@ -42,6 +43,11 @@ public class NotificationActivity extends BaseLoaderActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
         binding = (ActivityNotificationBinding) viewDataBinding;
+
+        appPrefes =  appPrefes = new AppPrefes(this);
+        appPrefes.saveBoolData("is_job_id",false);
+        appPrefes.saveIntData("job_id",0);
+
         setTitle("Notifications");
         hideNotification();
         callUpdateLocation();
