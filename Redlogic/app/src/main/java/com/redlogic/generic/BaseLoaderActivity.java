@@ -179,8 +179,14 @@ public class BaseLoaderActivity extends BaseActivity {
 
     public void onSos(View view) {
 
-            callSosApi();
+        if(currentLocation != null ) {
 
+            callSosApi();
+        }else {
+            getFusedLocation();
+        }
+    }
+    public void callSosNumber(){
         if (!sosMobileNumber.isEmpty()) {
 //            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", sosMobileNumber, null));
 //            startActivity(intent);
@@ -302,21 +308,17 @@ public class BaseLoaderActivity extends BaseActivity {
 
     public void callSosApi() {
 
-        ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);
         SosRequestModel requestModel = new SosRequestModel();
+
+        ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);
         if(appPrefes.getBoolData("is_job_id")) {
             requestModel.setJob_id(String.valueOf(appPrefes.getIntData("job_id")));
         }else {
             requestModel.setJob_id("");
         }
-
-        if(currentLocation != null ) {
-            requestModel.setLocation_details(getAddressFromLatLng(currentLocation.getLatitude(),currentLocation.getLongitude()));
-            requestModel.setLat(String.valueOf(currentLocation.getLatitude()));
-            requestModel.setLong_(String.valueOf(currentLocation.getLongitude()));
-        }else {
-            getFusedLocation();
-        }
+        requestModel.setLocation_details(getAddressFromLatLng(currentLocation.getLatitude(),currentLocation.getLongitude()));
+        requestModel.setLat(String.valueOf(currentLocation.getLatitude()));
+        requestModel.setLong_(String.valueOf(currentLocation.getLongitude()));
 
         Call<ResponseBody> call = apiServiceProvider.apiServices.calSos(requestModel);
         ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();
@@ -339,13 +341,14 @@ public class BaseLoaderActivity extends BaseActivity {
                 }catch (Exception e){
 
                 }
+                callSosNumber();
             }
 
             @Override
             public void onResponseError(ErrorObject errorObject) {
                 hideDialog();
                 showToast("Sos not send");
-
+                callSosNumber();
             }
         };
         apiServiceProvider.callApi(apiParams);

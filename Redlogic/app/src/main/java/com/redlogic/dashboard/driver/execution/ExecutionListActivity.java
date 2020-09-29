@@ -54,7 +54,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
     int nextCompleteCheckBoxId=0;
     private String TAG=  "tag_jithin";
     public static String jobId;
-
+    TimeZone tz;
     public static void start(Context context) {
         Intent intent = new Intent(context, ExecutionListActivity.class);
         context.startActivity(intent);
@@ -81,6 +81,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
                 getColor(R.color.grad_6)), ImageUtils.convertToIntArray(getColor(R.color.grad_6_trans),
                 getColor(R.color.grad_6_trans)), 20, binding.tvReport);
         callInitialChecklist();
+        tz = TimeZone.getDefault();
 
         if (DeliveriesActivity.isCompleted){
             binding.tvComplete.setVisibility(View.GONE);
@@ -200,7 +201,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
        // df.setTimeZone(TimeZone.getTimeZone("gmt"));
         // make time in UTC format
 
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String gmtTime = df.format(new Date());
         return gmtTime;
     }
@@ -251,6 +252,10 @@ public class ExecutionListActivity extends BaseLoaderActivity {
         // set clicked check box time here
         item.getTasks().get(nextCompleteCheckBoxId).setCompleted_on(getCurrentTime());
         item.getTasks().get(nextCompleteCheckBoxId).setIs_completed(true);
+        item.getTasks().get(nextCompleteCheckBoxId).setTime_zone(tz.getID());
+
+        Gson gson = new Gson();
+        String json = gson.toJson(item.getTasks().get(nextCompleteCheckBoxId));
 
         Call<ResponseBody> call = apiServiceProvider.apiServices.callExecutionChecklistSubmit(requestModel);
         ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();

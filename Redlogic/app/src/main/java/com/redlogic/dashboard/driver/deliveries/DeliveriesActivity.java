@@ -67,6 +67,7 @@ public class DeliveriesActivity extends BaseLoaderActivity implements TextWatche
         appPrefes =  appPrefes = new AppPrefes(this);
         appPrefes.saveBoolData("is_job_id",false);
         appPrefes.saveIntData("job_id",0);
+        setItems();
     }
 
     @Override
@@ -91,12 +92,6 @@ public class DeliveriesActivity extends BaseLoaderActivity implements TextWatche
         binding.edSearch.addTextChangedListener(this);
     }
 
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        setItems();
-
-    }
 
     private void addItem(String text, int icon, int position) {
         LayoutInflater inflater = LayoutInflater.from(this);

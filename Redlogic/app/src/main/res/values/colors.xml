@@ -55,6 +55,6 @@
     <color name="grad_9">#20B819</color>
     <color name="grad_10">#FF0000</color>
 
-    <color name="tran_black">#2F000000</color>
+    <color name="tran_black">#CC0E0E0E</color>
 
 </resources>

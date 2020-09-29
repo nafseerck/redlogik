@@ -53,6 +53,8 @@ import com.redlogic.utils.api.ApiServiceProvider;
 import com.redlogic.utils.api.listeners.RetrofitListener;
 import com.redlogic.utils.api.models.ErrorObject;
 import com.redlogic.utils.core.CoreUtils;
+import com.redlogic.utils.distance.DistanceMatrix;
+import com.redlogic.utils.distance.DistanceResponse;
 import com.redlogic.utils.image.FileConversion;
 import com.redlogic.utils.image.ImageUtils;
 
@@ -70,7 +72,7 @@ import java.util.Locale;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-public class JobActivity extends BaseLoaderActivity implements OnLocationHelperUpdateListener {
+public class JobActivity extends BaseLoaderActivity implements OnLocationHelperUpdateListener{
 
     public static JobsResponseModel.DataBean data;
     private ActivityJobBinding binding;
@@ -78,8 +80,11 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
     public static ArrayList<String> acceptedJobs = new ArrayList<>();
     Dialog alertDialog;
     boolean updateLocation = false;
+    boolean getRoute = false;
+
     LocationHelper locationHelper;
     LocationManager locationManager;
+    DistanceMatrix distanceMatrix;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, JobActivity.class);
@@ -103,9 +108,10 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
         ImageUtils.setRoundedBackground(this, ImageUtils.convertToIntArray(getColor(R.color.black),
                 getColor(R.color.black)), ImageUtils.convertToIntArray(getColor(R.color.black_trans),
                 getColor(R.color.black_trans)), 0, binding.tvReject);
-        binding.tvRoute.setText("Route - 20.9 kilometers");
-        binding.tvTime.setText("23 Minutes");
+        binding.tvRoute.setText("Distance");
+        binding.tvTime.setText("Estimated time");
         binding.tvTitleTxt11.setText("Assigned by");
+        binding.distanceProgressBar.setVisibility(View.VISIBLE);
         binding.tvTitle11.setText(data.getAssigned_by());
         binding.tvTitleTxt12.setText(R.string.customer);
         binding.tvTitle12.setText(data.getCustomer());
@@ -131,7 +137,11 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
         binding.card1.setOnClickListener(v -> {
 
             if (isDateValid()){
-                callAcceptOrReject("accept");
+                if(DeliveriesActivity.selectedPosition != 0) {
+                    callAcceptOrReject("accept");
+                }else {
+                    showToast("please accept job first");
+                }
             }
 
         });
@@ -143,15 +153,18 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
 
         }
 
-//        String origin = "11.715602, 77.040184";
-//        String destination = "12.360282, 78.380516";
-//        new DistanceMatrix().getDistance(origin, destination, this, value -> {
-//            String distance = value.getRows().get(0)
-//                    .getElements().get(0).getDistance().getText().replace("km", "kilometers");
-//            binding.tvRoute.setText(String.format("Route - %s", distance));
-//            binding.tvTime.setText(String.format("%s", value.getRows().get(0)
-//                    .getElements().get(0).getDuration().getText()));
-//        });
+        String origin = "11.715602, 77.040184";
+        String destination = data.getEnd_lat()+","+data.getEnd_long();
+
+      /*  new DistanceMatrix().getDistance(origin, destination, this, value -> {
+            String distance = value.getRows().get(0)
+                    .getElements().get(0).getDistance().getText().replace("km", "kilometers");
+           binding.tvRoute.setText(String.format("Route - %s", distance));
+            binding.tvTime.setText(String.format("%s", value.getRows().get(0)
+                    .getElements().get(0).getDuration().getText()));
+        });
+
+       */
 
         //isAcceptedJob-temporary
         for (int i = 0; i < acceptedJobs.size(); i++) {
@@ -314,12 +327,12 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
                         cargoDetailsBinding.tvPassName.setText(data.getName());
 
                         cargoDetailsBinding.ivImageDownload.setOnClickListener(v->{
-                          //  downloadGatePass(data.getDownload_url().get(0));
-                            download(data.getDownload_url().get(0),data.getName());
+                            downloadGatePass(data.getName(),data.getDownload_url().get(0));
+                           // download(data.getDownload_url().get(0),data.getName());
 
                         });
                         cargoDetailsBinding.ivImageView.setOnClickListener(v->{
-                            createDialogue(data.getDownload_url().get(0));
+                            createDialogue(data.getDownload_url().get(0)).show();
 
                         });
 
@@ -330,11 +343,11 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
         binding.recyclerVewCargo.setNestedScrollingEnabled(false);
     }
 
-    public void downloadGatePass(String url)
+    public void downloadGatePass(String title,String url)
     {
         if(url != null) {
             //FileConversion.downloadPdf(this, "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/"+pdf);
-            FileConversion.downloadPdf(this, url);
+            FileConversion.downloadGatePass(title,this, url);
             showToast("Downloading...");
             showToast("Please check you downloads folder");
         }else {
@@ -377,9 +390,8 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
         try {
             alertDialog = new Dialog(this, 0);
             alertDialog.setContentView(R.layout.gate_pass_view_layout);
-            alertDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            alertDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             alertDialog.setCancelable(true);
-            ImageView close = alertDialog.findViewById(R.id.close);
             ImageView ItemImg = alertDialog.findViewById(R.id.iv_item);
 
             RequestOptions options = new RequestOptions();
@@ -389,13 +401,6 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
                     .load(url)
                     .apply(options)
                     .into(ItemImg);
-
-            close.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    alertDialog.dismiss();
-                }
-            });
 
             return alertDialog;
         } catch (Exception e) {
@@ -428,10 +433,12 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onUserLeaveHint() {
-        PictureInPictureParams params = new PictureInPictureParams.Builder().build();
+       /* PictureInPictureParams params = new PictureInPictureParams.Builder().build();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             enterPictureInPictureMode(params);
         }
+
+        */
     }
 
     @Override
@@ -441,6 +448,7 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
             binding.mainLayout.setVisibility(View.GONE);
         } else {
             updateLocation = false;
+            getRoute = false;
             binding.mainLayout.setVisibility(View.VISIBLE);
             finish();
         }
@@ -448,9 +456,12 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
 
     @Override
     public void onLocationUpdate(Location location) {
-        if(updateLocation)
-       // showToast(location.getLatitude()+""+location.getLongitude());
-        callLocationUpdateApi(location);
+        if(updateLocation) {
+            callLocationUpdateApi(location);
+        }
+        if(!getRoute){
+            callDistanceMatrix(location);
+        }
     }
 
     public void callLocationUpdateApi(Location location){
@@ -474,10 +485,11 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
                     SosResponseModel responseModel = new Gson().fromJson(responseBodyString, SosResponseModel.class);
 
                     if (responseModel.isStatus()) {
-                      //  showToast(responseModel.getMessage());
+                        Log.d("worker_log", "onLocation Updated: ");
+
                     }else
                     {
-                      //  showToast("Location not updated");
+                        Log.d("worker_log", "location updation failed: ");
                     }
                 }catch (Exception e){
 
@@ -490,6 +502,25 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
             }
         };
         apiServiceProvider.callApi(apiParams);
+    }
+
+
+    public void callDistanceMatrix(Location originLoc)
+    {
+        String origin = originLoc.getLatitude()+","+originLoc.getLongitude();
+        String destination = data.getEnd_lat()+","+data.getEnd_long();
+       // String destination = "10.518820,76.212060";
+        new DistanceMatrix().getDistance(origin, destination, this, value -> {
+            if(value.getRows().get(0).getElements().get(0).getStatus().toLowerCase().equals("ok")) {
+                String distance = value.getRows().get(0)
+                        .getElements().get(0).getDistance().getText().replace("km", "kilometers");
+                binding.tvRoute.setText(String.format("Route - %s", distance));
+                binding.tvTime.setText(String.format("%s", value.getRows().get(0)
+                        .getElements().get(0).getDuration().getText()));
+                getRoute = true;
+                binding.distanceProgressBar.setVisibility(View.GONE);
+            }
+        });
     }
 
 }

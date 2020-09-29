@@ -89,6 +89,19 @@ public class ExecutionChecklistResponseModel {
             private boolean is_completed;
             private String completed_on;
             private List<DataBean> data;
+            private String time_zone;
+
+            public String getTime_zone() {
+                return time_zone;
+            }
+
+            public void setTime_zone(String time_zone) {
+                this.time_zone = time_zone;
+            }
+
+            public boolean isIs_completed() {
+                return is_completed;
+            }
 
             public int getId() {
                 return id;

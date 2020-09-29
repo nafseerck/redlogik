@@ -63,4 +63,13 @@ public class FileConversion {
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
         downloadmanager.enqueue(request);
     }
+    public static void downloadGatePass(String title,Context c, String url) {
+        DownloadManager downloadmanager = (DownloadManager) c.getSystemService(Context.DOWNLOAD_SERVICE);
+        Uri uri = Uri.parse(url);
+        DownloadManager.Request request = new DownloadManager.Request(uri);
+        request.setTitle(title);
+        request.setDescription("Downloading");
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        downloadmanager.enqueue(request);
+    }
 }

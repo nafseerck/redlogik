@@ -1,5 +1,6 @@
 package com.redlogic.utils.distance;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DistanceResponse {
@@ -14,7 +15,7 @@ public class DistanceResponse {
     private String status;
     private List<String> destination_addresses;
     private List<String> origin_addresses;
-    private List<RowsBean> rows;
+    private List<RowsBean> rows = new ArrayList<>();
 
     public String getStatus() {
         return status;
@@ -49,7 +50,7 @@ public class DistanceResponse {
     }
 
     public static class RowsBean {
-        private List<ElementsBean> elements;
+        private List<ElementsBean> elements = new ArrayList<>();
 
         public List<ElementsBean> getElements() {
             return elements;

@@ -16,11 +16,17 @@ public class DistanceMatrix {
     public void getDistance(String origins, String destinations,
                              BaseLoaderActivity baseLoaderActivity,DistanceValue distanceValue) {
 
-        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?" +
+      /* // old api key
+      String url = "https://maps.googleapis.com/maps/api/distancematrix/json?" +
                 "origins=" + origins + "&" +
                 "destinations=" + destinations +
                 "&key=AIzaSyBV7Qha3GiO1E1NmBQMkEMde5x8KKqFbrs";
 
+       */
+        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?" +
+                "origins=" + origins + "&" +
+                "destinations=" + destinations +
+                "&key=AIzaSyDp9NX2wf3Q8sGdET_luEv59ix3NzmOS58";
 
         ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(baseLoaderActivity);
         Call<ResponseBody> call = apiServiceProvider.apiServices.getUrl(url);
