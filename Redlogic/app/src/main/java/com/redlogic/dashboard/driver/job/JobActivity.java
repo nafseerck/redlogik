@@ -137,7 +137,7 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
         binding.card1.setOnClickListener(v -> {
 
             if (isDateValid()){
-                if(DeliveriesActivity.selectedPosition != 0) {
+                if(binding.bottomButtonLayout.getVisibility() == View.GONE) {
                     callAcceptOrReject("accept");
                 }else {
                     showToast("please accept job first");
@@ -239,7 +239,6 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
     public void onMap(View view) {
         //RouteMapActivity.start(this);
         callPictureInPicture();
-
         CoreUtils.openRoutesMaps(this, data.getTo_location());
     }
 
