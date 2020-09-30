@@ -253,6 +253,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
         item.getTasks().get(nextCompleteCheckBoxId).setCompleted_on(getCurrentTime());
         item.getTasks().get(nextCompleteCheckBoxId).setIs_completed(true);
         item.getTasks().get(nextCompleteCheckBoxId).setTime_zone(tz.getID());
+        item.getTasks().get(nextCompleteCheckBoxId).getData().get(0).setValue("1");
 
         Gson gson = new Gson();
         String json = gson.toJson(item.getTasks().get(nextCompleteCheckBoxId));
