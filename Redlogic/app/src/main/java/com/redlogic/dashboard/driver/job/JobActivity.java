@@ -326,15 +326,19 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
                         cargoDetailsBinding.tvPassName.setText(data.getName());
 
                         cargoDetailsBinding.ivImageDownload.setOnClickListener(v->{
-                            downloadGatePass(data.getName(),data.getDownload_url().get(0));
+                            if(data.getDownload_url().size() > 0)
+                                downloadGatePass(data.getName(),data.getDownload_url().get(0));
+                            else
+                                showToast("Gate pass not available");
                            // download(data.getDownload_url().get(0),data.getName());
 
                         });
                         cargoDetailsBinding.ivImageView.setOnClickListener(v->{
-                            createDialogue(data.getDownload_url().get(0)).show();
-
+                            if(data.getDownload_url().size() > 0)
+                                createDialogue(data.getDownload_url().get(0)).show();
+                            else
+                                showToast("Gate pass not available");
                         });
-
                     }
                 })
                 .attachTo(binding.recyclerViewGatePass);

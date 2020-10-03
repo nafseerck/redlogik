@@ -3,6 +3,7 @@ package com.redlogic.dashboard.driver.execution;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -129,7 +130,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
                         mBinding.tvTitle.setText(data.getDescription());
 
                         // shivin make the time visiblle if available in the model
-                        mBinding.tvTitleTxt.setText(data.getCompleted_on());
+                       // mBinding.tvTitleTxt.setText(data.getCompleted_on());
 
                         mBinding.liItem.setOnClickListener(v -> {
                         });
@@ -165,7 +166,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
                         }
 
                         if (data.getIs_completed()) {
-                            mBinding.tvTitleTxt.setText(data.getCompleted_on());
+                            mBinding.tvTitleTxt.setText(getDefaultTimeZoneTime(data.getCompleted_on()));
                             mBinding.imCheck.setVisibility(View.GONE);
                             mBinding.imCheck.setChecked(false);
                             mBinding.imTic.setVisibility(View.VISIBLE);
@@ -195,15 +196,46 @@ public class ExecutionListActivity extends BaseLoaderActivity {
     }
 
     private String getCurrentTime() {
-      //  DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         // shivin disbale
        // df.setTimeZone(TimeZone.getTimeZone("gmt"));
         // make time in UTC format
 
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        df.setTimeZone(TimeZone.getTimeZone("GMT"));
         String gmtTime = df.format(new Date());
         return gmtTime;
+    }
+
+    private String getDefaultTimeZoneTime(String dateTime){
+        try{
+            // convert to normal yyyy-MM-dd HH:mm:ss format
+            Date date1=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateTime);
+
+            // convert UTC format
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            df.setTimeZone(TimeZone.getTimeZone("UTC"));
+            String gmtTime = df.format(date1);
+            Log.d(TAG, "getDefaultTimeZoneTime: " + gmtTime);
+
+        // convert to Current time zone
+            DateFormat finalFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            Date formattedDate1 = finalFormat.parse(gmtTime);
+            finalFormat.setTimeZone(TimeZone.getTimeZone(TimeZone.getDefault().getID()));
+            String ISTtime1 = finalFormat.format(formattedDate1);
+            Log.d(TAG, "getDefaultTimeZoneTime: " + ISTtime1);
+
+            // convert current time zone date to normal format
+            Date date2=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(ISTtime1);
+            DateFormat targetFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:dd");
+            String formattedDate = targetFormat.format(date2);
+            Log.d(TAG, "getDefaultTimeZoneTime: " + formattedDate);
+            return formattedDate;
+        }catch(Exception e){
+            Log.d(TAG, "getDefaultTimeZoneTime: "+e.getMessage());
+        }
+        return null;
     }
 
     private void getNextCheckboxToComplete() {
@@ -256,7 +288,7 @@ public class ExecutionListActivity extends BaseLoaderActivity {
         item.getTasks().get(nextCompleteCheckBoxId).getData().get(0).setValue("1");
 
         Gson gson = new Gson();
-        String json = gson.toJson(item.getTasks().get(nextCompleteCheckBoxId));
+        String json = gson.toJson(requestModel);
 
         Call<ResponseBody> call = apiServiceProvider.apiServices.callExecutionChecklistSubmit(requestModel);
         ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();

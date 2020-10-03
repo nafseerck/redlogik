@@ -4,6 +4,7 @@
     <string name="english">English</string>
     <!--    <string name="google_maps_key">AIzaSyArj_CZHCsOvoWVK4Kpj9qxrdY-oR9nbrk</string>-->
     <string name="google_maps_key">AIzaSyCzhO37JuMJEFCAG3nL6f9mqn6QLxcfCaw</string>
+    <string name="distance_api_key">AIzaSyDp9NX2wf3Q8sGdET_luEv59ix3NzmOS58</string>
     <string name="arabic">العربية</string>
     <string name="welcome_to_redlogik">Welcome to elcy!</string>
     <string name="sign_in_as_customer">Sign into elcy</string>

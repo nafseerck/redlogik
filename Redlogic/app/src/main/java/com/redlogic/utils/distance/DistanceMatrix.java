@@ -1,6 +1,7 @@
 package com.redlogic.utils.distance;
 
 import com.google.gson.Gson;
+import com.redlogic.R;
 import com.redlogic.generic.BaseLoaderActivity;
 import com.redlogic.utils.api.ApiServiceProvider;
 import com.redlogic.utils.api.listeners.RetrofitListener;
