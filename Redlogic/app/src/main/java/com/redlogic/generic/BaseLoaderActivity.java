@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.telecom.TelecomManager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -38,13 +39,17 @@ import com.redlogic.dashboard.driver.job.JobActivity;
 import com.redlogic.dashboard.driver.notification.NotificationActivity;
 import com.redlogic.dashboard.driver.request.GatePassRequestModel;
 import com.redlogic.dashboard.driver.request.JobLocationUpdateRequestModel;
+import com.redlogic.dashboard.driver.request.JobsRequestModel;
 import com.redlogic.dashboard.driver.response.GatePassListResponseModel;
 import com.redlogic.dashboard.driver.response.JobsLocationUpdateResponseModel;
+import com.redlogic.dashboard.driver.response.JobsResponseModel;
 import com.redlogic.dashboard.driver.schedule.DriverScheduleActivity;
 import com.redlogic.databinding.ItemMenuItemBinding;
 import com.redlogic.language.LanguageActivity;
 import com.redlogic.language.request.SettingsRequestModel;
+import com.redlogic.location.LocationHelper;
 import com.redlogic.location.LocationTrack;
+import com.redlogic.location.OnLocationHelperUpdateListener;
 import com.redlogic.login.LoginActivity;
 import com.redlogic.utils.PrefConstants;
 import com.redlogic.utils.api.ApiServiceProvider;
@@ -67,7 +72,7 @@ import retrofit2.Call;
 /**
  * Created by Sarath on 9/12/18.
  */
-public class BaseLoaderActivity extends BaseActivity {
+public class BaseLoaderActivity extends BaseActivity implements OnLocationHelperUpdateListener {
 
     protected ViewDataBinding viewDataBinding;
     private View dialogContent;
@@ -81,14 +86,16 @@ public class BaseLoaderActivity extends BaseActivity {
     private View relContent;
     public static String sosMobileNumber = "";
     private String TAG="tag_jithin";
-    LocationTrack locationTrack;
     String NO_LOCATION_MSG = "No location Found";
     Location currentLocation;
-
-    LocationManager locationManager;
+    public static List<String> inprogressJobList = new ArrayList<>();
+    static LocationManager locationManager;
     private FusedLocationProviderClient fusedLocationClient;
     private static final int REQ_CODE_LOCATION = 700;
-
+    static LocationHelper locationHelper;
+    static LocationTrack locationTrack;
+    static  int countTimer = 0;
+    static boolean isSettings = false;
 
     @Override
     public void setContentView(int view) {
@@ -106,19 +113,33 @@ public class BaseLoaderActivity extends BaseActivity {
         getLayoutInflater().inflate(view, subActivityContent, true);
         viewDataBinding = DataBindingUtil.bind(subActivityContent.getChildAt(0));
         setAdapter();
-        locationTrack = initLocationTrack(BaseLoaderActivity.this);
+      //  locationTrack = initLocationTrack(BaseLoaderActivity.this);
+
+        if(!isSettings)
+            callSettings();
 
         if(hasLocationPermission()) {
-            initializeLocationManager();
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+            if(locationManager == null)
+                initializeLocationManager();
+            if(fusedLocationClient == null)
+                fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+            //if(locationHelper == null)
+            //    locationHelper = new LocationHelper(locationManager,this,this);
+            if(isSettings) {
+                if (locationTrack == null)
+                    locationTrack = initLocationTrack();
+            }else {
+                callSettings();
+            }
+
+
         }else {
             requestLocatopnPermission();
         }
 
-        callSettings();
+        getDeliveries();
         super.setContentView(fullLayout);
     }
-
 
     public void hideActionBar() {
         toolbar.setVisibility(View.GONE);
@@ -262,9 +283,9 @@ public class BaseLoaderActivity extends BaseActivity {
                 })
                 .attachTo(recyclerView);
         List<String> list = new ArrayList<>();
-        list.add("Profiles");
+      //  list.add("Profiles");
         list.add("Dashboard");
-        list.add("Settings");
+      //  list.add("Settings");
         list.add("Schedules");
         list.add("Logout");
         slimAdapter.updateData(list);
@@ -304,8 +325,6 @@ public class BaseLoaderActivity extends BaseActivity {
         }
     };
 
-
-
     public void callSosApi() {
 
         SosRequestModel requestModel = new SosRequestModel();
@@ -319,7 +338,6 @@ public class BaseLoaderActivity extends BaseActivity {
         requestModel.setLocation_details(getAddressFromLatLng(currentLocation.getLatitude(),currentLocation.getLongitude()));
         requestModel.setLat(String.valueOf(currentLocation.getLatitude()));
         requestModel.setLong_(String.valueOf(currentLocation.getLongitude()));
-
         Call<ResponseBody> call = apiServiceProvider.apiServices.calSos(requestModel);
         ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();
         apiParams.call = call;
@@ -331,15 +349,15 @@ public class BaseLoaderActivity extends BaseActivity {
                 try {
 
                     SosResponseModel responseModel = new Gson().fromJson(responseBodyString, SosResponseModel.class);
-
                     if (responseModel.isStatus()) {
                         showToast(responseModel.getMessage());
+                        Log.d("sos_location send",currentLocation.getLatitude()+","+currentLocation.getLongitude());
+
                     }else
                     {
                         showToast("Sos not send");
                     }
                 }catch (Exception e){
-
                 }
                 callSosNumber();
             }
@@ -352,8 +370,6 @@ public class BaseLoaderActivity extends BaseActivity {
             }
         };
         apiServiceProvider.callApi(apiParams);
-
-
     }
 
     private void initializeLocationManager() {
@@ -377,20 +393,21 @@ public class BaseLoaderActivity extends BaseActivity {
 
     @SuppressLint("MissingPermission")
     private void getFusedLocation() {
-        if (currentLocation != null) {
+       /* if (currentLocation != null) {
             //location fetched already
             callSosApi();
-        } else {
+        } else {*/
             //if location not fetched
             fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
                 if (location != null) {
                     currentLocation = location;
+                    callSosApi();
+                }else {
+                    getFusedLocation();
                 }
-                getFusedLocation();
             });
-        }
+       // }
     }
-
 
     private boolean hasLocationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -411,8 +428,18 @@ public class BaseLoaderActivity extends BaseActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (requestCode == REQ_CODE_LOCATION) {
-            initializeLocationManager();
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+            if(locationManager == null)
+                initializeLocationManager();
+            if(fusedLocationClient == null)
+                fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+           // if(locationHelper == null)
+           //     locationHelper = new LocationHelper(locationManager,this,this);
+            if(isSettings) {
+                if (locationTrack == null)
+                    locationTrack = initLocationTrack();
+            }else {
+                callSettings();
+            }
         }else {
             requestLocatopnPermission();
         }
@@ -434,16 +461,108 @@ public class BaseLoaderActivity extends BaseActivity {
 
                 if(responseModel.isStatus()) {
                     appPrefes.saveIntData("location_distance", responseModel.getLat_lon_frequency());
+                    LocationTrack.MIN_TIME_BW_UPDATES = responseModel.getLat_lon_frequency();
+                  //  LocationTrack.MIN_TIME_BW_UPDATES = 3000;
+
+                    isSettings =true;
                 }
+
+                if(locationTrack == null)
+                    locationTrack = initLocationTrack();
             }
 
             @Override
             public void onResponseError(ErrorObject errorObject) {
              //   hideDialog();
-                appPrefes.saveIntData("location_distance", 2000);
+                appPrefes.saveIntData("location_distance", 9000);
+                LocationTrack.MIN_TIME_BW_UPDATES = 9000;
+                if(locationTrack == null)
+                    locationTrack = initLocationTrack();
+            }
+
+        };
+        apiServiceProvider.callApi(apiParams);
+    }
+
+    public void getDeliveries() {
+        ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);
+        JobsRequestModel requestModel = new JobsRequestModel();
+        requestModel.setType("inprogress");
+        Call<ResponseBody> call = apiServiceProvider.apiServices.callJobs(requestModel);
+        ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();
+        apiParams.call = call;
+        apiParams.retrofitListener = new RetrofitListener() {
+            @Override
+            public void onResponseSuccess(String responseBodyString) {
+                inprogressJobList.clear();
+                JobsResponseModel responseModel = new Gson().fromJson(responseBodyString, JobsResponseModel.class);
+                for(int i =0; i<responseModel.getData().size(); i++)
+                {
+                    inprogressJobList.add(String.valueOf(responseModel.getData().get(i).getJob_id()));
+                }
+            }
+
+            @Override
+            public void onResponseError(ErrorObject errorObject) {
 
             }
         };
         apiServiceProvider.callApi(apiParams);
+    }
+
+
+    public void callLocationUpdateApi(Location location, String jobId){
+        ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);
+        JobLocationUpdateRequestModel requestModel = new JobLocationUpdateRequestModel();
+
+        requestModel.setJob_id(jobId);
+        requestModel.setLatitude(String.valueOf(location.getLatitude()));
+        requestModel.setLongitude(String.valueOf(location.getLongitude()));
+
+        Call<ResponseBody> call = apiServiceProvider.apiServices.callUpdateLocation(requestModel);
+        ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();
+        apiParams.call = call;
+        // showDialog();
+        apiParams.retrofitListener = new RetrofitListener() {
+            @Override
+            public void onResponseSuccess(String responseBodyString) {
+                hideDialog();
+                try {
+
+                    SosResponseModel responseModel = new Gson().fromJson(responseBodyString, SosResponseModel.class);
+
+                    if (responseModel.isStatus()) {
+                        Log.d("worker_log", "onLocation Updated: "+jobId+"   : "+countTimer);
+
+                    }else
+                    {
+                        Log.d("worker_log", "location updation failed: ");
+                    }
+                }catch (Exception e){
+
+                }
+            }
+            @Override
+            public void onResponseError(ErrorObject errorObject) {
+                //  hideDialog();
+                //    showToast("Location not updated error");
+            }
+        };
+        apiServiceProvider.callApi(apiParams);
+    }
+
+    @Override
+    public void onLocationUpdate(Location location) {
+        currentLocation = location;
+        countTimer++;
+        if(inprogressJobList.size() > 0) {
+            for(int i=0; i<inprogressJobList.size(); i++){
+                callLocationUpdateApi(location,inprogressJobList.get(i));
+            }
+        }
+    }
+
+    private LocationTrack initLocationTrack() {
+        return new LocationTrack(this,this);
     }
 }

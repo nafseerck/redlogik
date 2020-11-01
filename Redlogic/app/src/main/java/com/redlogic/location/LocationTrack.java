@@ -10,8 +10,19 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
+
+import com.google.gson.Gson;
+import com.redlogic.dashboard.driver.request.JobLocationUpdateRequestModel;
+import com.redlogic.generic.SosResponseModel;
+import com.redlogic.utils.api.ApiServiceProvider;
+import com.redlogic.utils.api.listeners.RetrofitListener;
+import com.redlogic.utils.api.models.ErrorObject;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 
 public class LocationTrack extends Service implements LocationListener {
 
@@ -24,15 +35,18 @@ public class LocationTrack extends Service implements LocationListener {
     public double latitude;
     public double longitude;
 
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 0;
 
 
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
+    public static long MIN_TIME_BW_UPDATES = 9000;
     protected LocationManager locationManager;
+    OnLocationHelperUpdateListener onLocationHelperUpdateListener;
 
-    public LocationTrack(Context mContext) {
+    public LocationTrack(Context mContext, OnLocationHelperUpdateListener onLocationHelperUpdateListener) {
         this.mContext = mContext;
         getLocation();
+        this.onLocationHelperUpdateListener = onLocationHelperUpdateListener;
+
     }
 
     public LocationTrack() {}
@@ -75,8 +89,6 @@ public class LocationTrack extends Service implements LocationListener {
                             longitude = loc.getLongitude();
                         }
                     }
-
-
                 }
             }
 
@@ -109,7 +121,15 @@ public class LocationTrack extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
+        if (location != null) {
+            //locationHelperUpdateListener.onLocationUpdate(location);
+            loc = location;
+            latitude = loc.getLatitude();
+            longitude = loc.getLongitude();
+            Log.d("worker_log", "onLocationChanged: location track "+loc.getLatitude()+","+loc.getLongitude());
+            onLocationHelperUpdateListener.onLocationUpdate(location);
 
+        }
     }
 
     @Override
@@ -126,4 +146,6 @@ public class LocationTrack extends Service implements LocationListener {
     public void onProviderDisabled(String s) {
 
     }
+
+
 }

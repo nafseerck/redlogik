@@ -43,7 +43,7 @@ public class LocationHelper implements LocationListener {
 
             locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, Looper.getMainLooper());
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,appPrefes.getIntData("location_distance"),0,this);
-            //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,1000,10,this);
+           // locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,3000,0,this);
 
             fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
             fusedLocationProviderClient.getLastLocation().addOnSuccessListener(location -> {
@@ -68,7 +68,7 @@ public class LocationHelper implements LocationListener {
             //locationHelperUpdateListener.onLocationUpdate(location);
             loc = location;
             isLocationAvailable = true;
-            Log.d("worker_log", "onLocationChanged: ");
+            Log.d("worker_log", "onLocationChanged: "+loc.getLatitude()+","+loc.getLongitude());
             onLocationHelperUpdateListener.onLocationUpdate(location);
         }
     }

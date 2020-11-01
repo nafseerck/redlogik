@@ -23,6 +23,7 @@ import com.redlogic.dashboard.driver.request.InitialChecklistRequestModel;
 import com.redlogic.dashboard.driver.response.JobsResponseModel;
 import com.redlogic.databinding.ActivityDeclarationBinding;
 import com.redlogic.generic.BaseLoaderActivity;
+import com.redlogic.utils.AppPrefes;
 import com.redlogic.utils.api.ApiServiceProvider;
 import com.redlogic.utils.api.listeners.RetrofitListener;
 import com.redlogic.utils.api.models.ErrorObject;
@@ -57,10 +58,14 @@ public class DeclarationActivity extends BaseLoaderActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_declaration);
-
         binding = (ActivityDeclarationBinding) viewDataBinding;
         setTitle("Declaration");
         data = JobActivity.data;
+
+        appPrefes =  appPrefes = new AppPrefes(this);
+        appPrefes.saveBoolData("is_job_id",true);
+        appPrefes.saveIntData("job_id",Integer.parseInt(data.getJob_id()));
+
         binding.include.tvTitleTxt1.setText(R.string.customer);
         binding.include.tvTitle1.setText(data.getCustomer());
         binding.include.imCall.setOnClickListener(v -> call(data.getCustomer_phone()));
@@ -75,6 +80,15 @@ public class DeclarationActivity extends BaseLoaderActivity {
 
         ImageUtils.setRoundedBackgroundWithBorder(this, Color.WHITE,
                 getColor(R.color.gray_232), 1, 19, binding.liDraw);
+
+        if(data.isPod_status()) {
+            binding.liDraw.setVisibility(View.GONE);
+            binding.tvGenerate.setText("Close Job");
+            callGetPod();
+        }
+        if(data.getJob_status().equals("completed"))
+            binding.tvGenerate.setVisibility(View.GONE);
+
     }
 
     public void onGenerate(View view) {
@@ -118,7 +132,11 @@ public class DeclarationActivity extends BaseLoaderActivity {
         ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);
         GeneratePodRequestModel requestModel = new GeneratePodRequestModel();
         requestModel.setJob_id(data.getJob_id());
-        requestModel.setDocument_base64(isUpload ? base64 : FileConversion.getBase64(binding.signatureView.getSignatureBitmap()));
+        if(!data.isPod_status())
+            requestModel.setDocument_base64(isUpload ? base64 : FileConversion.getBase64(binding.signatureView.getSignatureBitmap()));
+        else
+            requestModel.setDocument_base64("");
+
         Call<ResponseBody> call = apiServiceProvider.apiServices.callGeneratePod(requestModel);
         ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();
         apiParams.call = call;
@@ -139,6 +157,7 @@ public class DeclarationActivity extends BaseLoaderActivity {
                     JSONObject obj = new JSONObject(responseBodyString);
                     pdf=obj.getString("download_url");
 
+
                 } catch (Throwable t) {
                     // shivin :
                     showToast("POD is pending");
@@ -153,6 +172,53 @@ public class DeclarationActivity extends BaseLoaderActivity {
         };
         apiServiceProvider.callApi(apiParams);
     }
+
+    private void callGetPod() {
+        showDialog();
+        ApiServiceProvider apiServiceProvider = ApiServiceProvider.getInstance(this);
+        GeneratePodRequestModel requestModel = new GeneratePodRequestModel();
+        requestModel.setJob_id(data.getJob_id());
+
+
+        Call<ResponseBody> call = apiServiceProvider.apiServices.callGetPod(requestModel);
+        ApiServiceProvider.ApiParams apiParams = new ApiServiceProvider.ApiParams();
+        apiParams.call = call;
+        apiParams.retrofitListener = new RetrofitListener() {
+            @Override
+            public void onResponseSuccess(String responseBodyString) {
+                isSecond = true;
+                setTitle("Download");
+                binding.tvGenerate.setText("Close Job");
+              /*  binding.tvTitle.setText(isPod ?
+                        "Generated\nPOD Successfully" :
+                        "Generated\nTimesheet Successfully");*/
+                binding.tvTitle.setText("Download POD");
+                binding.liDraw.setVisibility(View.GONE);
+                binding.liGenerated.setVisibility(View.VISIBLE);
+
+
+                try {
+
+                    JSONObject obj = new JSONObject(responseBodyString);
+                    JSONObject  JSONResult =new JSONObject(obj.getString("result"));
+
+                    pdf=JSONResult.getString("download_url");
+
+                } catch (Throwable t) {
+                    // shivin :
+                    showToast("POD is pending");
+                }
+                hideDialog();
+            }
+
+            @Override
+            public void onResponseError(ErrorObject errorObject) {
+                hideDialog();
+            }
+        };
+        apiServiceProvider.callApi(apiParams);
+    }
+
 
     private void callCloseJob() {
         InitialChecklistRequestModel requestModel = new InitialChecklistRequestModel();

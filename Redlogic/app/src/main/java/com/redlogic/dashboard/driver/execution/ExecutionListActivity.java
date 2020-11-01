@@ -129,9 +129,6 @@ public class ExecutionListActivity extends BaseLoaderActivity {
                         if (mBinding == null) return;
                         mBinding.tvTitle.setText(data.getDescription());
 
-                        // shivin make the time visiblle if available in the model
-                       // mBinding.tvTitleTxt.setText(data.getCompleted_on());
-
                         mBinding.liItem.setOnClickListener(v -> {
                         });
                         if (isSecondTime) {
@@ -166,11 +163,16 @@ public class ExecutionListActivity extends BaseLoaderActivity {
                         }
 
                         if (data.getIs_completed()) {
-                            mBinding.tvTitleTxt.setText(getDefaultTimeZoneTime(data.getCompleted_on()));
+                            if(data.getCompleted_on() != null) {
+                                mBinding.tvTitleTxt.setText(getDefaultTimeZoneTime(data.getCompleted_on()));
+                                mBinding.tvTitleTxt.setVisibility(View.VISIBLE);
+                            }
+
                             mBinding.imCheck.setVisibility(View.GONE);
                             mBinding.imCheck.setChecked(false);
                             mBinding.imTic.setVisibility(View.VISIBLE);
                         } else {
+                            mBinding.tvTitleTxt.setVisibility(View.INVISIBLE);
                             mBinding.imCheck.setVisibility(View.VISIBLE);
                             mBinding.imCheck.setChecked(false);
                             mBinding.imTic.setVisibility(View.GONE);
@@ -211,11 +213,16 @@ public class ExecutionListActivity extends BaseLoaderActivity {
     private String getDefaultTimeZoneTime(String dateTime){
         try{
             // convert to normal yyyy-MM-dd HH:mm:ss format
-            Date date1=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateTime);
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+            Date date1 = dateFormat.parse(dateTime);
+            String date = dateFormat.format(date1);
+            Log.d(TAG, "getDefaultTimeZoneTime: " + date1.toString());
 
             // convert UTC format
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-            df.setTimeZone(TimeZone.getTimeZone("UTC"));
+            //df.setTimeZone(TimeZone.getTimeZone("GMT"));
+            df.setTimeZone(TimeZone.getTimeZone(TimeZone.getDefault().getID()));
             String gmtTime = df.format(date1);
             Log.d(TAG, "getDefaultTimeZoneTime: " + gmtTime);
 
@@ -223,12 +230,13 @@ public class ExecutionListActivity extends BaseLoaderActivity {
             DateFormat finalFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
             Date formattedDate1 = finalFormat.parse(gmtTime);
             finalFormat.setTimeZone(TimeZone.getTimeZone(TimeZone.getDefault().getID()));
+            Log.d(TAG,"time zone"+TimeZone.getTimeZone(TimeZone.getDefault().getID()));
             String ISTtime1 = finalFormat.format(formattedDate1);
             Log.d(TAG, "getDefaultTimeZoneTime: " + ISTtime1);
 
             // convert current time zone date to normal format
             Date date2=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(ISTtime1);
-            DateFormat targetFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:dd");
+            DateFormat targetFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String formattedDate = targetFormat.format(date2);
             Log.d(TAG, "getDefaultTimeZoneTime: " + formattedDate);
             return formattedDate;
@@ -301,11 +309,17 @@ public class ExecutionListActivity extends BaseLoaderActivity {
                 updateCompleteJobBtnLastExecution();
                 getNextCheckboxToComplete();
                 slimAdapter.updateData(listExecute.getTasks());
+
+                if(!BaseLoaderActivity.inprogressJobList.contains(String.valueOf(listExecute.getJob_id()))){
+                    BaseLoaderActivity.inprogressJobList.add(String.valueOf(listExecute.getJob_id()));
+                }
             }
 
             @Override
             public void onResponseError(ErrorObject errorObject) {
                 listExecute.getTasks().get(nextCompleteCheckBoxId).setIs_completed(false);
+                item.getTasks().get(nextCompleteCheckBoxId).setCompleted_on(null);
+
                 slimAdapter.updateData(listExecute.getTasks());
                 showToast("Some error occurred please try again");
                 hideDialog();
@@ -333,7 +347,6 @@ public class ExecutionListActivity extends BaseLoaderActivity {
         }else {
             binding.tvComplete.setEnabled(false);
         }
-
     }
 
     private void callCompleteJob() {

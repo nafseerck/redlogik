@@ -21,6 +21,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.gson.Gson;
 import com.redlogic.R;
+import com.redlogic.dashboard.driver.declaration.DeclarationActivity;
+import com.redlogic.dashboard.driver.execution.ExecutionListActivity;
 import com.redlogic.dashboard.driver.job.JobActivity;
 import com.redlogic.dashboard.driver.request.JobsRequestModel;
 import com.redlogic.dashboard.driver.response.JobsResponseModel;
@@ -182,6 +184,13 @@ public class DeliveriesActivity extends BaseLoaderActivity implements TextWatche
                 data.clear();
                 data.addAll(responseModel.getData());
                 slimAdapter.updateData(data);
+                if(type.equals("inprogress")){
+                    inprogressJobList.clear();
+                    for(int i =0; i<responseModel.getData().size(); i++)
+                    {
+                        inprogressJobList.add(String.valueOf(responseModel.getData().get(i).getJob_id()));
+                    }
+                }
             }
 
             @Override
@@ -208,7 +217,34 @@ public class DeliveriesActivity extends BaseLoaderActivity implements TextWatche
                         mBinding.tvDateTime.setText(dateTime);
                         mBinding.liItem.setOnClickListener(v -> {
                             JobActivity.data = data;
-                            JobActivity.start(DeliveriesActivity.this);
+
+                            if(data.getJob_status() != null){
+                                if(data.getJob_status().equals("completed") )
+                                {
+                                    ExecutionListActivity.jobId = String.valueOf(data.getJob_id());
+                                    DeclarationActivity.isPod = data.isPod_status();
+                                    DeclarationActivity.start(DeliveriesActivity.this);
+                                }else if(data.getJob_status().equals("inprogress") && data.isPod_status() )
+                                {
+                                    ExecutionListActivity.jobId = String.valueOf(data.getJob_id());
+                                    DeclarationActivity.isPod = data.isPod_status();
+                                    DeclarationActivity.start(DeliveriesActivity.this);
+                                }else {
+                                    // if completed job
+                                   /* if (selectedPosition == 2) {
+                                        ExecutionListActivity.jobId = String.valueOf(data.getJob_id());
+                                        DeclarationActivity.isPod = data.isPod_status();
+                                        DeclarationActivity.start(DeliveriesActivity.this);
+                                    } else {
+                                        JobActivity.start(DeliveriesActivity.this);
+                                    }  */
+                                    JobActivity.start(DeliveriesActivity.this);
+
+                                }
+                            }else {
+                                showToast("Job Status not found");
+                            }
+
                         });
                     }
                 })

@@ -48,7 +48,7 @@ import java.util.TimerTask;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-public class SplashActivity extends BaseActivity {
+public class SplashActivity extends BaseLoaderActivity {
 
     private static final int REQ_CODE_LOCATION = 700;
     CenteredRoundCornerProgressBar progress;
@@ -97,7 +97,7 @@ public class SplashActivity extends BaseActivity {
 
     private void handleSplashScreen()
     {
-        locationTrack = initLocationTrack(SplashActivity.this);
+       // locationTrack = initLocationTrack(SplashActivity.this);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         new CountDownTimer(2500, 80) {

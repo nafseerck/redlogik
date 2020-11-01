@@ -17,6 +17,8 @@ import android.util.Rational;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 
 import androidx.annotation.RequiresApi;
@@ -30,6 +32,7 @@ import com.androidnetworking.interfaces.DownloadListener;
 import com.androidnetworking.interfaces.DownloadProgressListener;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.redlogic.R;
 import com.redlogic.dashboard.driver.decline.DeclineActivity;
@@ -82,8 +85,8 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
     boolean updateLocation = false;
     boolean getRoute = false;
 
-    LocationHelper locationHelper;
-    LocationManager locationManager;
+   // LocationHelper locationHelper;
+   // LocationManager locationManager;
     DistanceMatrix distanceMatrix;
 
     public static void start(Context context) {
@@ -137,7 +140,13 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
         binding.card1.setOnClickListener(v -> {
 
             if (isDateValid()){
-                if(binding.bottomButtonLayout.getVisibility() == View.GONE) {
+                /* if(binding.bottomButtonLayout.getVisibility() == View.GONE) {
+                        callAcceptOrReject("accept");
+                    }else {
+                        showToast("please accept job first");
+                    }
+                */
+                if(data.getVendor_status().equals("accept")) {
                     callAcceptOrReject("accept");
                 }else {
                     showToast("please accept job first");
@@ -145,13 +154,20 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
             }
 
         });
-        if (DeliveriesActivity.selectedPosition == 2 || DeliveriesActivity.selectedPosition == 3 || DeliveriesActivity.selectedPosition == 1) {
+     /*   if (DeliveriesActivity.selectedPosition == 2 || DeliveriesActivity.selectedPosition == 3 || DeliveriesActivity.selectedPosition == 1) {
             binding.tvAccept.setVisibility(View.GONE);
             binding.tvReject.setVisibility(View.GONE);
 
             binding.bottomButtonLayout.setVisibility(View.GONE);
 
         }
+
+      */
+     if(!data.getVendor_status().equals("pending")){
+         binding.tvAccept.setVisibility(View.GONE);
+         binding.tvReject.setVisibility(View.GONE);
+         binding.bottomButtonLayout.setVisibility(View.GONE);
+     }
 
         String origin = "11.715602, 77.040184";
         String destination = data.getEnd_lat()+","+data.getEnd_long();
@@ -163,20 +179,19 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
             binding.tvTime.setText(String.format("%s", value.getRows().get(0)
                     .getElements().get(0).getDuration().getText()));
         });
-
        */
-
         //isAcceptedJob-temporary
-        for (int i = 0; i < acceptedJobs.size(); i++) {
+       /* for (int i = 0; i < acceptedJobs.size(); i++) {
             if (acceptedJobs.get(i).matches(data.getJob_id())) {
                 binding.bottomButtonLayout.setVisibility(View.GONE);
             }
         }
 
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        locationHelper = new LocationHelper(locationManager,this,this);
+        */
 
-
+      //  locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+      //  locationHelper = new LocationHelper(locationManager,this,this);
+        callDistanceMatrix();
     }
 
     private void setCargoAdapter(List<JobsResponseModel.DataBean.CargoDetails> cargo_details) {
@@ -238,8 +253,34 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void onMap(View view) {
         //RouteMapActivity.start(this);
-        callPictureInPicture();
-        CoreUtils.openRoutesMaps(this, data.getTo_location());
+      /*
+       if(DeliveriesActivity.selectedPosition != 0) {
+            callPictureInPicture();
+            CoreUtils.openRoutesMaps(this, data.getTo_location());
+        }else {
+            CoreUtils.openSourceDestinationRouteMaps(this,
+                    new LatLng(Double.parseDouble(data.getStart_lat()),Double.parseDouble(data.getStart_long())),
+                    new LatLng(Double.parseDouble(data.getEnd_lat()),Double.parseDouble(data.getEnd_long())));
+        }
+
+       */
+        if(data.getVendor_status().equals("accept")) {
+
+            if(DeliveriesActivity.selectedPosition != 0) {
+                //callPictureInPicture();
+               // CoreUtils.openRoutesMaps(this, data.getTo_location());
+                CoreUtils.openRoutesMaps(this, data.getEnd_lat()+","+data.getEnd_long());
+            }else {
+                CoreUtils.openSourceDestinationRouteMaps(this,
+                        new LatLng(Double.parseDouble(data.getStart_lat()),Double.parseDouble(data.getStart_long())),
+                        new LatLng(Double.parseDouble(data.getEnd_lat()),Double.parseDouble(data.getEnd_long())));
+            }
+        }else {
+          //  callPictureInPicture();
+            CoreUtils.openSourceDestinationRouteMaps(this,
+                    new LatLng(Double.parseDouble(data.getStart_lat()),Double.parseDouble(data.getStart_long())),
+                    new LatLng(Double.parseDouble(data.getEnd_lat()),Double.parseDouble(data.getEnd_long())));
+        }
     }
 
 
@@ -396,14 +437,31 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
             alertDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             alertDialog.setCancelable(true);
             ImageView ItemImg = alertDialog.findViewById(R.id.iv_item);
+            WebView webView = alertDialog.findViewById(R.id.webView);
 
-            RequestOptions options = new RequestOptions();
-            options.centerInside().placeholder(this.getResources().getDrawable(R.drawable.logo));
-            Glide
-                    .with(this)
-                    .load(url)
-                    .apply(options)
-                    .into(ItemImg);
+            if(url.endsWith(".pdf")){
+                ItemImg.setVisibility(View.INVISIBLE);
+                webView.setVisibility(View.VISIBLE);
+                webView.getSettings().setJavaScriptEnabled(true);
+                webView.loadUrl(url);
+                webView.setWebViewClient(new WebViewClient() {
+
+                    public void onPageFinished(WebView view, String url) {
+                        // do your stuff here
+                    }
+                });
+
+            }else {
+                ItemImg.setVisibility(View.VISIBLE);
+                webView.setVisibility(View.INVISIBLE);
+                RequestOptions options = new RequestOptions();
+                options.centerInside().placeholder(this.getResources().getDrawable(R.drawable.logo));
+                Glide
+                        .with(this)
+                        .load(url)
+                        .apply(options)
+                        .into(ItemImg);
+            }
 
             return alertDialog;
         } catch (Exception e) {
@@ -459,12 +517,14 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
 
     @Override
     public void onLocationUpdate(Location location) {
-        if(updateLocation) {
+      /*  if(updateLocation) {
             callLocationUpdateApi(location);
         }
         if(!getRoute){
-            callDistanceMatrix(location);
+           // callDistanceMatrix(location);
         }
+
+       */
     }
 
     public void callLocationUpdateApi(Location location){
@@ -508,9 +568,9 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
     }
 
 
-    public void callDistanceMatrix(Location originLoc)
+    public void callDistanceMatrix()
     {
-        String origin = originLoc.getLatitude()+","+originLoc.getLongitude();
+        String origin = data.getStart_lat()+","+data.getStart_long();
         String destination = data.getEnd_lat()+","+data.getEnd_long();
        // String destination = "10.518820,76.212060";
         new DistanceMatrix().getDistance(origin, destination, this, value -> {

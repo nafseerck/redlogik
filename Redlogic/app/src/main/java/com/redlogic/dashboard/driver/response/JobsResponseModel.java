@@ -70,6 +70,51 @@ public class JobsResponseModel {
         private String customer;
         private String customer_phone;
         private String customer_address;
+        private String start_lat;
+        private String start_long;
+        private String vendor_status;
+        private boolean pod_status;
+        private String job_status;
+
+        public String getVendor_status() {
+            return vendor_status;
+        }
+
+        public void setVendor_status(String vendor_status) {
+            this.vendor_status = vendor_status;
+        }
+
+        public boolean isPod_status() {
+            return pod_status;
+        }
+
+        public void setPod_status(boolean pod_status) {
+            this.pod_status = pod_status;
+        }
+
+        public String getJob_status() {
+            return job_status;
+        }
+
+        public void setJob_status(String job_status) {
+            this.job_status = job_status;
+        }
+
+        public String getStart_lat() {
+            return start_lat;
+        }
+
+        public void setStart_lat(String start_lat) {
+            this.start_lat = start_lat;
+        }
+
+        public String getStart_long() {
+            return start_long;
+        }
+
+        public void setStart_long(String start_long) {
+            this.start_long = start_long;
+        }
 
         public List<CargoDetails> getCargo_details() {
             return cargo_details;

@@ -81,6 +81,9 @@ public interface ApiServices {
     @POST("generate_pod")
     Call<ResponseBody> callGeneratePod(@Body GeneratePodRequestModel requestModel);
 
+    @POST("get-pod-download-url")
+    Call<ResponseBody> callGetPod(@Body GeneratePodRequestModel requestModel);
+
     @POST("close_job")
     Call<ResponseBody> callCloseJob(@Body InitialChecklistRequestModel requestModel);
 

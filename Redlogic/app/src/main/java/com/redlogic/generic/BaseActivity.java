@@ -64,7 +64,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public LocationTrack initLocationTrack(Context context) {
-        return new LocationTrack(context);
+        return new LocationTrack();
     }
 
 }

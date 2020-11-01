@@ -24,6 +24,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.redlogic.R;
 import com.redlogic.utils.image.ImageUtils;
 
@@ -194,6 +195,24 @@ public class CoreUtils {
         if (mapIntent.resolveActivity(context.getPackageManager()) != null) {
             context.startActivity(mapIntent);
         }
+    }
+
+    public static void openSourceDestinationRouteMaps(Context context, LatLng sLocation, LatLng dLocation) {
+
+        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                Uri.parse("http://maps.google.com/maps?saddr="+sLocation.latitude+","+sLocation.longitude+"&daddr="+dLocation.latitude+","+dLocation.longitude));
+        if (intent.resolveActivity(context.getPackageManager()) != null) {
+            context.startActivity(intent);
+        }
+
+      /*  Uri gmmIntentUri = Uri.parse("https://www.google.com/maps/dir/?api=1&destination=" + name);
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        if (mapIntent.resolveActivity(context.getPackageManager()) != null) {
+            context.startActivity(mapIntent);
+        }
+
+       */
     }
 
     public static File createDirectory(Context mContext) {
