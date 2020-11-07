@@ -85,7 +85,9 @@ public class NotificationActivity extends BaseLoaderActivity {
                         ItemNotificationBinding mBinding = DataBindingUtil.bind(injector.findViewById(R.id.liItem));
                         if (mBinding == null) return;
                         mBinding.tvTitle.setText(data.getNotification_title());
+                        //String dateTime = CoreUtils.getParsedStamp("dd-MMM-yyyy,hh:mm aa", data.getTimestamp());
                         String dateTime = CoreUtils.getParsedStamp("dd-MMM-yyyy,hh:mm aa", data.getTimestamp());
+
                         mBinding.tvTitleTxt.setText(dateTime);
                         mBinding.liItem.setOnClickListener(v -> {
                         });

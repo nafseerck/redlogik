@@ -443,7 +443,8 @@ public class JobActivity extends BaseLoaderActivity implements OnLocationHelperU
                 ItemImg.setVisibility(View.INVISIBLE);
                 webView.setVisibility(View.VISIBLE);
                 webView.getSettings().setJavaScriptEnabled(true);
-                webView.loadUrl(url);
+                webView.loadUrl("https://drive.google.com/viewerng/viewer?embedded=true&url=" + url);
+
                 webView.setWebViewClient(new WebViewClient() {
 
                     public void onPageFinished(WebView view, String url) {

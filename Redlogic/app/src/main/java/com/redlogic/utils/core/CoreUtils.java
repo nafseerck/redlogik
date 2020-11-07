@@ -105,6 +105,8 @@ public class CoreUtils {
         SimpleDateFormat sdf1 = new SimpleDateFormat(format1);
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat sdf2 = new SimpleDateFormat(format2);
+        sdf2.setTimeZone(TimeZone.getTimeZone(TimeZone.getDefault().getID()));
+
         try {
             return sdf2.format(sdf1.parse(date));
         } catch (ParseException e) {
@@ -127,6 +129,9 @@ public class CoreUtils {
     public static String getParsedStamp(String format, long timeStamp) {
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat sdf = new SimpleDateFormat(format);
+       // sdf.setTimeZone(TimeZone.getTimeZone("gmt"));
+        sdf.setTimeZone(TimeZone.getTimeZone(TimeZone.getDefault().getID()));
+
         try {
             return sdf.format(new Date(timeStamp * 1000));
         } catch (Exception e) {
@@ -138,7 +143,9 @@ public class CoreUtils {
     public static String getParsedCurrentDate(String format) {
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat sdf = new SimpleDateFormat(format);
-        sdf.setTimeZone(TimeZone.getTimeZone("gmt"));
+      //  sdf.setTimeZone(TimeZone.getTimeZone("gmt"));
+        sdf.setTimeZone(TimeZone.getTimeZone(TimeZone.getDefault().getID()));
+
         return sdf.format(new Date());
     }
 
@@ -155,15 +162,14 @@ public class CoreUtils {
         try {
             Date date1=new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ssZ").parse(date);
             DateFormat targetFormat = new SimpleDateFormat(format);
+            targetFormat.setTimeZone(TimeZone.getTimeZone(TimeZone.getDefault().getID()));
             String formattedDate = targetFormat.format(date1);
             return formattedDate;
         }catch (Exception e)
         {
 
         }
-
         return "";
-
     }
 
     public static void enableDisableConfirmButton(Context context, TextView button, boolean enable) {
